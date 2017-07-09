@@ -22,8 +22,8 @@ public class BeverageApplication {
     @Bean
     public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
         return args -> {
-            String quote = restTemplate.getForObject(
-                    "https://www.systembolaget.se/api/assortment/products/xml", String.class);
+            Products quote = restTemplate.getForObject(
+                    "https://www.systembolaget.se/api/assortment/products/xml", Products.class);
             System.out.println(quote);
         };
     }
