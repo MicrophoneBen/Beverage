@@ -1,5 +1,5 @@
 # Beverage
-A service that rates a bevarage
+A service that rates bevarages found on Systembolaget.
 
 Stack: angular/spring boot/jpa
 
