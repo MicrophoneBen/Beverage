@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductCatalogServiceImpl implements ProductCatalogService {
     
-    final ProductCatalogProviderService productCatalogProviderService;
-    final ProductRepository productRepository;
+    private final ProductCatalogProviderService productCatalogProviderService;
+    private final ProductRepository productRepository;
 
     public ProductCatalogServiceImpl(final ProductCatalogProviderService productCatalogProviderService, final ProductRepository productRepository) {
         this.productCatalogProviderService = productCatalogProviderService;

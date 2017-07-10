@@ -2,20 +2,26 @@ package com.github.morotsman.bevarage.product_catalog.product_provider.systembol
 
 
 import com.github.morotsman.bevarage.product_catalog.model.Product;
-import com.github.morotsman.bevarage.product_catalog.product_provider.systembolaget.dto.ProductCatalogeDto;
 import com.github.morotsman.bevarage.product_catalog.product_provider.systembolaget.dto.ProductDto;
 import com.github.morotsman.bevarage.product_catalog.service.ProductCatalogProviderService;
+import java.util.Date;
 import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCatalogProviderService{
     
-    final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+    private final String providerUrl;
     
-    public ProductCatalogProviderServiceSystembolagetImpl(RestTemplate restTemplate) {
+    @Autowired
+    public ProductCatalogProviderServiceSystembolagetImpl(final RestTemplate restTemplate, 
+            final @Value("${product_catalog.provider.systembolaget.url}") String providerUrl) {
         this.restTemplate = restTemplate;
+        this.providerUrl = providerUrl;
     }
     
     private Product toProduct(final ProductDto from) {
@@ -28,11 +34,15 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     }
         
     
-    //TODO move url to application.properties
+    //TODO we are using mock data for the time being, no need to hammer the service
+    @Override
     public Stream<Product> getProductCatalog() {
-        final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject("https://www.systembolaget.se/api/assortment/products/xml", ProductCatalogeDto.class);
-        System.out.println(productCatalogeDto.getProducts().get(1));
-        return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));   
+        //final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
+        //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));
+        return Stream.of(new Product(1L, "A bear", "Öl", 12.0, 50.0, "2", "1243", "Another name", 24.0, new Date(), 
+                false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
+                "A nice comapany", "Some other company", "1972", "7.0%", "", "", 
+                false, false, false, "some raw materials"));
     }  
     
 }

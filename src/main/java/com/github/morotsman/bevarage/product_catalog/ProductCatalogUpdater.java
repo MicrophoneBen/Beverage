@@ -5,20 +5,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductCatalogUpdater {
-    
-   final ProductCatalogService productCatalogService;
-    
+
+    private final ProductCatalogService productCatalogService;
+
+
     public ProductCatalogUpdater(final ProductCatalogService productCatalogService) {
         this.productCatalogService = productCatalogService;
-    }  
-    
-    //TODO move to application.properties
-    private final int rate = 60000*60;
-    
-    @Scheduled(fixedRate = rate)
+    }
+
+    @Scheduled(fixedRateString = "${product_catalog.provider.systembolaget.reload_product.rate_in_ms}")
     public void reportCurrentTime() {
-        System.out.println("HEPP!!!!!!!!!!!!!!!!");   
+        System.out.println("HEPP!!!!!!!!!!!!!!!!");
         productCatalogService.reloadProductCatalog();
     }
-    
+
 }
