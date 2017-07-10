@@ -1,4 +1,4 @@
-package com.github.morotsman.bevarage.beverage;
+package com.github.morotsman.bevarage;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

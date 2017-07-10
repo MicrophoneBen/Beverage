@@ -1,4 +1,4 @@
-package com.github.morotsman.bevarage.beverage.rater;
+package com.github.morotsman.bevarage.rater;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

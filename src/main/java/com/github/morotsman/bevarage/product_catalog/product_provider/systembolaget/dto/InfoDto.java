@@ -1,4 +1,4 @@
-package com.github.morotsman.bevarage.beverage;
+package com.github.morotsman.bevarage.product_catalog.product_provider.systembolaget.dto;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name = "info")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Info {
+public class InfoDto {
     
     
     @XmlElement(name = "meddelande")
