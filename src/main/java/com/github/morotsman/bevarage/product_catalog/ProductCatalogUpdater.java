@@ -6,10 +6,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductCatalogUpdater {
     
+   final ProductCatalogService productCatalogService;
     
-    @Scheduled(fixedRate = 5000)
+    public ProductCatalogUpdater(final ProductCatalogService productCatalogService) {
+        this.productCatalogService = productCatalogService;
+    }  
+    
+    //TODO move to application.properties
+    private final int rate = 60000*60;
+    
+    @Scheduled(fixedRate = rate)
     public void reportCurrentTime() {
-        //System.out.println("The time is now" + new Date());
+        System.out.println("HEPP!!!!!!!!!!!!!!!!");   
+        productCatalogService.reloadProductCatalog();
     }
     
 }

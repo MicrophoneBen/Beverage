@@ -19,9 +19,16 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     }
     
     private Product toProduct(final ProductDto from) {
-        return new Product(from.getProductId(),from.getName1(), from.getProductCategory(), from.getPrice());
+        return new Product(from.getProductId(), from.getName1(), from.getProductCategory(), from.getPrice(), 
+                from.getVolume(), from.getNr(), from.getArticelNumber(), from.getName2(), from.getPricePerLiter(), 
+                from.getStartSellDate(), from.isExpired(), from.getType(), from.getStyle(), from.getPackaging(), 
+                from.getSeal(), from.getOrigin(), from.getOriginCountry(), from.getProducer(), from.getSupplier(), 
+                from.getVintage(), from.getAlcoholPercent(), from.getAssortment(), from.getAssortmentText(), 
+                from.isEcologic(), from.isEtnic(), from.isKoscher(), from.getRawMaterialDescription());
     }
-      
+        
+    
+    //TODO move url to application.properties
     public Stream<Product> getProductCatalog() {
         final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject("https://www.systembolaget.se/api/assortment/products/xml", ProductCatalogeDto.class);
         System.out.println(productCatalogeDto.getProducts().get(1));

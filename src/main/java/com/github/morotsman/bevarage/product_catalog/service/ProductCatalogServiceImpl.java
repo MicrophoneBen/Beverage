@@ -27,8 +27,9 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
         //products.forEach(System.out::println);
         System.out.println("Before: " + productRepository.count());
         productRepository.save(products.collect(Collectors.toList()));
-        System.out.println("After: " + productRepository.count()); 
-        productRepository.findByProductCategory("Öl").sorted(Comparator.comparing(Product::getPrice)).forEach(System.out::println);  
+         
+        productRepository.findByProductCategory("Öl").sorted(Comparator.comparing(Product::getPricePerLiter)).forEach(System.out::println);  
+        System.out.println("After: " + productRepository.count());  
     }
     
 }
