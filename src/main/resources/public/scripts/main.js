@@ -18,9 +18,10 @@ requirejs.config({
     }
 });
 
-require(['angular', 'jquery','./rate-controller'],
+require(['angular', 'jquery','./rate/rate.module', './rate/rate-controller'],
         function (angular) {
-            var app = angular.module('beverage', ['beverage.rate-controller']);
+            
+            var app = angular.module('beverage', ['beverage.rate']);
 
             var $html = angular.element(document.getElementsByTagName('html')[0]);
 
