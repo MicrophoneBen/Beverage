@@ -3,8 +3,7 @@
 
 'use strict';
 
-require(['angular'], function () {
-
+define(['angular','./rate.module'], function (angular) {
     angular.module('beverage.rate').controller('rateCtrl', ['$scope',
         function ($scope) {
             $scope.hello="Hello World!";
