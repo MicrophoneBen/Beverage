@@ -17,22 +17,44 @@
             <!--
             Denna webbsida innehåller information om alkoholdrycker. För inköp och besök på denna webbplats måste du vara 20 år eller äldre.
             -->
+
             <div ng-cloak ng-controller="rateCtrl as ctrl">
-                <ui-select ng-model="ctrl.beverage.selected"
-                           theme="bootstrap"
-                           ng-disabled="ctrl.disabled"
-                           reset-search-input="false"
-                           style="width: 600px;"
-                           title="Choose a beverage">
-                    <ui-select-match placeholder="Enter a name or a producer">{{ctrl.getDisplayName($select.selected)}}</ui-select-match>
-                    <ui-select-choices repeat="beverage in ctrl.beverages track by $index"
-                                       refresh="ctrl.refreshBeverages($select.search)"
-                                       refresh-delay="400">
-                        <div>{{ctrl.getDisplayName(beverage)}}</div>
-                    </ui-select-choices>
-                </ui-select>
+                <div class="col-md-12">
+                    <form name="form" role="form" autocomplete="off">
+                        <div class="row">
+                            <div class="form-group">
+                                <span uib-rating ng-model="ctrl.rate.score" max="10" aria-labelledby="default-rating"></span>
+                            </div>
+                            <div class="form-group">
+                                <ui-select ng-model="ctrl.rate.selected"
+                                           theme="bootstrap"
+                                           ng-disabled="ctrl.disabled"
+                                           reset-search-input="false"
+                                           style="width: 600px;"
+                                           title="Choose a beverage">
+                                    <ui-select-match placeholder="Enter a name or a producer">{{ctrl.getDisplayName($select.selected)}}</ui-select-match>
+                                    <ui-select-choices repeat="beverage in ctrl.beverages track by $index"
+                                                       refresh="ctrl.refreshBeverages($select.search)"
+                                                       refresh-delay="400">
+                                        <div>{{ctrl.getDisplayName(beverage)}}</div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description" class="control-label">Description</label>
+                                <textarea rows="6" class="form-control" id="description" ng-model="ctrl.rate.description"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10 form-group">
+                                <button id="submit" type="submit" class="btn btn-primary" ng-click="ctrl.rate()">Rate</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            
+
+
         </div>
         <script src="/webjarsjs"></script>
         <script data-main="scripts/main" src="webjars/requirejs/require.min.js"></script>

@@ -7,9 +7,8 @@ define(['angular', './rate.module'], function (angular) {
     angular.module('beverage.rate').controller('rateCtrl', ['$scope', '$http',
         function ($scope, $http) {
             var vm = this;
-            $scope.hello = "Hello World!";
 
-            vm.address = {};
+            vm.rate = {};
             vm.refreshBeverages = function (query) {
                 var params = {query: query};
                 return $http.get(
@@ -23,6 +22,11 @@ define(['angular', './rate.module'], function (angular) {
             vm.getDisplayName = function (beverage) {
                 if(!beverage) return "";
                 return beverage.name + ', ' + beverage.producer + ',' + beverage.originCountry + (beverage.vintage ? (', ' + beverage.vintage) : "");
+            };
+            
+            vm.rate = function() {
+                console.log("hepp");
+                console.log(vm.rate);
             };
 
         }]);

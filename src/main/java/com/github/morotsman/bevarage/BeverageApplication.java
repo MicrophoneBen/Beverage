@@ -6,13 +6,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 @SpringBootApplication
-@EnableScheduling  
+@EnableScheduling   
 public class BeverageApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BeverageApplication.class, args);
     } 
    
-    
+      
 
 }
