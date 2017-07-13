@@ -5,12 +5,16 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "product",
+       indexes = {@Index(name = "my_index_name", columnList="name", unique = false),@Index(name = "my_index_producer", columnList="producer", unique = false)})
 public class Product implements Serializable{
     
     @Id
-    @Column(unique=true)
+    @Column(unique=true) 
     private Long productId;
     
     private String name;
@@ -24,8 +28,6 @@ public class Product implements Serializable{
     private String nr;
     
     private String articelNumber;
-
-    private String name2;
 
     private Double pricePerLiter;
 
@@ -68,7 +70,7 @@ public class Product implements Serializable{
     
     protected Product() {}
 
-    public Product(Long productId, String name, String productCategory, Double price, Double volume, String nr, String articelNumber, String name2, Double pricePerLiter, Date startSellDate, Boolean expired, String type, String style, String packaging, String seal, String origin, String originCountry, String producer, String supplier, String vintage, String alcoholPercent, String assortment, String assortmentText, Boolean ecologic, Boolean etnic, Boolean koscher, String rawMaterialDescription) {
+    public Product(Long productId, String name, String productCategory, Double price, Double volume, String nr, String articelNumber, Double pricePerLiter, Date startSellDate, Boolean expired, String type, String style, String packaging, String seal, String origin, String originCountry, String producer, String supplier, String vintage, String alcoholPercent, String assortment, String assortmentText, Boolean ecologic, Boolean etnic, Boolean koscher, String rawMaterialDescription) {
         this.productId = productId;
         this.name = name;
         this.productCategory = productCategory;
@@ -76,7 +78,6 @@ public class Product implements Serializable{
         this.volume = volume;
         this.nr = nr;
         this.articelNumber = articelNumber;
-        this.name2 = name2;
         this.pricePerLiter = pricePerLiter;
         this.startSellDate = startSellDate;
         this.expired = expired;
@@ -124,10 +125,6 @@ public class Product implements Serializable{
 
     public String getArticelNumber() {
         return articelNumber;
-    }
-
-    public String getName2() {
-        return name2;
     }
 
     public Double getPricePerLiter() {
@@ -208,7 +205,7 @@ public class Product implements Serializable{
   
     @Override
     public String toString() {
-        return "Product{" + "productId=" + productId + ", name=" + name + ", productCategory=" + productCategory + ", price=" + price + ", volume=" + volume + ", nr=" + nr + ", articelNumber=" + articelNumber + ", name2=" + name2 + ", pricePerLiter=" + pricePerLiter + ", startSellDate=" + startSellDate + ", expired=" + expired + ", type=" + type + ", style=" + style + ", packaging=" + packaging + ", seal=" + seal + ", origin=" + origin + ", originCountry=" + originCountry + ", producer=" + producer + ", supplier=" + supplier + ", vintage=" + vintage + ", alcoholPercent=" + alcoholPercent + ", assortment=" + assortment + ", assortmentText=" + assortmentText + ", ecologic=" + ecologic + ", etnic=" + etnic + ", koscher=" + koscher + ", rawMaterialDescription=" + rawMaterialDescription + '}';
+        return "Product{" + "productId=" + productId + ", name=" + name + ", productCategory=" + productCategory + ", price=" + price + ", volume=" + volume + ", nr=" + nr + ", articelNumber=" + articelNumber + ", pricePerLiter=" + pricePerLiter + ", startSellDate=" + startSellDate + ", expired=" + expired + ", type=" + type + ", style=" + style + ", packaging=" + packaging + ", seal=" + seal + ", origin=" + origin + ", originCountry=" + originCountry + ", producer=" + producer + ", supplier=" + supplier + ", vintage=" + vintage + ", alcoholPercent=" + alcoholPercent + ", assortment=" + assortment + ", assortmentText=" + assortmentText + ", ecologic=" + ecologic + ", etnic=" + etnic + ", koscher=" + koscher + ", rawMaterialDescription=" + rawMaterialDescription + '}';
     }
 
     

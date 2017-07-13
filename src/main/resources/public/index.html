@@ -1,21 +1,41 @@
 <!doctype html>
 <html>
-<head>
-<title>Beverage</title>
-<style type="text/css">
+    <head>
+        <title>Beverage</title>
+        <link rel="stylesheet" href="./webjars/angular-ui-select/select.css">
+        <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
+        <style type="text/css">
+            [ng\:cloak], [ng-cloak], .ng-cloak {
+                display: none !important;
+            }
+        </style>
+    </head>  
 
-</style>
-</head>  
+    <body>
+        <div class="container">
+            <h1>Beverage</h1>
+            <!--
+            Denna webbsida innehåller information om alkoholdrycker. För inköp och besök på denna webbplats måste du vara 20 år eller äldre.
+            -->
+            <div ng-cloak ng-controller="rateCtrl as ctrl">
+                <ui-select ng-model="ctrl.beverage.selected"
+                           theme="bootstrap"
+                           ng-disabled="ctrl.disabled"
+                           reset-search-input="false"
+                           style="width: 600px;"
+                           title="Choose a beverage">
+                    <ui-select-match placeholder="Enter a name or a producer">{{ctrl.getDisplayName($select.selected)}}</ui-select-match>
+                    <ui-select-choices repeat="beverage in ctrl.beverages track by $index"
+                                       refresh="ctrl.refreshBeverages($select.search)"
+                                       refresh-delay="400">
+                        <div>{{ctrl.getDisplayName(beverage)}}</div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            
+        </div>
+        <script src="/webjarsjs"></script>
+        <script data-main="scripts/main" src="webjars/requirejs/require.min.js"></script>
 
-<body>
-  <div class="container">
-    <h1>Beverage</h1>
-    <div ng-controller="rateCtrl">
-        {{hello}}
-    </div>
-  </div>
-    <script src="/webjarsjs"></script>
-  <script data-main="scripts/main" src="webjars/requirejs/require.min.js"></script>
-  
-</body>
+    </body>
 </html>

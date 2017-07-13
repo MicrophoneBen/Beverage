@@ -3,9 +3,9 @@
 'use strict';
 
 
-define(['angular','./rate/rate-controller'],
+define(['angular','ui_select','./rate/rate-controller'],
         function (angular) {
-            var app = angular.module('beverage', ['beverage.rate']);
+            var app = angular.module('beverage', ['ngSanitize','ui.select','beverage.rate']);
 
             var $html = angular.element(document.getElementsByTagName('html')[0]);
 
