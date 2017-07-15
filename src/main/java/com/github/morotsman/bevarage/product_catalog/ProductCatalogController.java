@@ -1,7 +1,6 @@
 package com.github.morotsman.bevarage.product_catalog;
 
 import com.github.morotsman.bevarage.product_catalog.model.Product;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

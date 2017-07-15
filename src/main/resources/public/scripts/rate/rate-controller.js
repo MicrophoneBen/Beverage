@@ -10,6 +10,18 @@ define(['angular', './rate.module'], function (angular) {
 
             vm.beverages = [];
             vm.rate = {};
+            
+            activate();
+    
+            function getRates() {
+                return $http.get('/v1/rate').then(function(result) {
+                    return result.data;
+                });
+            }            
+            
+            function activate() {
+                getRates().then(refreshRates); 
+            }
 
             //var windowWidth = $(window).innerWidth();
             vm.getDisplayName = function (beverage) {
@@ -18,8 +30,24 @@ define(['angular', './rate.module'], function (angular) {
                 return beverage.name + ', ' + beverage.producer + ',' + beverage.originCountry + (beverage.vintage ? (', ' + beverage.vintage) : "");
             };
 
+            function createRate(_rate) {
+                console.log(_rate);
+                var rate = {
+                    description: _rate.description,
+                    rate: _rate.score,
+                    productId: _rate.selected.productId
+                };
+                return $http.post('/v1/rate',rate);
+            }
+            
+
+
+            function refreshRates(rates) {
+                vm.rates = rates;
+            }
+
             vm.rateIt = function () {
-                console.log(vm.rate);
+                createRate(vm.rate).then(getRates).then(refreshRates);   
             };
 
             vm.page = 0;

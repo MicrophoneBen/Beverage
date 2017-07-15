@@ -1,4 +1,4 @@
-package com.github.morotsman.bevarage.product_catalog.repository;
+package com.github.morotsman.bevarage.product_catalog;
 
 import com.github.morotsman.bevarage.product_catalog.model.Product;
 import java.util.List;

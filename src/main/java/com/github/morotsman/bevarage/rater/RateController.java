@@ -1,16 +1,45 @@
 package com.github.morotsman.bevarage.rater;
 
+import com.github.morotsman.bevarage.product_catalog.model.Rate;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/rate")
+@RequestMapping("v1/rate")
 public class RateController {
     
+    private final RateService rateService;
     
-    @RequestMapping(value = "/hello_world", method = RequestMethod.GET)
-    public String helloWorld() {
+    public RateController(final RateService rateService) {
+        this.rateService = rateService;
+    }
+    
+    
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Iterable<Rate> getRates() {
+        return rateService.getRates();
+    }
+    
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public Rate createRate(@RequestBody RateDto rate) {
+        return rateService.createRate(rate);
+    }
+    
+    @RequestMapping(value = "/{rateId}", method = RequestMethod.GET)
+    public Rate getRate(@PathVariable long rateId) {
+        return rateService.getRate(rateId);
+    }
+    
+    @RequestMapping(value = "/{rateId}", method = RequestMethod.PUT)
+    public Rate updateRate(@PathVariable long rateId,@RequestBody RateDto rate) {
+        return rateService.updateRate(rate);
+    }
+    
+    @RequestMapping(value = "/{rateId}", method = RequestMethod.DELETE)
+    public String deleteRate(@PathVariable long rateId) {
         return "hi6";
     }
 }

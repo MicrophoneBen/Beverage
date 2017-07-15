@@ -12,46 +12,90 @@
     </head>  
 
     <body>
-        <div class="container">
+
+        <div class="container" ng-controller="rateCtrl as vm">
             <h1>Beverage</h1>
             <!--
             Denna webbsida innehåller information om alkoholdrycker. För inköp och besök på denna webbplats måste du vara 20 år eller äldre.
             -->
 
-            <div ng-cloak ng-controller="rateCtrl as vm">
-                <div class="col-md-12">
-                    <form name="form" role="form" autocomplete="off">
-                        <div class="row">
-                            <div class="form-group">
-                                <span uib-rating ng-model="vm.rate.score" max="10" aria-labelledby="default-rating"></span>
-                            </div>
-                            
-                            
-                            <ui-select reach-infinity="vm.getBeverages($select, true)" theme="bootstrap" ng-model="vm.rate.selected">
-                                <ui-select-match placeholder="Enter a name or a producer">
-                                    {{vm.getDisplayName($select.selected)}}
-                                </ui-select-match>
-                                <ui-select-choices 
-                                    refresh="vm.getBeverages($select)" 
-                                    refresh-delay="300" 
-                                    repeat="beverage in vm.beverages track by $index">
-                                    <div>{{vm.getDisplayName(beverage)}}</div>
-                                </ui-select-choices>
-                            </ui-select>
-                            
-                            <div class="form-group">
-                                <label for="description" class="control-label">Description</label>
-                                <textarea rows="6" class="form-control" id="description" ng-model="vm.rate.description"></textarea>
+            <uib-tabset>
+                <uib-tab heading="Rate It">
+                    <br>
+                    <div ng-cloak >
+                        <div class="col-md-12">
+                            <form name="form" role="form" autocomplete="off">
+                                <div class="row">
+                                    <ui-select reach-infinity="vm.getBeverages($select, true)" theme="bootstrap" ng-model="vm.rate.selected">
+                                        <ui-select-match placeholder="Enter a name or a producer">
+                                            {{vm.getDisplayName($select.selected)}}
+                                        </ui-select-match>
+                                        <ui-select-choices 
+                                            refresh="vm.getBeverages($select)" 
+                                            refresh-delay="300" 
+                                            repeat="beverage in vm.beverages track by $index">
+                                            <div>{{vm.getDisplayName(beverage)}}</div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <br>
+                                    <br>
+
+                                    <div class="form-group">
+                                        <span uib-rating ng-model="vm.rate.score" max="10" aria-labelledby="default-rating"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="description" class="control-label">Description</label>
+                                        <textarea rows="6" class="form-control" id="description" ng-model="vm.rate.description"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10 form-group">
+                                        <button id="submit" type="submit" class="btn btn-primary" ng-click="vm.rateIt()">Rate</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>                   
+                </uib-tab>
+                <uib-tab heading="My Rates">
+                    <div ng-cloak>
+                        <br>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="panel panel-default panel-table">
+                                    <div class="panel-heading">
+                                      
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table" cellspacing="0" width="100%">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Producer</th>
+                                                <th>Rate</th>
+                                            </tr>
+                                            <tr ng-repeat="rate in vm.rates track by $index">
+                                                <td>{{rate.product.name}}</td>
+                                                <td>{{rate.product.producer}}</td>
+                                                <td>{{rate.rate}}</td>
+                                            </tr>
+                                        </table>                                       
+                                    </div>
+                                    <div class="panel-footer">
+                                        
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-10 form-group">
-                                <button id="submit" type="submit" class="btn btn-primary" ng-click="vm.rateIt()">Rate</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                </uib-tab>
+                <uib-tab heading="Popular">
+
+                </uib-tab>
+            </uib-tabset>
+
 
 
         </div>

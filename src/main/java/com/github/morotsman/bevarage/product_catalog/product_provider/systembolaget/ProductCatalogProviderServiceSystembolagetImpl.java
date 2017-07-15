@@ -55,10 +55,10 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     @Override
     public Stream<Product> getProductCatalog() {
         
-        final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
-        return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));
+        //final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
+        //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));
         
-        //return getProducts(100);
-    }  
+        return getProducts(1000);
+    }    
     
 }

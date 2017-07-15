@@ -2,7 +2,7 @@ package com.github.morotsman.bevarage.product_catalog.service;
 
 import com.github.morotsman.bevarage.product_catalog.ProductCatalogService;
 import com.github.morotsman.bevarage.product_catalog.model.Product;
-import com.github.morotsman.bevarage.product_catalog.repository.ProductRepository;
+import com.github.morotsman.bevarage.product_catalog.ProductRepository;
 import java.awt.print.Pageable;
 import java.util.Comparator;
 import java.util.List;
