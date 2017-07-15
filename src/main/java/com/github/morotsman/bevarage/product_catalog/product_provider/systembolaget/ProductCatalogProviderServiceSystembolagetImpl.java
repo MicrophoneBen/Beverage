@@ -6,6 +6,7 @@ import com.github.morotsman.bevarage.product_catalog.product_provider.systembola
 import com.github.morotsman.bevarage.product_catalog.product_provider.systembolaget.dto.ProductDto;
 import com.github.morotsman.bevarage.product_catalog.service.ProductCatalogProviderService;
 import java.util.Date;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,22 +41,24 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     }
         
     
+    private Stream<Product> getProducts(final int numberOfProducts) {
+        return LongStream.range(0, numberOfProducts).mapToObj(i -> {
+            System.out.println(i);
+            return new Product(i, "A bear" + i, "Bear", 12.0, 50.0, "2", "1243", 24.0, new Date(), 
+                false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
+                "A nice comapany", "Some other company", "1972", "7.0%", "", "", 
+                false, false, false, "some raw materials");
+        });
+    }
+    
     //TODO we are using mock data for the time being, no need to hammer the service
     @Override
     public Stream<Product> getProductCatalog() {
+        
         final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
         return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));
-        /*
-        return Stream.of(
-                new Product(1L, "A bear", "Bear", 12.0, 50.0, "2", "1243", "Another name", 24.0, new Date(), 
-                false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
-                "A nice comapany", "Some other company", "1972", "7.0%", "", "", 
-                false, false, false, "some raw materials"),
-                new Product(2L, "Another bear", "Bear", 12.0, 50.0, "2", "1243", "Another name", 24.0, new Date(), 
-                false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
-                "A nice comapany", "Some other company", "1972", "7.0%", "", "", 
-                false, false, false, "some raw materials")
-                );*/
+        
+        //return getProducts(100);
     }  
     
 }

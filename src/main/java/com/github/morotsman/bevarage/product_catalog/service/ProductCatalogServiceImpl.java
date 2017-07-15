@@ -3,12 +3,15 @@ package com.github.morotsman.bevarage.product_catalog.service;
 import com.github.morotsman.bevarage.product_catalog.ProductCatalogService;
 import com.github.morotsman.bevarage.product_catalog.model.Product;
 import com.github.morotsman.bevarage.product_catalog.repository.ProductRepository;
+import java.awt.print.Pageable;
 import java.util.Comparator;
 import java.util.List;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,14 +29,18 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     @Override
     public void reloadProductCatalog() {   
         Stream<Product> products = productCatalogProviderService.getProductCatalog();
-
-        productRepository.save(products.collect(Collectors.toList()));      
+        final List productsAsList = products.collect(Collectors.toList());
+        System.out.println("Products in list: " + productsAsList.size());
+        productRepository.save(productsAsList);  
+        
+        System.out.println("Number of products: " + productRepository.count());
     } 
   
     @Transactional
     @Override 
-    public List<Product> getProductCatalog(final String query) {
-        return productRepository.findDistinctProductsByNameIgnoreCaseContainingOrProducerIgnoreCaseContaining(query,query);          
+    public List<Product> getProductCatalog(final String query, final int page) {
+        PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"productId"});
+        return productRepository.findDistinctProductsByNameIgnoreCaseContainingOrProducerIgnoreCaseContaining(query,query,pageRequest);          
     }
     
     

@@ -18,36 +18,35 @@
             Denna webbsida innehåller information om alkoholdrycker. För inköp och besök på denna webbplats måste du vara 20 år eller äldre.
             -->
 
-            <div ng-cloak ng-controller="rateCtrl as ctrl">
+            <div ng-cloak ng-controller="rateCtrl as vm">
                 <div class="col-md-12">
                     <form name="form" role="form" autocomplete="off">
                         <div class="row">
                             <div class="form-group">
-                                <span uib-rating ng-model="ctrl.rate.score" max="10" aria-labelledby="default-rating"></span>
+                                <span uib-rating ng-model="vm.rate.score" max="10" aria-labelledby="default-rating"></span>
                             </div>
-                            <div class="form-group">
-                                <ui-select ng-model="ctrl.rate.selected"
-                                           theme="bootstrap"
-                                           ng-disabled="ctrl.disabled"
-                                           reset-search-input="false"
-                                           style="width: 600px;"
-                                           title="Choose a beverage">
-                                    <ui-select-match placeholder="Enter a name or a producer">{{ctrl.getDisplayName($select.selected)}}</ui-select-match>
-                                    <ui-select-choices repeat="beverage in ctrl.beverages track by $index"
-                                                       refresh="ctrl.refreshBeverages($select.search)"
-                                                       refresh-delay="400">
-                                        <div>{{ctrl.getDisplayName(beverage)}}</div>
-                                    </ui-select-choices>
-                                </ui-select>
-                            </div>
+                            
+                            
+                            <ui-select reach-infinity="vm.getBeverages($select, true)" theme="bootstrap" ng-model="vm.rate.selected">
+                                <ui-select-match placeholder="Enter a name or a producer">
+                                    {{vm.getDisplayName($select.selected)}}
+                                </ui-select-match>
+                                <ui-select-choices 
+                                    refresh="vm.getBeverages($select)" 
+                                    refresh-delay="300" 
+                                    repeat="beverage in vm.beverages track by $index">
+                                    <div>{{vm.getDisplayName(beverage)}}</div>
+                                </ui-select-choices>
+                            </ui-select>
+                            
                             <div class="form-group">
                                 <label for="description" class="control-label">Description</label>
-                                <textarea rows="6" class="form-control" id="description" ng-model="ctrl.rate.description"></textarea>
+                                <textarea rows="6" class="form-control" id="description" ng-model="vm.rate.description"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 form-group">
-                                <button id="submit" type="submit" class="btn btn-primary" ng-click="ctrl.rate()">Rate</button>
+                                <button id="submit" type="submit" class="btn btn-primary" ng-click="vm.rateIt()">Rate</button>
                             </div>
                         </div>
                     </form>

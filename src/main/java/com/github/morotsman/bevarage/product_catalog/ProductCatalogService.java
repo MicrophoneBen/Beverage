@@ -8,6 +8,6 @@ public interface ProductCatalogService {
     
     void reloadProductCatalog();
     
-    List<Product> getProductCatalog(String query);
+    List<Product> getProductCatalog(String query, final int page);
     
 }

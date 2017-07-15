@@ -18,9 +18,8 @@ public class ProductCatalogController {
     }
     
     @RequestMapping  
-    public List<Product> getProductCatalog(final @RequestParam String query) {
-        if(query.length() < 2) return new ArrayList<>();  
-        return productCatalogService.getProductCatalog(query==null?"":query);
+    public List<Product> getProductCatalog(final @RequestParam(required=true) String query, final @RequestParam(required=true) int page) {
+        return productCatalogService.getProductCatalog(query, page);
     }
       
     
