@@ -3,7 +3,7 @@
 
 'use strict';
 
-define(['angular', './rate.module', 'rate/product-select.directive'], function (angular) {
+define(['angular', './rate.module', './product-select.directive', './product-details.directive'], function (angular) {
     angular.module('beverage.rate').controller('rateCtrl', ['$scope', '$http',
         function ($scope, $http) {
             var vm = this;
@@ -33,7 +33,7 @@ define(['angular', './rate.module', 'rate/product-select.directive'], function (
                 var rate = {
                     description: _rate.description,
                     rate: _rate.score,
-                    productId: _rate.selected.productId
+                    productId: _rate.product.productId
                 };
                 return $http.post('/v1/rate',rate);
             }
@@ -47,8 +47,8 @@ define(['angular', './rate.module', 'rate/product-select.directive'], function (
             ////////////////////////////////public
             
             function showBeverageDetails(rate) {
-                console.log(rate);
-                vm.selectedRate = rate;
+                vm.rate.product = rate.product;
+                vm.activeTab = 2;
             }
 
             function rateIt() {

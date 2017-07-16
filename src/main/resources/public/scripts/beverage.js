@@ -3,7 +3,8 @@
 'use strict';
 
 
-define(['angular','ui_select','angular-sanitize','./rate/rate-controller','angular-ui-bootstrap', 'infinit-scrolling', './rate/product-select.directive'],
+define(['angular','ui_select','angular-sanitize','./rate/rate-controller','angular-ui-bootstrap', 'infinit-scrolling', 
+    './rate/product-select.directive', './rate/product-details.directive'],
         function (angular) {
             var app = angular.module('beverage', ['ngSanitize','ui.select','beverage.rate','ui.bootstrap','ui-select-infinity']);
 

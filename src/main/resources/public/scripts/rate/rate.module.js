@@ -1,6 +1,6 @@
 define(['angular'], function (angular) {
     'use strict';
-    angular.module('beverage.rate', []);
+    return angular.module('beverage.rate', []);
 });
 
 
