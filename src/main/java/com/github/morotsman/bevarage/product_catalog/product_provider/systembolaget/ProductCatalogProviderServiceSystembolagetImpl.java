@@ -43,7 +43,6 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     
     private Stream<Product> getProducts(final int numberOfProducts) {
         return LongStream.range(0, numberOfProducts).mapToObj(i -> {
-            System.out.println(i);
             return new Product(i, "A bear" + i, "Bear", 12.0, 50.0, "2", "1243", 24.0, new Date(), 
                 false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
                 "A nice comapany", "Some other company", "1972", "7.0%", "", "", 

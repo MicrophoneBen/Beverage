@@ -3,33 +3,33 @@
 
 'use strict';
 
-define(['angular', './rate.module'], function (angular) {
+define(['angular', './rate.module', 'rate/product-select.directive'], function (angular) {
     angular.module('beverage.rate').controller('rateCtrl', ['$scope', '$http',
         function ($scope, $http) {
             var vm = this;
 
             vm.beverages = [];
             vm.rate = {};
+            vm.getDisplayName = getDisplayName;
+            vm.showBeverageDetails = showBeverageDetails;
+            vm.rateIt = rateIt;
+            vm.getBeverages = getBeverages;
+            vm.deleteRate = deleteRate;
+            vm.saveRate = saveRate;
             
             activate();
     
+            ////////////////////////////////////private
             function getRates() {
                 return $http.get('/v1/rate').then(function(result) {
                     return result.data;
                 });
-            }            
+            } 
             
             function activate() {
                 getRates().then(refreshRates); 
             }
-
-            //var windowWidth = $(window).innerWidth();
-            vm.getDisplayName = function (beverage) {
-                if (!beverage)
-                    return "";
-                return beverage.name + ', ' + beverage.producer + ',' + beverage.originCountry + (beverage.vintage ? (', ' + beverage.vintage) : "");
-            };
-
+            
             function createRate(_rate) {
                 console.log(_rate);
                 var rate = {
@@ -44,15 +44,46 @@ define(['angular', './rate.module'], function (angular) {
 
             function refreshRates(rates) {
                 vm.rates = rates;
+            }            
+            
+            ////////////////////////////////public
+            
+            function showBeverageDetails(rate) {
+                console.log(rate);
+                vm.selectedRate = rate;
             }
+            
+            //var windowWidth = $(window).innerWidth();
+            function getDisplayName(beverage) {
+                if (!beverage)
+                    return "";
+                return beverage.name + ', ' + beverage.producer + ',' + beverage.originCountry + (beverage.vintage ? (', ' + beverage.vintage) : "");
+            };
 
-            vm.rateIt = function () {
+
+
+            function rateIt() {
                 createRate(vm.rate).then(getRates).then(refreshRates);   
             };
+            
+            function deleteRate(rate) {
+                $http.delete('/v1/rate/' + rate.rateId).then(getRates).then(refreshRates);
+            }
+            
+            function saveRate(_rate) {
+                var rate = {
+                    rateId: _rate.rateId,
+                    description: _rate.description,
+                    rate: _rate.rate,
+                    productId: _rate.product.productId
+                };
+                console.log(_rate);
+                $http.put('/v1/rate/' + _rate.rateId,rate).then(getRates).then(refreshRates);
+            }
 
             vm.page = 0;
 
-            vm.getBeverages = function ($select, $event) {
+            function getBeverages($select, $event) {
                 if (vm.loading) {
                     return;
                 }

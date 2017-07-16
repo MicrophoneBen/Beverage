@@ -3,8 +3,6 @@ package com.github.morotsman.bevarage.product_catalog.service;
 import com.github.morotsman.bevarage.product_catalog.ProductCatalogService;
 import com.github.morotsman.bevarage.product_catalog.model.Product;
 import com.github.morotsman.bevarage.product_catalog.ProductRepository;
-import java.awt.print.Pageable;
-import java.util.Comparator;
 import java.util.List;
 
 import java.util.stream.Collectors;
@@ -30,10 +28,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     public void reloadProductCatalog() {   
         Stream<Product> products = productCatalogProviderService.getProductCatalog();
         final List productsAsList = products.collect(Collectors.toList());
-        System.out.println("Products in list: " + productsAsList.size());
         productRepository.save(productsAsList);  
-        
-        System.out.println("Number of products: " + productRepository.count());
     } 
   
     @Transactional

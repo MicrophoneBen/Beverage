@@ -6,6 +6,7 @@ import com.github.morotsman.bevarage.product_catalog.model.Rate;
 import com.github.morotsman.bevarage.rater.RateDto;
 import com.github.morotsman.bevarage.rater.RateRepository;
 import com.github.morotsman.bevarage.rater.RateService;
+import javax.persistence.EntityManager;
 
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,12 @@ public class RateServiceImpl implements RateService {
     
     private final ProductRepository productRepository;
     
-    public RateServiceImpl(final RateRepository rateRepository, final ProductRepository productRepository) {
+    private final EntityManager entityManager;
+    
+    public RateServiceImpl(final RateRepository rateRepository, final ProductRepository productRepository, final EntityManager entityManager) {
         this.rateRepository = rateRepository;
         this.productRepository = productRepository;
+        this.entityManager= entityManager;
     }
     
     private Rate fromDto(final RateDto rateDto, final Product product) {
@@ -32,10 +36,11 @@ public class RateServiceImpl implements RateService {
     }
 
     @Transactional
-    @Override
-    public Rate createRate(final RateDto rate) {
-        Product product = productRepository.findOne(rate.getProductId());
-        return rateRepository.save(fromDto(rate,product));
+    @Override 
+    public RateDto createRate(final RateDto rate) {
+        final Product product = entityManager.getReference(Product.class, rate.getProductId());
+        final Rate createdRate = rateRepository.save(fromDto(rate,product));
+        return toDto(createdRate);
     }
 
     @Transactional
@@ -46,8 +51,10 @@ public class RateServiceImpl implements RateService {
 
     @Transactional
     @Override
-    public Rate updateRate(RateDto rate) {
-        return rateRepository.save(fromDto(rate,null));
+    public RateDto updateRate(RateDto rate) {
+        final Product product = entityManager.getReference(Product.class, rate.getProductId());
+        final Rate updatedRate = rateRepository.save(fromDto(rate,product));
+        return toDto(updatedRate);
     }
 
     @Transactional

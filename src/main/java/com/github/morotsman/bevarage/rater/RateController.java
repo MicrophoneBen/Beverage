@@ -24,7 +24,7 @@ public class RateController {
     }
     
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Rate createRate(@RequestBody RateDto rate) {
+    public RateDto createRate(@RequestBody RateDto rate) {
         return rateService.createRate(rate);
     }
     
@@ -34,12 +34,12 @@ public class RateController {
     }
     
     @RequestMapping(value = "/{rateId}", method = RequestMethod.PUT)
-    public Rate updateRate(@PathVariable long rateId,@RequestBody RateDto rate) {
+    public RateDto updateRate(@PathVariable long rateId,@RequestBody RateDto rate) {
         return rateService.updateRate(rate);
     }
     
     @RequestMapping(value = "/{rateId}", method = RequestMethod.DELETE)
-    public String deleteRate(@PathVariable long rateId) {
-        return "hi6";
+    public void deleteRate(@PathVariable long rateId) {
+        rateService.deleteRate(rateId);  
     }
 }
