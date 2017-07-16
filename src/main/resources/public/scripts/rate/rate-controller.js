@@ -10,10 +10,8 @@ define(['angular', './rate.module', 'rate/product-select.directive'], function (
 
             vm.beverages = [];
             vm.rate = {};
-            vm.getDisplayName = getDisplayName;
             vm.showBeverageDetails = showBeverageDetails;
             vm.rateIt = rateIt;
-            vm.getBeverages = getBeverages;
             vm.deleteRate = deleteRate;
             vm.saveRate = saveRate;
             
@@ -52,15 +50,6 @@ define(['angular', './rate.module', 'rate/product-select.directive'], function (
                 console.log(rate);
                 vm.selectedRate = rate;
             }
-            
-            //var windowWidth = $(window).innerWidth();
-            function getDisplayName(beverage) {
-                if (!beverage)
-                    return "";
-                return beverage.name + ', ' + beverage.producer + ',' + beverage.originCountry + (beverage.vintage ? (', ' + beverage.vintage) : "");
-            };
-
-
 
             function rateIt() {
                 createRate(vm.rate).then(getRates).then(refreshRates);   
@@ -81,34 +70,7 @@ define(['angular', './rate.module', 'rate/product-select.directive'], function (
                 $http.put('/v1/rate/' + _rate.rateId,rate).then(getRates).then(refreshRates);
             }
 
-            vm.page = 0;
-
-            function getBeverages($select, $event) {
-                if (vm.loading) {
-                    return;
-                }
-                // no event means first load!
-                if (!$event) {
-                    vm.beverages = [];
-                    vm.page = 0;
-                } else {;
-                    vm.page += 1;
-                }
-
-                vm.loading = true;
-                $http({
-                    method: 'GET',
-                    url: '/v1/product_catalog',
-                    params: {
-                        query: $select.search,
-                        page: vm.page
-                    }
-                }).then(function (resp) {
-                    vm.beverages = vm.beverages.concat(resp.data);
-                })['finally'](function () {
-                    vm.loading = false;
-                });
-            };
+            
 
         }]);
 
