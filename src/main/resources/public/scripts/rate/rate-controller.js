@@ -69,9 +69,9 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                 console.log(_rate);
                 $http.put('/v1/rate/' + _rate.rateId,rate).then(getRates).then(refreshRates);
             }
+          
 
             
-
         }]);
 
 });
