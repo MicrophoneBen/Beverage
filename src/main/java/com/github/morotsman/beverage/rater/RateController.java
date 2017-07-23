@@ -2,6 +2,7 @@ package com.github.morotsman.beverage.rater;
 
 import com.github.morotsman.beverage.model.Rate;
 import java.security.Principal;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,5 +43,12 @@ public class RateController {
     @RequestMapping(value = "/{rateId}", method = RequestMethod.DELETE)
     public void deleteRate(@PathVariable long rateId, Principal principal) {
         rateService.deleteRate(principal.getName(),rateId);  
+    }
+    
+    @ExceptionHandler({ Exception.class })
+    public void handleException(Exception e) {
+        System.out.println(e.getMessage());  
+        e.printStackTrace(System.out);
+        
     }
 }

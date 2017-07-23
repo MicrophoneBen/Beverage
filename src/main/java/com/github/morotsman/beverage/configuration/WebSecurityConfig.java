@@ -31,25 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
     }
-    /*
-    @Override  
-    protected void configure(HttpSecurity http) throws Exception {
-        
-        http
-                .authorizeRequests().access("hasRole('USER')").anyRequest().authenticated()
-                .and()
-                .formLogin().loginPage("/login").permitAll()  
-                .and()
-                .logout().permitAll()
-                .and()
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-                
-    }
-    */
 
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //TODO fix so that it's possible to create a user
-        //TODO encrypt password
         StandardPasswordEncoder encoder = new StandardPasswordEncoder("dkdsjksdj");
         bevarageUserRepository.save(Arrays.asList(new BeverageUser("user1", encoder.encode("password")), new BeverageUser("user2", encoder.encode("password"))));
         bevarageUserRepository.findAll().stream().forEach(System.out::println);

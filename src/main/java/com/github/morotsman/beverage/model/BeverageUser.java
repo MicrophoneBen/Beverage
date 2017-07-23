@@ -16,10 +16,12 @@ public class BeverageUser implements UserDetails, Serializable{
     private String userName;
     private String password;
 
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("USER"));
     }
+    
 
     @Override
     public String getPassword() {
