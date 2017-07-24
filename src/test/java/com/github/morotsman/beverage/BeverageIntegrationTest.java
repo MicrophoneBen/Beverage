@@ -28,87 +28,83 @@ public class BeverageIntegrationTest {
 
     @Before
     public void before() {
-        baseUrl = "http://localhost:" + port + "/";
+        baseUrl = "http://localhost:" + port + "/";  
     }
 
-    @Test
-    public void testLogin() {
-        login("user1", "password")
-                .expectedStatus(HttpStatus.OK)
-                .assertCall(restTemplate);
-    }
-
-    @Test
-    public void loginWithWrongCredentials() {
-        login("unknown_user", "password")
-                .expectedStatus(HttpStatus.UNAUTHORIZED)
-                .assertCall(restTemplate);
-    }
-
-    @Test
-    public void callWithoutCredentials() {
-        RestTester.get(baseUrl)
-                .withUrl("")
-                .expectedStatus(HttpStatus.OK)
-                .assertCall(restTemplate);
-    }
-
+/*
     @Test
     public void testCreateRate() {
         login("user1", "password").assertCall(restTemplate);
-
-        createRate("{\"description\": \"ghhg\", \"rate\": 7, \"productId\": 3}")
-                .withCredentials("user1", "password")
-                .expectedBody("{\"rateId\":1,\"description\": \"ghhg\", \"rate\": 7, \"productId\": 3}")
-                .assertCall(restTemplate);
-
-        RestTester.delete(baseUrl)
-                .withUrl("v1/rate/1")
-                .withCredentials("user1", "password")
-                .expectedStatus(HttpStatus.OK)
-                .assertCall(restTemplate);
-    }
-
-    @Test
-    public void testDeleteRate() {
-        login("user1", "password").assertCall(restTemplate);
         
-        RestTester.delete(baseUrl)
-                .withUrl("v1/rate/1")
-                .withCredentials("user1", "password")
+        createRate("{\"description\": \"ghhg\", \"rate\": 7, \"productId\": 3}")
+                .expectedBody("{\"rateId\":1,\"description\": \"ghhg\", \"rate\": 7, \"productId\": 3}")
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
 
-        RestTester.get(baseUrl)
-                .withUrl("v1/rate")
-                .withCredentials("user1", "password")
-                .expectedStatus(HttpStatus.OK)
-                .expectedBody("[]")
-                .assertCall(restTemplate);
+        deleteRate("1").assertCall(restTemplate);
     }
 
     @Test
     public void listRatesWhenNoRatesExists() {
+        login("user1", "password").assertCall(restTemplate);
+        
         RestTester.get(baseUrl)
                 .withUrl("v1/rate")
-                .withCredentials("user1", "password")
                 .expectedStatus(HttpStatus.OK)
                 .expectedBody("[]")
                 .assertCall(restTemplate);
     }
+    */
+    @Test
+    public void doNotListAnotherUsersRates() {
+        login("user1", "password").assertCall(restTemplate);
+        
+        createRandomRate().assertCall(restTemplate);
+        
+        login("user2", "password").assertCall(restTemplate);
+        
+        RestTester.get()
+                .withUrl(baseUrl + "v1/rate")
+                .expectedStatus(HttpStatus.OK)
+                .expectedBody("[]")
+                .assertCall(restTemplate);
+        
+        login("user1", "password").assertCall(restTemplate);
+        
+        deleteRate("1").assertCall(restTemplate);
+        
+        RestTester.get()
+                .withUrl(baseUrl + "v1/rate")
+                .expectedStatus(HttpStatus.OK)
+                .expectedBody("[]")
+                .assertCall(restTemplate);
+    }   
+    
+    private RestTester deleteRate(final String id) {
+        return RestTester.delete()
+                .withUrl(baseUrl + "v1/rate/" + id)
+                .expectedStatus(HttpStatus.OK);
+    }
     
     private RestTester login(final String username, final String password) {
-        return RestTester.get(baseUrl)
-                .withUrl("")
+        return RestTester.get()
+                .withUrl(baseUrl)
                 .withCredentials(username, password)
                 .expectedStatus(HttpStatus.OK);
     }
     
     public RestTester createRate(final String body) {
-        return RestTester.post(baseUrl)
-                .withUrl("v1/rate")
+        return RestTester.post()
+                .withUrl(baseUrl + "v1/rate")
                 .withRequestBody(body)
                 .expectedStatus(HttpStatus.OK);
     }
-
+    
+    public RestTester createRandomRate() {
+        return RestTester.post()
+                .withUrl(baseUrl+ "v1/rate")
+                .withRequestBody("{\"description\": \"ghhg\", \"rate\": 5, \"productId\": 3}")
+                .expectedStatus(HttpStatus.OK);
+    }
+    
 }
