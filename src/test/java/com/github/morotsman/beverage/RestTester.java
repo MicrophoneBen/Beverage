@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 import static org.junit.Assert.assertEquals;
@@ -17,6 +18,7 @@ import java.util.function.Function;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.security.crypto.codec.Base64;
 
 
 public class RestTester {
@@ -83,25 +85,13 @@ public class RestTester {
         return new RestTester(httpMethod, baseUrl, url, username,password,expectedHttpStatus,expectedBody,requestBody); 
     }
     
-    public void assertCall() {
-        RestTemplate template = restTemplate(username,password);
-        
-        HttpHeaders headers = new HttpHeaders();
-        
-        
-        if(username != null) {
-            ResponseEntity<String> login =  template.getForEntity(baseUrl,String.class);
-
-            final Optional<String> xsrfToken = login.getHeaders().get("Set-Cookie").stream()
-                    .filter(v -> v.startsWith("XSRF-TOKEN"))
-                    .map(t -> t.split(";")[0].split("=")[1]).findFirst();
-      
-            headers.add("X-XSRF-TOKEN", xsrfToken.get());
-            headers.add("Cookie","XSRF-TOKEN=" + xsrfToken.get());
-        }
-         
+    public void assertCall(final RestTemplate template) {
         try {
+            HttpHeaders headers = new HttpHeaders();
             
+            if(username != null) {
+                headers = getLoginHeaders(username,password);
+            }
             
             if(requestBody != null) {
                 headers.setContentType(MediaType.APPLICATION_JSON);
@@ -126,20 +116,14 @@ public class RestTester {
         }      
     }
     
-    private RestTemplate restTemplate(final String username, final String password) {
-
-        final RestTemplate restTemplate = new RestTemplate();
-        
-        if(username == null || password == null) return restTemplate;
-
-        restTemplate.setMessageConverters(Arrays.asList(
-                new FormHttpMessageConverter(),
-                new StringHttpMessageConverter()
-        ));
-        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(username, password));
-
-
-        return restTemplate;
+    
+    private HttpHeaders getLoginHeaders(final String username, final String password){
+        HttpHeaders requestHeaders = new HttpHeaders();
+        final String auth = username + ":" + password;
+        final byte[] encodedAuth = Base64.encode(auth.getBytes(Charset.forName("US-ASCII")));
+        final String authHeader = "Basic " + new String(encodedAuth);
+        requestHeaders.set("Authorization", authHeader);
+        return requestHeaders;
     }
     
     
