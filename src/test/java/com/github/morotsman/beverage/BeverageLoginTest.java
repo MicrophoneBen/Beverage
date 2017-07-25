@@ -47,7 +47,7 @@ public class BeverageLoginTest {
 
     @Test
     public void callWithoutCredentials() {
-        RestTester.get()
+        RestTester.get(String.class)
                 .withUrl(baseUrl)
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
@@ -55,7 +55,7 @@ public class BeverageLoginTest {
 
     
     private RestTester login(final String username, final String password) {
-        return RestTester.get()
+        return RestTester.get(String.class)
                 .withUrl(baseUrl)
                 .withCredentials(username, password)
                 .expectedStatus(HttpStatus.OK);

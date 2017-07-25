@@ -26,57 +26,53 @@ public class RestTester<R> {
     private final String url;
        
     private final String requestBody;
-    
-    private final String expectedBody;
+  
     
     private final HttpMethod httpMethod;
     
+    private final Class<R> responseBodyClass;
     
     
-    public static RestTester get() {
-        return new RestTester(HttpMethod.GET, null,null,null, null,null, null);
+    public static <R> RestTester<R> get(Class<R> responseBodyClass) {
+        return new RestTester<>(responseBodyClass, HttpMethod.GET, null,null, null,null, null);
     }
     
-    public static RestTester post() { 
-        return new RestTester(HttpMethod.POST, null,null,null, null,null,null);
+    public static <R> RestTester<R> post(Class<R> responseBodyClass) { 
+        return new RestTester<>(responseBodyClass, HttpMethod.POST, null,null, null,null,null);
     }
     
-    public static RestTester delete() {
-        return new RestTester(HttpMethod.DELETE, null,null,null, null,null,null);
+    public static <R> RestTester<R> delete(Class<R> responseBodyClass) {
+        return new RestTester<>(responseBodyClass, HttpMethod.DELETE, null,null, null,null,null);
     }
     
-    private RestTester(final HttpMethod httpMethod, final String url, final String username, final String password, 
-            final HttpStatus expectedHttpStatus, final String expectedBody, final String requestBody) {
+    private RestTester(Class<R> responseBodyClass, final HttpMethod httpMethod, final String url, final String username, final String password, 
+            final HttpStatus expectedHttpStatus, final String requestBody) {
         this.url = url;
         this.username = username;
         this.password = password;
         this.expectedHttpStatus = expectedHttpStatus;
-        this.expectedBody = expectedBody;
         this.httpMethod = httpMethod;
         this.requestBody = requestBody;
+        this.responseBodyClass = responseBodyClass;
     }
     
-    public RestTester withUrl(final String url) {
-       return new RestTester(httpMethod, url, username, password, expectedHttpStatus,expectedBody,requestBody);
+    public RestTester<R> withUrl(final String url) {
+       return new RestTester<>(responseBodyClass, httpMethod, url, username, password, expectedHttpStatus,requestBody);
     }
     
-    public RestTester withCredentials(final String username, final String password) {
-        return new RestTester(httpMethod, url, username, password, expectedHttpStatus,expectedBody,requestBody);
+    public RestTester<R> withCredentials(final String username, final String password) {
+        return new RestTester<>(responseBodyClass,httpMethod, url, username, password, expectedHttpStatus,requestBody);
     }
     
-    public RestTester withRequestBody(final String requestBody) {
-        return new RestTester(httpMethod, url, username, password, expectedHttpStatus,expectedBody,requestBody);
+    public RestTester<R> withRequestBody(final String requestBody) {
+        return new RestTester<>(responseBodyClass,httpMethod, url, username, password, expectedHttpStatus,requestBody);
     }
     
-    public RestTester expectedStatus(HttpStatus httpStatus) {
-        return new RestTester(httpMethod, url, username,password,httpStatus,expectedBody,requestBody);
+    public RestTester<R> expectedStatus(HttpStatus httpStatus) {
+        return new RestTester<>(responseBodyClass,httpMethod, url, username,password,httpStatus,requestBody);
     }
     
-    public RestTester expectedBody(final String expectedBody) {
-        return new RestTester(httpMethod, url, username,password,expectedHttpStatus,expectedBody,requestBody); 
-    }
-    
-    public ResponseEntity<String> assertCall(final RestTemplate template) {
+    public ResponseEntity<R> assertCall(final RestTemplate template) {
         try {
             HttpHeaders headers = new HttpHeaders();
             
@@ -90,14 +86,11 @@ public class RestTester<R> {
             }
             
             HttpEntity<String> requestEntity = new HttpEntity<>(requestBody,headers);
-            ResponseEntity<String> response = template.exchange(url, httpMethod, requestEntity, String.class);
+            ResponseEntity<R> response = template.exchange(url, httpMethod, requestEntity, responseBodyClass);
             
             if(expectedHttpStatus != null) {
                 assertEquals(expectedHttpStatus,response.getStatusCode());
             } 
-            if(expectedBody != null) {
-                assertEquals(expectedBody.replace(" ", ""),response.getBody().replace(" ", ""));
-            }
             return response;
         } catch(HttpClientErrorException e) {
             if(expectedHttpStatus!=null && expectedHttpStatus.value() >= 400) {

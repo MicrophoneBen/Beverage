@@ -64,8 +64,10 @@ public class RateServiceImpl implements RateService {
     @Transactional
     @Override
     public void deleteRate(final String username, long rateId) {
-        Rate rate = rateRepository.findOne(rateId);
-        rateRepository.delete(rateId);
+        final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
+        System.out.println("Kommer hit 1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        rateRepository.deleteByRateIdAndBevarageUser(rateId, user);
+        System.out.println("Kommer hit 2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     @Transactional

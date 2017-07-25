@@ -8,4 +8,6 @@ public interface RateRepository extends CrudRepository<Rate, Long> {
     
     Stream<Rate> findByBevarageUser(BeverageUser user);
     
+    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);
+    
 }
