@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class RateServiceImpl implements RateService {
@@ -55,10 +56,12 @@ public class RateServiceImpl implements RateService {
     @Transactional
     @Override
     public RateDto updateRate(final String username, RateDto rate) {
+        final BeverageUser owner = rateRepository.findOne(rate.getRateId()).getBevarageUser();
+        
+        if(!owner.getUsername().equals(username)) throw new WrongUserException();
+           
         final Product product = entityManager.getReference(Product.class, rate.getProductId());
-        final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
-        System.out.println(fromDto(rate,product,user));
-        final Rate updatedRate = rateRepository.save(fromDto(rate,product,user));
+        final Rate updatedRate = rateRepository.save(fromDto(rate,product,owner));
         return toDto(updatedRate);
     }
 

@@ -163,6 +163,26 @@ public class BeverageRateTest {
 
         deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);        
     }
+   
+    @Test
+    public void doNotUpdateAnotherUsersRate() {
+        login("user1", "password").assertCall(restTemplate);
+        
+        ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.OK)
+                .assertCall(restTemplate);
+        
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
+        
+        login("user2", "password").assertCall(restTemplate);
+        
+        updateRate(rate.getBody().getRateId(), "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
+                .expectedStatus(HttpStatus.FORBIDDEN)
+                .assertCall(restTemplate);
+        
+        login("user1", "password").assertCall(restTemplate);
+        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);        
+    }
     
     
     private void assertThatTheNumberOfRatesIs(final int expectedNumberOfRates) {

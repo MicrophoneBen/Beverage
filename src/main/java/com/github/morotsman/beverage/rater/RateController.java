@@ -1,6 +1,7 @@
 package com.github.morotsman.beverage.rater;
 
 import com.github.morotsman.beverage.model.Rate;
+import com.github.morotsman.beverage.rater.service.WrongUserException;
 import java.security.Principal;
 import javax.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -78,6 +79,15 @@ public class RateController {
         System.out.println(e.getMessage());  
         e.printStackTrace(System.out);    
     }
+    
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler({ WrongUserException.class })
+    public void handleException(WrongUserException e) {
+        System.out.println(e.getMessage());  
+        e.printStackTrace(System.out);    
+    }
+    
+    
     
 
     
