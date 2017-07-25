@@ -39,7 +39,7 @@ public class RateController {
     
     
     @RequestMapping(value = "/{rateId}", method = RequestMethod.PUT)
-    public RateDto updateRate(@PathVariable long rateId,@RequestBody RateDto rate, Principal principal) {
+    public RateDto updateRate(@PathVariable long rateId,@RequestBody @Valid RateDto rate, Principal principal) {
         return rateService.updateRate(principal.getName(),rate);
     }
     
