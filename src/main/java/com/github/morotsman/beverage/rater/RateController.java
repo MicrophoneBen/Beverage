@@ -36,10 +36,6 @@ public class RateController {
         return rateService.createRate(principal.getName(),rate);
     }
     
-    @RequestMapping(value = "/{rateId}", method = RequestMethod.GET)
-    public Rate getRate(@PathVariable long rateId, Principal principal) {
-        return rateService.getRate(principal.getName(),rateId);
-    }
     
     @RequestMapping(value = "/{rateId}", method = RequestMethod.PUT)
     public RateDto updateRate(@PathVariable long rateId,@RequestBody RateDto rate, Principal principal) {

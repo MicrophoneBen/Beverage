@@ -41,6 +41,10 @@ public class RestTester<R> {
         return new RestTester<>(responseBodyClass, HttpMethod.POST, null,null, null,null,null);
     }
     
+    public static <R> RestTester<R> put(Class<R> responseBodyClass) { 
+        return new RestTester<>(responseBodyClass, HttpMethod.PUT, null,null, null,null,null);
+    }
+    
     public static <R> RestTester<R> delete(Class<R> responseBodyClass) {
         return new RestTester<>(responseBodyClass, HttpMethod.DELETE, null,null, null,null,null);
     }

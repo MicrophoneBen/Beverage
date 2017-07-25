@@ -57,6 +57,7 @@ public class RateServiceImpl implements RateService {
     public RateDto updateRate(final String username, RateDto rate) {
         final Product product = entityManager.getReference(Product.class, rate.getProductId());
         final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
+        System.out.println(fromDto(rate,product,user));
         final Rate updatedRate = rateRepository.save(fromDto(rate,product,user));
         return toDto(updatedRate);
     }
@@ -65,9 +66,7 @@ public class RateServiceImpl implements RateService {
     @Override
     public void deleteRate(final String username, long rateId) {
         final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
-        System.out.println("Kommer hit 1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         rateRepository.deleteByRateIdAndBevarageUser(rateId, user);
-        System.out.println("Kommer hit 2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
     @Transactional

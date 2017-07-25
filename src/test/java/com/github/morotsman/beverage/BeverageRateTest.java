@@ -34,7 +34,7 @@ public class BeverageRateTest {
     public void before() {
         baseUrl = "http://localhost:" + port + "/";  
     }
-
+    
     @Test
     public void testCreateRate() {
         login("user1", "password").assertCall(restTemplate);
@@ -86,33 +86,26 @@ public class BeverageRateTest {
         
         ResponseEntity<RateDto> rate = createRandomRate().assertCall(restTemplate);
         
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);  
-        Assert.assertEquals(1,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(1);
 
         deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
         
-        rates = getRates().assertCall(restTemplate);  
-        Assert.assertEquals(0,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(0);
     }  
    
     
     @Test
     public void testDeleteAnotherUsersRate() {
-        login("user1", "password").assertCall(restTemplate);
-        
+        login("user1", "password").assertCall(restTemplate);       
         ResponseEntity<RateDto> rate = createRandomRate().assertCall(restTemplate);
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);  
-        Assert.assertEquals(1,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(1);
         
         login("user2", "password").assertCall(restTemplate);
-        
         deleteRate(rate.getBody().getRateId())
                 .assertCall(restTemplate);
         
         login("user1", "password").assertCall(restTemplate);
-        
-        rates = getRates().assertCall(restTemplate);  
-        Assert.assertEquals(1,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(1);
         
         deleteRate(rate.getBody().getRateId())
                 .expectedStatus(HttpStatus.OK)
@@ -133,30 +126,49 @@ public class BeverageRateTest {
         login("user1", "password").assertCall(restTemplate);
         ResponseEntity<RateDto> rate =  createRandomRate().assertCall(restTemplate);
         
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);  
-        Assert.assertEquals(1,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(1);
         
         deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
     }
     
     @Test
-    public void doNotListAnotherUsersRates() {
-        
+    public void doNotListAnotherUsersRates() {    
         login("user1", "password").assertCall(restTemplate);
         ResponseEntity<RateDto> rate =  createRandomRate().assertCall(restTemplate);
-        
-        
+              
         login("user2", "password").assertCall(restTemplate);
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
-        Assert.assertEquals(0,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(0);
         
         login("user1", "password").assertCall(restTemplate);   
-        rates = getRates().assertCall(restTemplate);
-        Assert.assertEquals(1,rates.getBody().length);
-        
+        assertThatTheNumberOfRatesIs(1);
         
         deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
     } 
+ 
+    @Test
+    public void updateARate() {
+        login("user1", "password").assertCall(restTemplate);
+        
+        ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.OK)
+                .assertCall(restTemplate);
+        
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
+        
+        rate = updateRate(rate.getBody().getRateId(), "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
+                .expectedStatus(HttpStatus.OK)
+                .assertCall(restTemplate);
+        
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 1L), rate.getBody());
+
+        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);        
+    }
+    
+    
+    private void assertThatTheNumberOfRatesIs(final int expectedNumberOfRates) {
+        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
+        Assert.assertEquals(expectedNumberOfRates,rates.getBody().length);
+    }
     
     private RestTester getRates() {
         return RestTester.get(Rate[].class)
@@ -180,6 +192,13 @@ public class BeverageRateTest {
     public RestTester createRate(final String body) {
         return RestTester.post(RateDto.class)
                 .withUrl(baseUrl + "v1/rate")
+                .withRequestBody(body)
+                .expectedStatus(HttpStatus.OK);
+    }
+    
+    public RestTester updateRate(final Long id, final String body) {
+        return RestTester.put(RateDto.class)
+                .withUrl(baseUrl + "v1/rate/" + id)
                 .withRequestBody(body)
                 .expectedStatus(HttpStatus.OK);
     }
