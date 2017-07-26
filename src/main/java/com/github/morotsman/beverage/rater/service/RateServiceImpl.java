@@ -49,28 +49,24 @@ public class RateServiceImpl implements RateService {
 
     @Transactional
     @Override
-    public RateDto getRate(final String username, long rateId) {
+    public RateDto getRate(final String username, long rateId) {        
+        return toDto(getRateIfOwnedByUser(username, rateId));  
+    }
+    
+    private Rate getRateIfOwnedByUser(final String username, long rateId) {
         final Rate rate = rateRepository.findOne(rateId);
         if(rate == null) throw new UnknownRateException();
         
-        validateThatRateIsOwnedByUser(rate, username);
-        
-        return toDto(rate);  
-    }
-    
-    private void validateThatRateIsOwnedByUser(final Rate rate, String username) {
         final BeverageUser owner = rate.getBevarageUser();
         if(!owner.getUsername().equals(username)) throw new WrongUserException();
+        
+        return rate;
     }
 
     @Transactional
     @Override
     public RateDto updateRate(final String username, RateDto rateDto) {
-        final Rate rate = rateRepository.findOne(rateDto.getRateId());
-        if(rate == null) throw new UnknownRateException();
-        
-        validateThatRateIsOwnedByUser(rate, username);
-           
+        final Rate rate = getRateIfOwnedByUser(username, rateDto.getRateId());         
         final Product product = entityManager.getReference(Product.class, rateDto.getProductId());
         final Rate updatedRate = rateRepository.save(fromDto(rateDto,product,rate.getBevarageUser()));
         return toDto(updatedRate);
@@ -79,13 +75,8 @@ public class RateServiceImpl implements RateService {
     @Transactional
     @Override
     public void deleteRate(final String username, long rateId) {
-        final Rate rate = rateRepository.findOne(rateId);
-        if(rate == null) throw new UnknownRateException();
-        
-        validateThatRateIsOwnedByUser(rate, username);
-        
-        final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
-        rateRepository.deleteByRateIdAndBevarageUser(rateId, user);
+        final Rate rate = getRateIfOwnedByUser(username, rateId);     
+        rateRepository.deleteByRateIdAndBevarageUser(rateId, rate.getBevarageUser());
     }
 
     @Transactional
