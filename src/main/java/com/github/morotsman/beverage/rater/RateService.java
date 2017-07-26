@@ -7,7 +7,7 @@ public interface RateService {
     
     RateDto createRate(String username,RateDto rate);
     
-    Rate getRate(String username,long rateId);
+    RateDto getRate(String username,long rateId);
     
     RateDto updateRate(String username, RateDto rate);
     

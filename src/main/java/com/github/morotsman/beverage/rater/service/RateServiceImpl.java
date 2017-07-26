@@ -49,25 +49,41 @@ public class RateServiceImpl implements RateService {
 
     @Transactional
     @Override
-    public Rate getRate(final String username, long rateId) {
-        return rateRepository.findOne(rateId);  
+    public RateDto getRate(final String username, long rateId) {
+        final Rate rate = rateRepository.findOne(rateId);
+        if(rate == null) throw new UnknownRateException();
+        
+        validateThatRateIsOwnedByUser(rate, username);
+        
+        return toDto(rate);  
+    }
+    
+    private void validateThatRateIsOwnedByUser(final Rate rate, String username) {
+        final BeverageUser owner = rate.getBevarageUser();
+        if(!owner.getUsername().equals(username)) throw new WrongUserException();
     }
 
     @Transactional
     @Override
-    public RateDto updateRate(final String username, RateDto rate) {
-        final BeverageUser owner = rateRepository.findOne(rate.getRateId()).getBevarageUser();
+    public RateDto updateRate(final String username, RateDto rateDto) {
+        final Rate rate = rateRepository.findOne(rateDto.getRateId());
+        if(rate == null) throw new UnknownRateException();
         
-        if(!owner.getUsername().equals(username)) throw new WrongUserException();
+        validateThatRateIsOwnedByUser(rate, username);
            
-        final Product product = entityManager.getReference(Product.class, rate.getProductId());
-        final Rate updatedRate = rateRepository.save(fromDto(rate,product,owner));
+        final Product product = entityManager.getReference(Product.class, rateDto.getProductId());
+        final Rate updatedRate = rateRepository.save(fromDto(rateDto,product,rate.getBevarageUser()));
         return toDto(updatedRate);
     }
 
     @Transactional
     @Override
     public void deleteRate(final String username, long rateId) {
+        final Rate rate = rateRepository.findOne(rateId);
+        if(rate == null) throw new UnknownRateException();
+        
+        validateThatRateIsOwnedByUser(rate, username);
+        
         final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
         rateRepository.deleteByRateIdAndBevarageUser(rateId, user);
     }
