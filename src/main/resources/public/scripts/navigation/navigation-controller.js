@@ -7,9 +7,9 @@ define(['angular', './navigation.module'], function (angular) {
     angular.module('beverage.navigation').controller('navigation', ['$scope', '$http', '$location',
         function ($scope, $http, $location) {
             function isAuthenticated(credentials) {
-                
+
                 $scope.signIn = true;
-                
+
                 var headers = credentials ? {authorization: "Basic "
                             + btoa(credentials.username + ":" + credentials.password)
                 } : {};
@@ -43,15 +43,24 @@ define(['angular', './navigation.module'], function (angular) {
             };
 
             isAuthenticated().then(route);
-            
+
             $scope.createUser = function (userDetails) {
-                return $http.post('/v1/user',userDetails).then(function() {
+                $scope.error = false;
+                return $http.post('/v1/user', userDetails).then(function () {
                     $scope.signIn = true;
                     $scope.signUp = false;
-                }, function() {
+                }, function () {
                     $scope.error = true;
-                });      
+                });
             };
+
+            $scope.logout = function () {
+                $http.post('logout', {}).then(function () {
+                    $location.path("/login");
+                }).error(function (data) {
+                    
+                });
+            }
 
 
 

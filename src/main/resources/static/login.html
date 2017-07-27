@@ -20,7 +20,7 @@
                             class="form-control" id="password" name="password" ng-model="credentials.password"/>
             </div>
             <button ng-disabled="signInForm.$invalid" type="submit" class="btn btn-primary" ng-click="login(credentials)">Sign in</button>
-            <button type="submit" class="btn btn-primary" ng-click="signIn=false;signUp=true">Sign up</button>
+            <button type="submit" class="btn btn-primary" ng-click="signIn=false;signUp=true;error=false;">Sign up</button>
     </form> 
     <form ng-show="signUp" role="form" name="signUpForm">
             <div class="form-group">
