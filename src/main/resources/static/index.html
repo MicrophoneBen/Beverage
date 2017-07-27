@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Beverage</title>
+        <link rel="stylesheet" href="./webjars/angular-ui-select/select.css">
+        <link rel='stylesheet' href='/webjars/bootstrap/css/bootstrap.min.css'>
+        <style type="text/css">
+            [ng\:cloak], [ng-cloak], .ng-cloak {
+                display: none !important;
+            }
+        </style>
+        <meta charset="utf-8">
+    </head>  
+    
+
+    <body>
+
+        
+        <div class="container">
+                <div class="col-md-10">
+                    <h1>Beverage</h1>
+                </div>
+                <div class="col-md-2">
+                    <a href="" ng-click="logout()">logout</a>
+                </div>
+	</div>
+	<div ng-cloak ng-view class="container"></div>
+        
+        
+        <script src="/webjarsjs"></script>
+        <script data-main="scripts/main" src="webjars/requirejs/require.min.js"></script>
+
+    </body>
+</html>
