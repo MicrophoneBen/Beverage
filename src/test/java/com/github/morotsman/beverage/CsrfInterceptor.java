@@ -15,24 +15,7 @@ public class CsrfInterceptor implements ClientHttpRequestInterceptor {
 
     private Optional<String> xsrfToken = Optional.empty();
     private Optional<String> jsession =  Optional.empty();
-    
-    private String extectXsrfToken(final String source) {
-        return StringUtils.substringBetween(source, "XSRF-TOKEN=", ";");
-    }
-    
-    private String extectJSessionToken(final String source) {
-        return StringUtils.substringBetween(source, "JSESSIONID=", ";");
-    }
-    
-    private Optional<String> getValueFromSetCookie(final List<String> cookieList, final String tag) {
-        return cookieList
-                .stream()
-                .filter(v -> v.contains(tag))
-                .map(s -> StringUtils.substringBetween(s, tag + "=", ";"))
-                .filter(StringUtils::isNoneEmpty)
-                .findFirst();
-    }
-    
+   
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {   
         if(xsrfToken.isPresent()) {
@@ -52,5 +35,15 @@ public class CsrfInterceptor implements ClientHttpRequestInterceptor {
         }
         return clientHttpResponse;
     }
+    
+    private Optional<String> getValueFromSetCookie(final List<String> cookieList, final String tag) {
+        return cookieList
+                .stream()
+                .filter(v -> v.contains(tag))
+                .map(s -> StringUtils.substringBetween(s, tag + "=", ";"))
+                .filter(StringUtils::isNoneEmpty)
+                .findFirst();
+    }
+    
     
 }
