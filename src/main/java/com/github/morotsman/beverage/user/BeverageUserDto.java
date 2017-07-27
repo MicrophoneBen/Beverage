@@ -1,19 +1,28 @@
 package com.github.morotsman.beverage.user;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
 public class BeverageUserDto {
     
     @NotEmpty
-    final String password;
+    private String password;
     
     @NotEmpty
-    final String username;
+    private String username;
+    
+    @NotNull
+    @Min(20)
+    private Long age;
+    
+    protected BeverageUserDto(){}
 
-    public BeverageUserDto(String password, String username) {
+    public BeverageUserDto(String password, String username, Long age) {
         this.password = password;
         this.username = username;
+        this.age = age;
     }
 
     public String getPassword() {
@@ -24,14 +33,13 @@ public class BeverageUserDto {
         return username;
     }
 
+    public Long getAge() {
+        return age;
+    }
+
     @Override
     public String toString() {
-        return "BeverageUserDto{" + "password=" + password + ", username=" + username + '}';
-    }
-    
-    
-    
-    
-    
+        return "BeverageUserDto{" + "password=" + password + ", username=" + username + ", age=" + age + '}';
+    }   
     
 }

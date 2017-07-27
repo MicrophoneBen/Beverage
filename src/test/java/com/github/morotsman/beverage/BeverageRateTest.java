@@ -41,10 +41,10 @@ public class BeverageRateTest {
     private String baseUrl;
 
     @Before
-    public void before() {
+    public void before() {  
         baseUrl = "http://localhost:" + port + "/"; 
-        createUser("user1", "password");
-        createUser("user2", "password");
+        createUser("user1", "password",20L);
+        createUser("user2", "password", 30L);
     }
     
     @After
@@ -340,8 +340,8 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.OK);
     }
     
-    public void createUser(final String username, final String password) {
-        userService.createUser(new BeverageUserDto(password,username));
+    public void createUser(final String username, final String password, final Long age) {
+        userService.createUser(new BeverageUserDto(password,username, age));
     }
     
  

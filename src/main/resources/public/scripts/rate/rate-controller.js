@@ -29,7 +29,6 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
             
             function createRate(_rate) {
-                console.log(_rate);
                 var rate = {
                     description: _rate.description,
                     rate: _rate.score,

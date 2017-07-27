@@ -36,8 +36,7 @@ public class BeverageLoginTest {
     public void before() {
         baseUrl = "http://localhost:" + port + "/";
         
-        createUser("user1", "password");
-        createUser("user2", "password");
+        createUser("user1", "password",23L);
     }
     
     @After
@@ -75,8 +74,8 @@ public class BeverageLoginTest {
                 .expectedStatus(HttpStatus.OK);
     }
     
-    public void createUser(final String username, final String password) {
-        userService.createUser(new BeverageUserDto(password,username));
+    public void createUser(final String username, final String password, final Long age) {
+        userService.createUser(new BeverageUserDto(password,username,age));
     }
     
     

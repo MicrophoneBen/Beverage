@@ -45,8 +45,15 @@ define(['angular', './navigation.module'], function (angular) {
             isAuthenticated().then(route);
             
             $scope.createUser = function (userDetails) {
-                           
+                return $http.post('/v1/user',userDetails).then(function() {
+                    $scope.signIn = true;
+                    $scope.signUp = false;
+                }, function() {
+                    $scope.error = true;
+                });      
             };
+
+
 
 
 

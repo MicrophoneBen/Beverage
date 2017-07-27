@@ -1,11 +1,16 @@
 package com.github.morotsman.beverage.user;
 
+import com.github.morotsman.beverage.user.service.DupplicatedUserException;
 import java.security.Principal;
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,7 +31,15 @@ public class UserController {
     
     @GetMapping("/user")  
     public BeverageUserDto getUser(Principal principal) {
-        return new BeverageUserDto(null, principal.getName());
+        return new BeverageUserDto(null, principal.getName(),null);
+    }
+    
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler({ DupplicatedUserException.class })
+    public void handleException(DupplicatedUserException e) {
+        System.out.println(e.getMessage());  
+        e.printStackTrace(System.out);
+        
     }
 
 }

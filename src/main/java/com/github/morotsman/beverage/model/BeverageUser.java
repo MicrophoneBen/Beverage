@@ -15,6 +15,7 @@ public class BeverageUser implements UserDetails, Serializable{
     @Id
     private String userName;
     private String password;
+    private Long age;
 
     
     @Override
@@ -32,6 +33,12 @@ public class BeverageUser implements UserDetails, Serializable{
     public String getUsername() {
         return userName;
     }
+
+    public Long getAge() {
+        return age;
+    }
+    
+    
 
     @Override
     public boolean isAccountNonExpired() {
@@ -53,9 +60,10 @@ public class BeverageUser implements UserDetails, Serializable{
         return true;
     }
 
-    public BeverageUser(String userName, String password) {
+    public BeverageUser(String userName, String password, Long age) {
         this.userName = userName;
         this.password = password;
+        this.age = age;
     }
     
     protected BeverageUser(){
@@ -63,11 +71,11 @@ public class BeverageUser implements UserDetails, Serializable{
 
     @Override
     public String toString() {
-        return "BeverageUser{" + "userName=" + userName + ", password=" + password + '}';
+        return "BeverageUser{" + "userName=" + userName + ", password=" + password + ", age=" + age + '}';
     }
+
     
     
-    
-    
+      
     
 }
