@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class RateServiceImpl implements RateService {
@@ -85,6 +84,12 @@ public class RateServiceImpl implements RateService {
         return rateRepository.findByBevarageUser(entityManager.getReference(BeverageUser.class, username))
                 .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null))
                 .collect(Collectors.toList());
+    }
+    
+    @Transactional
+    @Override
+    public void deleteAllRates() {
+        rateRepository.deleteAll();
     }
     
 }

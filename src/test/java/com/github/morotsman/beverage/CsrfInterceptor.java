@@ -24,9 +24,17 @@ public class CsrfInterceptor implements ClientHttpRequestInterceptor {
         return StringUtils.substringBetween(source, "JSESSIONID=", ";");
     }
     
+    private Optional<String> getValueFromSetCookie(final List<String> cookieList, final String tag) {
+        return cookieList
+                .stream()
+                .filter(v -> v.contains(tag))
+                .map(s -> StringUtils.substringBetween(s, tag + "=", ";"))
+                .filter(StringUtils::isNoneEmpty)
+                .findFirst();
+    }
+    
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {   
         if(xsrfToken.isPresent()) {
             request.getHeaders().add("X-XSRF-TOKEN", xsrfToken.get());
             request.getHeaders().add("Cookie","XSRF-TOKEN=" + xsrfToken.get() + "; " + "JSESSIONID=" + jsession.get());
@@ -38,28 +46,10 @@ public class CsrfInterceptor implements ClientHttpRequestInterceptor {
                     .getHeaders()
                     .get("Set-Cookie");
         
-        System.out.println(setCookie);
-        
         if(setCookie != null) {
-            xsrfToken = setCookie
-                    .stream()
-                    .filter(v -> v.contains("XSRF-TOKEN"))
-                    .map(this::extectXsrfToken)
-                    .filter(StringUtils::isNoneEmpty)
-                    .findFirst();
+            xsrfToken = getValueFromSetCookie(setCookie, "XSRF-TOKEN");
+            jsession =  getValueFromSetCookie(setCookie, "JSESSIONID");
         }
-        
-        if(setCookie != null) {
-            jsession = setCookie
-                    .stream()
-                    .filter(v -> v.contains("JSESSIONID"))
-                    .map(this::extectJSessionToken)
-                    .filter(StringUtils::isNoneEmpty)
-                    .findFirst();
-        }
-        
-        
-      
         return clientHttpResponse;
     }
     

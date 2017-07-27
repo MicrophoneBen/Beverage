@@ -2,6 +2,10 @@ package com.github.morotsman.beverage;
 
 import com.github.morotsman.beverage.model.Rate;
 import com.github.morotsman.beverage.rater.RateDto;
+import com.github.morotsman.beverage.rater.RateService;
+import com.github.morotsman.beverage.user.BeverageUserDto;
+import com.github.morotsman.beverage.user.UserService;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -27,12 +31,26 @@ public class BeverageRateTest {
     @Autowired
     @Qualifier("CsrfRestTemplate")
     private RestTemplate restTemplate;
+    
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private RateService rateService; 
 
     private String baseUrl;
 
     @Before
     public void before() {
-        baseUrl = "http://localhost:" + port + "/";  
+        baseUrl = "http://localhost:" + port + "/"; 
+        createUser("user1", "password");
+        createUser("user2", "password");
+    }
+    
+    @After
+    public void after() {
+        rateService.deleteAllRates();
+        userService.deleteAllUsers();
     }
     
     @Test
@@ -44,10 +62,7 @@ public class BeverageRateTest {
                 .assertCall(restTemplate);
         
         Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
-
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
     }
-    
     
     @Test
     public void testCreateWithInvalidInputs() {
@@ -82,8 +97,7 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
                 .assertCall(restTemplate);
         
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);  
-        Assert.assertEquals(0,rates.getBody().length);
+        assertThatTheNumberOfRatesIs(0);
     }   
     
     @Test
@@ -97,8 +111,6 @@ public class BeverageRateTest {
         ResponseEntity<RateDto> actual = getRate(rate.getBody().getRateId()).expectedStatus(HttpStatus.OK).assertCall(restTemplate);
         
         Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), actual.getBody());
-        
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
     }
     
     
@@ -133,9 +145,6 @@ public class BeverageRateTest {
         
         login("user2", "password").assertCall(restTemplate);
         ResponseEntity<RateDto> actual = getRate(rate.getBody().getRateId()).expectedStatus(HttpStatus.FORBIDDEN).assertCall(restTemplate);
-        
-        login("user1", "password").assertCall(restTemplate);
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
     }
      
     @Test
@@ -165,10 +174,6 @@ public class BeverageRateTest {
         
         login("user1", "password").assertCall(restTemplate);
         assertThatTheNumberOfRatesIs(1);
-        
-        deleteRate(rate.getBody().getRateId())
-                .expectedStatus(HttpStatus.OK)
-                .assertCall(restTemplate);
     }
 
     @Test
@@ -186,22 +191,16 @@ public class BeverageRateTest {
         ResponseEntity<RateDto> rate =  createRandomRate().assertCall(restTemplate);
         
         assertThatTheNumberOfRatesIs(1);
-        
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
     }
     
     @Test
     public void doNotListAnotherUsersRates() {    
         login("user1", "password").assertCall(restTemplate);
         ResponseEntity<RateDto> rate =  createRandomRate().assertCall(restTemplate);
+        assertThatTheNumberOfRatesIs(1);
               
         login("user2", "password").assertCall(restTemplate);
-        assertThatTheNumberOfRatesIs(0);
-        
-        login("user1", "password").assertCall(restTemplate);   
-        assertThatTheNumberOfRatesIs(1);
-        
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);
+        assertThatTheNumberOfRatesIs(0); 
     } 
  
     @Test
@@ -218,9 +217,7 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 1L), rate.getBody());
-
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);        
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 1L), rate.getBody());     
     }
    
     @Test
@@ -242,9 +239,7 @@ public class BeverageRateTest {
         
         login("user1", "password").assertCall(restTemplate);      
         rate = getRate(rate.getBody().getRateId()).assertCall(restTemplate);      
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
-        
-        deleteRate(rate.getBody().getRateId()).assertCall(restTemplate);        
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());     
     }
     
     @Test
@@ -344,5 +339,11 @@ public class BeverageRateTest {
                 .withRequestBody("{\"description\": \"ghhg\", \"rate\": 5, \"productId\": 3}")
                 .expectedStatus(HttpStatus.OK);
     }
+    
+    public void createUser(final String username, final String password) {
+        userService.createUser(new BeverageUserDto(password,username));
+    }
+    
+ 
     
 }

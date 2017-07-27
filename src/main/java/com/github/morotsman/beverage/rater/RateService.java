@@ -15,4 +15,6 @@ public interface RateService {
     
     Iterable<Rate> getRates(String username);
     
+    void deleteAllRates();
+    
 }

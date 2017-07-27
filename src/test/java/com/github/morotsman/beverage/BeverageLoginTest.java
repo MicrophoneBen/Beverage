@@ -1,5 +1,8 @@
 package com.github.morotsman.beverage;
 
+import com.github.morotsman.beverage.user.BeverageUserDto;
+import com.github.morotsman.beverage.user.UserService;
+import org.junit.After;
 import org.junit.Before;
 
 import org.junit.Test;
@@ -23,12 +26,23 @@ public class BeverageLoginTest {
     @Autowired
     @Qualifier("CsrfRestTemplate")
     private RestTemplate restTemplate;
+    
+    @Autowired
+    private UserService userService;
 
     private String baseUrl;
 
     @Before
     public void before() {
         baseUrl = "http://localhost:" + port + "/";
+        
+        createUser("user1", "password");
+        createUser("user2", "password");
+    }
+    
+    @After
+    public void after() {
+        userService.deleteAllUsers();
     }
 
     @Test
@@ -59,6 +73,10 @@ public class BeverageLoginTest {
                 .withUrl(baseUrl)
                 .withCredentials(username, password)
                 .expectedStatus(HttpStatus.OK);
+    }
+    
+    public void createUser(final String username, final String password) {
+        userService.createUser(new BeverageUserDto(password,username));
     }
     
     
