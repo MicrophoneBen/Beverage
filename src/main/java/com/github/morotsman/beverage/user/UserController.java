@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/user")
+@RequestMapping()
 public class UserController { 
 
     final UserService userService;
@@ -18,13 +18,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("")
+    @PostMapping("/v1/user")
     public BeverageUserDto createUser(@RequestBody @Valid BeverageUserDto user) {
         return userService.createUser(user);
     }
 
     
-    @GetMapping("")
+    @GetMapping("/user")  
     public BeverageUserDto getUser(Principal principal) {
         return new BeverageUserDto(null, principal.getName());
     }
