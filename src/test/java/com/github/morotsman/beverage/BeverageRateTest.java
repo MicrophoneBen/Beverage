@@ -228,6 +228,30 @@ public class BeverageRateTest {
     }
     
     @Test
+    public void verifyThatRatesAreDefaultSortOnUpdatedTimeStamp() {
+        login("user1", "password").assertCall(restTemplate);
+        
+        createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.CREATED)
+                .assertCall(restTemplate);
+        
+        createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
+                .expectedStatus(HttpStatus.CREATED)
+                .assertCall(restTemplate);
+        
+        createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":5}")
+                .expectedStatus(HttpStatus.CREATED)
+                .assertCall(restTemplate);
+        
+        assertThatTheNumberOfRatesIs(3);
+        
+        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
+        Assert.assertEquals(new Long(5),rates.getBody()[0].getProduct().getProductId());
+        Assert.assertEquals(new Long(1),rates.getBody()[1].getProduct().getProductId());
+        Assert.assertEquals(new Long(3),rates.getBody()[2].getProduct().getProductId());
+    }
+    
+    @Test
     public void doNotListAnotherUsersRates() {    
         login("user1", "password").assertCall(restTemplate);
         ResponseEntity<RateDto> rate =  createRandomRate().assertCall(restTemplate);

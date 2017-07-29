@@ -35,14 +35,17 @@ public class Rate implements Serializable{
     @JoinColumn(name = "user_id")
     private BeverageUser bevarageUser;
     
+    private Long updated;
+    
     protected Rate() {}
 
-    public Rate(Long rateId, String description, Long rate, Product product,BeverageUser bevarageUser) {
+    public Rate(Long rateId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated) {
         this.rateId = rateId;
         this.description = description;
         this.rate = rate;
         this.product = product;
         this.bevarageUser = bevarageUser;
+        this.updated = updated;
     }
 
     public Long getRateId() {
@@ -65,10 +68,16 @@ public class Rate implements Serializable{
         return bevarageUser;
     }
 
+    public Long getUpdated() {
+        return updated;
+    }
+
     @Override
     public String toString() {
-        return "Rate{" + "rateId=" + rateId + ", description=" + description + ", rate=" + rate + ", product=" + product + ", bevarageUser=" + bevarageUser + '}';
+        return "Rate{" + "rateId=" + rateId + ", description=" + description + ", rate=" + rate + ", product=" + product + ", bevarageUser=" + bevarageUser + ", updated=" + updated + '}';
     }
+
+
     
     
     

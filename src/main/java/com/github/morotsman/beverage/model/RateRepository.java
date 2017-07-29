@@ -6,8 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface RateRepository extends CrudRepository<Rate, Long> {
     
-    Stream<Rate> findByBevarageUser(BeverageUser user);
+    Stream<Rate> findByBevarageUserOrderByUpdatedDesc(BeverageUser user);  
     
-    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);
+    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);    
     
 }

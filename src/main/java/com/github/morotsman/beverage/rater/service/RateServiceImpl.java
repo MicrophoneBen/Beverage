@@ -28,8 +28,8 @@ public class RateServiceImpl implements RateService {
         this.entityManager= entityManager;
     }
     
-    private Rate fromDto(final RateDto rateDto, final Product product, final BeverageUser beverageUser) {
-        return new Rate(rateDto.getRateId(), rateDto.getDescription(), rateDto.getRate(), product, beverageUser);
+    private Rate fromDto(final RateDto rateDto, final Product product, final BeverageUser beverageUser, final Long timestamp) {
+        return new Rate(rateDto.getRateId(), rateDto.getDescription(), rateDto.getRate(), product, beverageUser,timestamp);
     }
    
     
@@ -42,7 +42,7 @@ public class RateServiceImpl implements RateService {
     public RateDto createRate(final String username, final RateDto rate) {
         final Product product = entityManager.getReference(Product.class, rate.getProductId());
         final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
-        final Rate createdRate = rateRepository.save(fromDto(rate,product,user));
+        final Rate createdRate = rateRepository.save(fromDto(rate,product,user, System.currentTimeMillis()));
         return toDto(createdRate);
     }
 
@@ -67,7 +67,7 @@ public class RateServiceImpl implements RateService {
     public RateDto updateRate(final String username, RateDto rateDto) {
         final Rate rate = getRateIfOwnedByUser(username, rateDto.getRateId());         
         final Product product = entityManager.getReference(Product.class, rateDto.getProductId());
-        final Rate updatedRate = rateRepository.save(fromDto(rateDto,product,rate.getBevarageUser()));
+        final Rate updatedRate = rateRepository.save(fromDto(rateDto,product,rate.getBevarageUser(),System.currentTimeMillis()));
         return toDto(updatedRate);
     }
 
@@ -76,13 +76,13 @@ public class RateServiceImpl implements RateService {
     public void deleteRate(final String username, long rateId) {
         final Rate rate = getRateIfOwnedByUser(username, rateId);     
         rateRepository.deleteByRateIdAndBevarageUser(rateId, rate.getBevarageUser());
-    }
+    }  
 
     @Transactional
     @Override
     public Iterable<Rate> getRates(final String username) { 
-        return rateRepository.findByBevarageUser(entityManager.getReference(BeverageUser.class, username))
-                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null))
+        return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username))
+                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null,r.getUpdated()))
                 .collect(Collectors.toList());
     }
     
