@@ -65,6 +65,21 @@ public class BeverageRateTest {
     }
     
     @Test
+    public void testThatItIsImpossibleToRateTheSameBeverageTwoTimes() {
+        login("user1", "password").assertCall(restTemplate);
+        
+        ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.OK)
+                .assertCall(restTemplate);
+        
+        createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.BAD_REQUEST)
+                .assertCall(restTemplate);
+        
+        assertThatTheNumberOfRatesIs(1);
+    }    
+    
+    @Test
     public void testCreateWithInvalidInputs() {
         login("user1", "password").assertCall(restTemplate);
         

@@ -6,9 +6,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(
+    uniqueConstraints=
+        @UniqueConstraint(columnNames={"product_id", "user_id"})
+)
 public class Rate implements Serializable{
 
     @Id
@@ -21,9 +28,11 @@ public class Rate implements Serializable{
     private Long rate;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private BeverageUser bevarageUser;
     
     protected Rate() {}
