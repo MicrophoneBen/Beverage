@@ -37,6 +37,7 @@ public class RateController {
     }
     
     @PostMapping(value = "")
+    @ResponseStatus(value = HttpStatus.CREATED)
     public RateDto createRate(@RequestBody @Valid RateDto rate, Principal principal) {
         return rateService.createRate(principal.getName(),rate);
     }

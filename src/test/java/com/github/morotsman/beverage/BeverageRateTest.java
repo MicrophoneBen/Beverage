@@ -58,7 +58,7 @@ public class BeverageRateTest {
         login("user1", "password").assertCall(restTemplate);
         
         ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
-                .expectedStatus(HttpStatus.OK)
+                .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
@@ -69,7 +69,7 @@ public class BeverageRateTest {
         login("user1", "password").assertCall(restTemplate);
         
         ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
-                .expectedStatus(HttpStatus.OK)
+                .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
@@ -78,6 +78,25 @@ public class BeverageRateTest {
         
         assertThatTheNumberOfRatesIs(1);
     }    
+    
+     @Test
+    public void testThatItIsPossibleToRateTheSameBeverageTwoTimesIfTheUsersAreDifferent() {
+        login("user1", "password").assertCall(restTemplate);
+        
+        ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.CREATED)
+                .assertCall(restTemplate);
+        
+        assertThatTheNumberOfRatesIs(1);
+        
+        login("user2", "password").assertCall(restTemplate);
+        
+        createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+                .expectedStatus(HttpStatus.CREATED)
+                .assertCall(restTemplate);
+        
+        assertThatTheNumberOfRatesIs(1);
+    }     
     
     @Test
     public void testCreateWithInvalidInputs() {
@@ -120,7 +139,7 @@ public class BeverageRateTest {
         login("user1", "password").assertCall(restTemplate);
         
         ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
-                .expectedStatus(HttpStatus.OK)
+                .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         ResponseEntity<RateDto> actual = getRate(rate.getBody().getRateId()).expectedStatus(HttpStatus.OK).assertCall(restTemplate);
@@ -155,7 +174,7 @@ public class BeverageRateTest {
     public void testGetAnotherUsersRate() {
         login("user1", "password").assertCall(restTemplate);      
         ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
-                .expectedStatus(HttpStatus.OK)
+                .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         login("user2", "password").assertCall(restTemplate);
@@ -223,7 +242,7 @@ public class BeverageRateTest {
         login("user1", "password").assertCall(restTemplate);
         
         ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
-                .expectedStatus(HttpStatus.OK)
+                .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
@@ -240,7 +259,7 @@ public class BeverageRateTest {
         login("user1", "password").assertCall(restTemplate);
         
         ResponseEntity<RateDto> rate = createRate("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
-                .expectedStatus(HttpStatus.OK)
+                .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
@@ -332,7 +351,7 @@ public class BeverageRateTest {
         return RestTester.post(RateDto.class)
                 .withUrl(baseUrl + "v1/rate")
                 .withRequestBody(body)
-                .expectedStatus(HttpStatus.OK);
+                .expectedStatus(HttpStatus.CREATED);
     }
     
     public RestTester<RateDto> getRate(final Long id) {
@@ -352,7 +371,7 @@ public class BeverageRateTest {
         return RestTester.post(RateDto.class)
                 .withUrl(baseUrl+ "v1/rate")
                 .withRequestBody("{\"description\": \"ghhg\", \"rate\": 5, \"productId\": 3}")
-                .expectedStatus(HttpStatus.OK);
+                .expectedStatus(HttpStatus.CREATED);
     }
     
     public void createUser(final String username, final String password, final Long age) {
