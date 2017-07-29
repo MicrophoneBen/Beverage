@@ -168,7 +168,7 @@ public class BeverageRateTest {
         
         updateRate(1212211221L,"{\"rateId\":1212211221, \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
                 .expectedStatus(HttpStatus.NOT_FOUND).assertCall(restTemplate);
-    }  
+    } 
     
     @Test
     public void testGetAnotherUsersRate() {

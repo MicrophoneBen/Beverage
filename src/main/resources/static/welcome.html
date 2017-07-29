@@ -1,0 +1,14 @@
+<div ng-controller="welcome as vm">
+  <div style="height: 305px">
+    <div uib-carousel active="active" interval="vm.myInterval" no-wrap="noWrapSlides">
+      <div uib-slide ng-repeat="slide in vm.slides track by slide.id" index="slide.id">
+        <img height="700px" width="100%" ng-src="{{slide.image}}" style="margin:auto;">
+        <div class="carousel-caption">
+          <h1>Welcome to Beverage</h1>
+          <p>Rate, review and share...</p>
+          <p><i>{{slide.text}}</i></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

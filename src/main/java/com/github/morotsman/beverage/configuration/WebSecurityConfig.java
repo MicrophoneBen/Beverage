@@ -27,17 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().and()
                 .authorizeRequests()
-                .antMatchers("/index.html", "/home.html", "/login.html", "/", "/webjars/**", "/webjarsjs", "/scripts/**", "/v1/user").permitAll().anyRequest()
+                .antMatchers("/index.html", "/welcome.html", "/login.html", "/", "/webjars/**", "/webjarsjs", "/scripts/**", "/v1/user", "/images/**").permitAll().anyRequest()
                 .authenticated().and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-        /*
-         http.authorizeRequests()
-         .anyRequest().authenticated()
-         .and()
-         .httpBasic()  
-         .and()
-         .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-         */
     }
 
     @Bean
@@ -49,6 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //TODO fix so that it's possible to create a user
         StandardPasswordEncoder encoder = encoder();
+        bevarageUserRepository.save(Arrays.asList(
+                new BeverageUser("niklas", encoder.encode("password"),22L)
+        ));
+        bevarageUserRepository.findAll().stream().forEach(System.out::println);
         auth.userDetailsService((String username) -> {
             return bevarageUserRepository.findOne(username);
         }).passwordEncoder(encoder);
