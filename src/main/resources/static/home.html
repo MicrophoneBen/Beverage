@@ -55,10 +55,11 @@
                                     <tr ng-repeat="rate in vm.rates track by $index">
                                         <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.name}}</td>
                                         <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.producer}}</td>
-                                        <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">{{rate.rate}}</td>
+                                        <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
+                                            <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>  
+                                        </td>
                                         <td ng-show="vm['editRate' + rate.rateId]">
-                                            <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>
-                                            <!--<input type="text" class="form-control" ng-model="rate.rate">-->
+                                            <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  
                                         </td>
                                         <td  class="col-md-2">
                                             <div>
@@ -72,7 +73,7 @@
                                                 </button> 
                                             </div>
                                             <div ng-show="vm['editRate' + rate.rateId]">
-                                                <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.saveRate(rate)">
+                                                <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.updateRate(rate)">
                                                     <span class="glyphicon glyphicon-ok"></span>
                                                 </button>
                                             </div>

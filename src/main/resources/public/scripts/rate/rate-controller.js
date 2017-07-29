@@ -13,7 +13,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.showBeverageDetails = showBeverageDetails;
             vm.rateIt = rateIt;
             vm.deleteRate = deleteRate;
-            vm.saveRate = saveRate;
+            vm.updateRate = updateRate;
             
             activate();
     
@@ -41,7 +41,13 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             function refreshRates(rates) {
                 vm.rates = rates;
-            }            
+            }       
+            
+            function selectTab(tab) {
+                return function() {
+                   vm.activeTab = tab; 
+                };
+            }
             
             ////////////////////////////////public
             
@@ -51,14 +57,14 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             function rateIt() {
-                createRate(vm.rate).then(getRates).then(refreshRates);   
+                createRate(vm.rate).then(getRates).then(refreshRates).then(selectTab(1));   
             };
             
             function deleteRate(rate) {
                 $http.delete('/v1/rate/' + rate.rateId).then(getRates).then(refreshRates);
             }
             
-            function saveRate(_rate) {
+            function updateRate(_rate) {
                 var rate = {
                     rateId: _rate.rateId,
                     description: _rate.description,
