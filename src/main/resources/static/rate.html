@@ -41,7 +41,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="infinite-table" style="height:600px;overflow-y:scroll;">
-                                    <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='1' infinite-scroll-container='".infinite-table"'
+                                    <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
                                            class="table table-hover" cellspacing="0" width="100%">
                                         <tr>
                                             <th>Name</th>
@@ -55,7 +55,10 @@
                                                 <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.name}}</td>
                                                 <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.producer}}</td>
                                                 <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
-                                                    <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>  
+                                                    {{rate.rate}}
+                                                    <!--
+                                                    <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span> 
+                                                    -->
                                                 </td>
                                                 <td ng-show="vm['editRate' + rate.rateId]">
                                                     <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  

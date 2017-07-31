@@ -92,7 +92,7 @@ public class RateServiceImpl implements RateService {
     @Override
     public Iterable<Rate> getRates(String username, int page) {
         //TODO add to application.properties
-        PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
+        PageRequest pageRequest = new PageRequest(page, 100,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
         return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username),pageRequest)
                 .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null,r.getUpdated()))
                 .collect(Collectors.toList());

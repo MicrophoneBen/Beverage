@@ -24,10 +24,10 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.loadingRates = false;
             vm.allLoaded = false;
 
-            function getRates(page) {
+            function getRates() {
                 vm.loadingRates = true;
                 return $http.get('/v1/rate', {
-                    params: {page: page}
+                    params: {page: vm.currentPage}
                 }).then(function (result) {
                     return result.data;
                 }, function () {
@@ -36,20 +36,22 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             vm.loadMore = function () {
-                console.log("Call to load more");
                 if(vm.allLoaded || vm.loadingRates) return;
-                console.log("load more!!!!!!");
                 vm.currentPage += 1;
-                getRates(vm.currentPage).then(function(rates) {
-                   vm.rates = vm.rates.concat(rates); 
-                   if(rates.length === 0) vm.allLoaded = true;
+                getRates().then(function(rates) {
+                   //vm.rates = vm.rates.concat(rates); 
+                   for(var i = 0; i < rates.length; i++) {
+                      vm.rates.push(rates[i]); 
+                   }
+                    
+                    if(rates.length === 0) vm.allLoaded = true;
                    vm.loadingRates = false;
                 });
             };
 
 
             function activate() {
-                getRates(0).then(refreshRates);
+                getRates().then(refreshRates);
             }
 
             function createRate(_rate) {
@@ -81,17 +83,17 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             function rateIt() {
+                vm.currentPage = 0;
                 createRate(vm.rate).then(getRates).then(refreshRates).then(selectTab(1));
             }
 
             function removeRate(index) {
                 return function() {
                     vm.rates.splice(index,1);
-                }
+                };
             }
 
             function deleteRate(rate, index) {
-                console.log(index);
                 $http.delete('/v1/rate/' + rate.rateId).then(removeRate(index));
             }
 
