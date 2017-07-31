@@ -246,9 +246,9 @@ public class BeverageRateTest {
         assertThatTheNumberOfRatesIs(3);
         
         ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
-        Assert.assertEquals(new Long(5),rates.getBody()[0].getProduct().getProductId());
-        Assert.assertEquals(new Long(1),rates.getBody()[1].getProduct().getProductId());
-        Assert.assertEquals(new Long(3),rates.getBody()[2].getProduct().getProductId());
+        Assert.assertEquals("A bear5",rates.getBody()[0].getName());
+        Assert.assertEquals("A bear1",rates.getBody()[1].getName());
+        Assert.assertEquals("A bear3",rates.getBody()[2].getName());
     }
     
     @Test
@@ -329,12 +329,12 @@ public class BeverageRateTest {
         
         updateRate(rate.getBody().getRateId(), 
                 "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":-1}")
-                .expectedStatus(HttpStatus.NOT_FOUND)
+                .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
         updateRate(rate.getBody().getRateId(), 
                 "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":7438437843}")
-                .expectedStatus(HttpStatus.NOT_FOUND)
+                .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
         updateRate(rate.getBody().getRateId(), 

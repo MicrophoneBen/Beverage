@@ -31,7 +31,7 @@ public class RateServiceImpl implements RateService {
     }
     
     private Rate fromDto(final RateDto rateDto, final Product product, final BeverageUser beverageUser, final Long timestamp) {
-        return new Rate(rateDto.getRateId(), rateDto.getDescription(), rateDto.getRate(), product, beverageUser,timestamp);
+        return new Rate(rateDto.getRateId(), rateDto.getDescription(), rateDto.getRate(), product, beverageUser,timestamp, product.getName(), product.getProducer());
     }
    
     
@@ -42,7 +42,9 @@ public class RateServiceImpl implements RateService {
     @Transactional
     @Override 
     public RateDto createRate(final String username, final RateDto rate) {
-        final Product product = entityManager.getReference(Product.class, rate.getProductId());
+        final Product product = productRepository.findOne(rate.getProductId());
+        if(product == null) throw new UnknownProductException();
+        
         final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
         final Rate createdRate = rateRepository.save(fromDto(rate,product,user, System.currentTimeMillis()));
         return toDto(createdRate);
@@ -68,7 +70,9 @@ public class RateServiceImpl implements RateService {
     @Override
     public RateDto updateRate(final String username, RateDto rateDto) {
         final Rate rate = getRateIfOwnedByUser(username, rateDto.getRateId());         
-        final Product product = entityManager.getReference(Product.class, rateDto.getProductId());
+        final Product product = productRepository.findOne(rateDto.getProductId());
+        if(product == null) throw new UnknownProductException();
+        
         final Rate updatedRate = rateRepository.save(fromDto(rateDto,product,rate.getBevarageUser(),System.currentTimeMillis()));
         return toDto(updatedRate);
     }
@@ -84,7 +88,7 @@ public class RateServiceImpl implements RateService {
     @Override
     public Iterable<Rate> getRates(final String username) { 
         return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username))
-                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null,r.getUpdated()))
+                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))
                 .collect(Collectors.toList());
     }
     
@@ -94,7 +98,7 @@ public class RateServiceImpl implements RateService {
         //TODO add to application.properties
         PageRequest pageRequest = new PageRequest(page, 100,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
         return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username),pageRequest)
-                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null,r.getUpdated()))
+                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))
                 .collect(Collectors.toList());
     }    
     

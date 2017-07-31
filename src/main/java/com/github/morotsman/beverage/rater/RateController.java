@@ -1,9 +1,11 @@
 package com.github.morotsman.beverage.rater;
 
 import com.github.morotsman.beverage.model.Rate;
+import com.github.morotsman.beverage.rater.service.UnknownProductException;
 import com.github.morotsman.beverage.rater.service.UnknownRateException;
 import com.github.morotsman.beverage.rater.service.WrongUserException;
 import java.security.Principal;
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -93,6 +95,23 @@ public class RateController {
         e.printStackTrace(System.out);
         
     }
+    
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler({EntityNotFoundException.class})
+    public void handleException(EntityNotFoundException e) {
+        System.out.println(e.getMessage());  
+        e.printStackTrace(System.out);
+        
+    }
+    
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({UnknownProductException.class})
+    public void handleException(UnknownProductException e) {
+        System.out.println(e.getMessage());  
+        e.printStackTrace(System.out);  
+    }
+    
+    
     
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ MethodArgumentNotValidException.class })

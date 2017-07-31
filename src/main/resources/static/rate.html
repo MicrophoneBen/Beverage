@@ -52,8 +52,8 @@
                                         </tr>
 
                                             <tr ng-repeat="rate in vm.rates track by $index">
-                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.name}}</td>
-                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.producer}}</td>
+                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.name}}</td>
+                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.producer}}</td>
                                                 <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
                                                     {{rate.rate}}
                                                     <!--

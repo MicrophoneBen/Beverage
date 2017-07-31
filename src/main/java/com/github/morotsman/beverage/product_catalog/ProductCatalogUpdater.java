@@ -26,10 +26,11 @@ public class ProductCatalogUpdater {
     public void reportCurrentTime() {
         productCatalogService.reloadProductCatalog();  
         userService.createUser(new BeverageUserDto("password","niklas",22L));
+        /*
         for(long i = 0; i < 800; i++) {
             rateService.createRate("niklas", new RateDto(null, "Some description", 5L, i));
         }
-        
+        */
     }
 
 }

@@ -3,6 +3,7 @@ package com.github.morotsman.beverage.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,8 +27,12 @@ public class Rate implements Serializable{
     private String description;
 
     private Long rate;
+    
+    private String name;
+    
+    private String producer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)  
     @JoinColumn(name = "product_id")
     private Product product;
     
@@ -39,15 +44,19 @@ public class Rate implements Serializable{
     
     protected Rate() {}
 
-    public Rate(Long rateId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated) {
+    public Rate(Long rateId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated, String name, String producer) {
         this.rateId = rateId;
         this.description = description;
         this.rate = rate;
         this.product = product;
         this.bevarageUser = bevarageUser;
         this.updated = updated;
+        this.name = name;
+        this.producer = producer;
     }
 
+    
+    
     public Long getRateId() {
         return rateId;
     }
@@ -72,10 +81,16 @@ public class Rate implements Serializable{
         return updated;
     }
 
-    @Override
-    public String toString() {
-        return "Rate{" + "rateId=" + rateId + ", description=" + description + ", rate=" + rate + ", product=" + product + ", bevarageUser=" + bevarageUser + ", updated=" + updated + '}';
+    public String getName() {
+        return name;
     }
+
+    public String getProducer() {
+        return producer;
+    }
+    
+    
+
 
 
     
