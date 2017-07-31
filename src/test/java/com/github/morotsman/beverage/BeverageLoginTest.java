@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage;
 
+import com.github.morotsman.beverage.rater.RateService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
 import org.junit.After;
@@ -29,6 +30,9 @@ public class BeverageLoginTest {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private RateService rateService;
 
     private String baseUrl;
 
@@ -41,6 +45,7 @@ public class BeverageLoginTest {
     
     @After
     public void after() {
+        rateService.deleteAllRates();
         userService.deleteAllUsers();
     }
 

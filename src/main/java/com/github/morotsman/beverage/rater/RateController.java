@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,10 +33,10 @@ public class RateController {
     }
     
     @GetMapping(value = "")
-    public Iterable<Rate> getRates(Principal principal) {
-        return rateService.getRates(principal.getName());
+    public Iterable<Rate> getRates(Principal principal, final @RequestParam(required=false) Integer page) {
+        return rateService.getRates(principal.getName(), page==null?0:page);
     }
-    
+     
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     public RateDto createRate(@RequestBody @Valid RateDto rate, Principal principal) {

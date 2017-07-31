@@ -40,45 +40,49 @@
 
                             </div>
                             <div class="panel-body">
-                                <table class="table table-hover" cellspacing="0" width="100%">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Producer</th>
-                                        <th>Rate</th>
-                                        <th></th>
-                                        <th></th>  
-                                    </tr>
-                                    <tr ng-repeat="rate in vm.rates track by $index">
-                                        <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.name}}</td>
-                                        <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.producer}}</td>
-                                        <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
-                                            <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>  
-                                        </td>
-                                        <td ng-show="vm['editRate' + rate.rateId]">
-                                            <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  
-                                        </td>
-                                        <td  class="col-md-2">
-                                            <div>
-                                                <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteRate(rate)">
-                                                    <span class="glyphicon glyphicon-remove"></span>
-                                                </button>
-                                            </div>
-                                            <div ng-hide="vm['editRate' + rate.rateId]">
-                                                <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = true">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
-                                                </button> 
-                                            </div>
-                                            <div ng-show="vm['editRate' + rate.rateId]">
-                                                <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.updateRate(rate)">
-                                                    <span class="glyphicon glyphicon-ok"></span>
-                                                </button>
-                                            </div>
+                                <div class="infinite-table" style="height:600px;overflow-y:scroll;">
+                                    <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='1' infinite-scroll-container='".infinite-table"'
+                                           class="table table-hover" cellspacing="0" width="100%">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Producer</th>
+                                            <th>Rate</th>
+                                            <th></th>
+                                            <th></th>  
+                                        </tr>
+
+                                            <tr ng-repeat="rate in vm.rates track by $index">
+                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.name}}</td>
+                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.product.producer}}</td>
+                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
+                                                    <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>  
+                                                </td>
+                                                <td ng-show="vm['editRate' + rate.rateId]">
+                                                    <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  
+                                                </td>
+                                                <td  class="col-md-2">
+                                                    <div>
+                                                        <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteRate(rate,$index)">
+                                                            <span class="glyphicon glyphicon-remove"></span>
+                                                        </button>
+                                                    </div>
+                                                    <div ng-hide="vm['editRate' + rate.rateId]">
+                                                        <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = true">
+                                                            <span class="glyphicon glyphicon-pencil"></span>
+                                                        </button> 
+                                                    </div>
+                                                    <div ng-show="vm['editRate' + rate.rateId]">
+                                                        <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.updateRate(rate,$index)">
+                                                            <span class="glyphicon glyphicon-ok"></span>
+                                                        </button>
+                                                    </div>
 
 
-                                        </td>
+                                                </td>
 
-                                    </tr>
-                                </table>                                       
+                                            </tr>
+                                    </table>   
+                                </div>
                             </div>
                             <div class="panel-footer">
 
@@ -98,7 +102,11 @@
             </div>
         </uib-tab>
         <uib-tab index="3" heading="Popular">
-
+            <!--
+              <div infinite-scroll='vm.loadMore()' infinite-scroll-distance='2'>
+                <img ng-repeat='image in vm.images' ng-src='http://placehold.it/225x250&text={{image}}'>
+              </div>
+            -->
         </uib-tab>
     </uib-tabset>
 

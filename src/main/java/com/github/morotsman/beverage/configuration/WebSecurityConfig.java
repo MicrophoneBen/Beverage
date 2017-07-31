@@ -39,12 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //TODO fix so that it's possible to create a user
         StandardPasswordEncoder encoder = encoder();
-        bevarageUserRepository.save(Arrays.asList(
-                new BeverageUser("niklas", encoder.encode("password"),22L)
-        ));
-        bevarageUserRepository.findAll().stream().forEach(System.out::println);
         auth.userDetailsService((String username) -> {
             return bevarageUserRepository.findOne(username);
         }).passwordEncoder(encoder);

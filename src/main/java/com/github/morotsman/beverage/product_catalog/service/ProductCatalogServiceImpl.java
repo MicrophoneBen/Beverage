@@ -34,6 +34,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     @Transactional
     @Override 
     public List<Product> getProductCatalog(final String query, final int page) {
+        //TODO add to application.properties
         PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"productId"});
         return productRepository.findDistinctProductsByNameIgnoreCaseContainingOrProducerIgnoreCaseContaining(query,query,pageRequest);          
     }

@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 
 import javax.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,8 +90,18 @@ public class RateServiceImpl implements RateService {
     
     @Transactional
     @Override
+    public Iterable<Rate> getRates(String username, int page) {
+        //TODO add to application.properties
+        PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
+        return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username),pageRequest)
+                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct(), null,r.getUpdated()))
+                .collect(Collectors.toList());
+    }    
+    
+    @Transactional
+    @Override
     public void deleteAllRates() {
         rateRepository.deleteAll();
     }
-    
+   
 }
