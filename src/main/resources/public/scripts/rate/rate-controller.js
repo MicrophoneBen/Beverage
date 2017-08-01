@@ -115,6 +115,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             function filterRates() {
                 vm.currentPage = 0;
+                vm.allLoaded = false;
                 getRates().then(refreshRates);
             }
 
@@ -128,6 +129,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             function rateIt() {
                 vm.currentPage = 0;
+                vm.allLoaded = false;
                 createRate(vm.rate).then(getRates).then(refreshRates).then(selectTab(1));
             }
 
