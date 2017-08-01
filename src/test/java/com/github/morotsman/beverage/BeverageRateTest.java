@@ -61,7 +61,7 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L, rate.getBody().getName(),rate.getBody().getProducer()), rate.getBody());
     }
     
     @Test
@@ -144,7 +144,7 @@ public class BeverageRateTest {
         
         ResponseEntity<RateDto> actual = getRate(rate.getBody().getRateId()).expectedStatus(HttpStatus.OK).assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), actual.getBody());
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L,rate.getBody().getName(),rate.getBody().getProducer()), actual.getBody());
     }
     
     
@@ -214,7 +214,7 @@ public class BeverageRateTest {
     public void listRatesWhenNoRatesExists() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
+        ResponseEntity<RateDto[]> rates = getRates().assertCall(restTemplate);
         
         Assert.assertEquals(0,rates.getBody().length);
     }
@@ -245,7 +245,7 @@ public class BeverageRateTest {
         
         assertThatTheNumberOfRatesIs(3);
         
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
+        ResponseEntity<RateDto[]> rates = getRates().assertCall(restTemplate);
         Assert.assertEquals("A bear5",rates.getBody()[0].getName());
         Assert.assertEquals("A bear1",rates.getBody()[1].getName());
         Assert.assertEquals("A bear3",rates.getBody()[2].getName());
@@ -269,13 +269,13 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());
         
         rate = updateRate(rate.getBody().getRateId(), "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 1L), rate.getBody());     
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 1L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());     
     }
    
     @Test
@@ -286,7 +286,7 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());
         
         login("user2", "password").assertCall(restTemplate);
         
@@ -297,7 +297,7 @@ public class BeverageRateTest {
         
         login("user1", "password").assertCall(restTemplate);      
         rate = getRate(rate.getBody().getRateId()).assertCall(restTemplate);      
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());     
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());     
     }
     
     @Test
@@ -343,17 +343,17 @@ public class BeverageRateTest {
                 .assertCall(restTemplate);
         
         rate = getRate(rate.getBody().getRateId()).assertCall(restTemplate);      
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L), rate.getBody());
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "a description", 7L, 3L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());
         
     }      
     
     private void assertThatTheNumberOfRatesIs(final int expectedNumberOfRates) {
-        ResponseEntity<Rate[]> rates = getRates().assertCall(restTemplate);
+        ResponseEntity<RateDto[]> rates = getRates().assertCall(restTemplate);
         Assert.assertEquals(expectedNumberOfRates,rates.getBody().length);
     }
     
-    private RestTester<Rate[]> getRates() {
-        return RestTester.get(Rate[].class)
+    private RestTester<RateDto[]> getRates() {
+        return RestTester.get(RateDto[].class)
                 .withUrl(baseUrl + "v1/rate")
                 .expectedStatus(HttpStatus.OK);
     }

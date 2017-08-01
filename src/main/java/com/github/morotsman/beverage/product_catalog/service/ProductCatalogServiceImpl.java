@@ -44,6 +44,11 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     public Iterable<Product> getProductCatalog() {
         return productRepository.findAll();
     }
+
+    @Override
+    public Product getProduct(Long id) {
+        return productRepository.findOne(id);
+    }
     
     
     

@@ -11,6 +11,10 @@ public class RateDto {
     private Long rateId;
 
     private String description;
+    
+    private String name;
+    
+    private String producer;
 
     @NotNull
     @Min(0)
@@ -23,11 +27,13 @@ public class RateDto {
 
     protected RateDto(){}
     
-    public RateDto(Long rateId, String description, Long rate, Long productId) {
+    public RateDto(Long rateId, String description, Long rate, Long productId, String name, String producer) {
         this.rateId = rateId;
         this.description = description;
         this.rate = rate;
         this.productId = productId;
+        this.name = name;
+        this.producer = producer;
     }
 
     public Long getRateId() {
@@ -42,8 +48,16 @@ public class RateDto {
         return rate;
     }
 
-    public long getProductId() {
+    public Long getProductId() {
         return productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProducer() {
+        return producer;
     }
 
     @Override

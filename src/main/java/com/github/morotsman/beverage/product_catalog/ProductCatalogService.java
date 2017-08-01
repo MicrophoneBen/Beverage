@@ -12,4 +12,6 @@ public interface ProductCatalogService {
     
     Iterable<Product> getProductCatalog();
     
+    Product getProduct(Long id);
+    
 }

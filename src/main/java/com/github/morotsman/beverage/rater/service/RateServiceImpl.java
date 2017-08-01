@@ -36,7 +36,7 @@ public class RateServiceImpl implements RateService {
    
     
     private RateDto toDto(final Rate rate) {
-        return new RateDto(rate.getRateId(), rate.getDescription(), rate.getRate(), rate.getProduct().getProductId());
+        return new RateDto(rate.getRateId(), rate.getDescription(), rate.getRate(), rate.getProduct().getProductId(), rate.getName(), rate.getProducer());
     }
 
     @Transactional
@@ -86,12 +86,12 @@ public class RateServiceImpl implements RateService {
     
     @Transactional
     @Override
-    public Iterable<Rate> getRates(String username, String query, int page) {
+    public Iterable<RateDto> getRates(String username, String query, int page) {
         //TODO add to application.properties
         PageRequest pageRequest = new PageRequest(page, 100,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
         BeverageUser user = entityManager.getReference(BeverageUser.class, username);
         return rateRepository.findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(user,query,user,query,pageRequest)
-                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))  
+                .map(r -> new RateDto(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct().getProductId(), r.getName(), r.getProducer()))  
                 .collect(Collectors.toList());
         /*
         return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username),pageRequest)

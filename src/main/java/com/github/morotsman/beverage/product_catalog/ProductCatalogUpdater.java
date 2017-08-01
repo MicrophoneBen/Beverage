@@ -32,7 +32,7 @@ public class ProductCatalogUpdater {
         
         productCatalogService.getProductCatalog().forEach(p -> {
             long rate = ran.nextInt(11);
-            rateService.createRate("niklas", new RateDto(null, "Some description", rate, p.getProductId()));
+            rateService.createRate("niklas", new RateDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
         });
         
         

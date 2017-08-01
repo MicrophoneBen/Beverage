@@ -119,8 +119,11 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             function showBeverageDetails(rate) {
-                vm.rate.product = rate.product;
-                vm.activeTab = 2;
+                $http.get('/v1/product_catalog/' + rate.productId).then(function(result) {
+                    vm.rate.product = result.data;
+                    vm.activeTab = 2;
+                });
+                
             }
 
             function rateIt() {

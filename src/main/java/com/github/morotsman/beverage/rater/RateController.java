@@ -35,7 +35,7 @@ public class RateController {
     }
     
     @GetMapping(value = "")
-    public Iterable<Rate> getRates(Principal principal, final @RequestParam(required=false) String query, final @RequestParam(required=false) Integer page) {
+    public Iterable<RateDto> getRates(Principal principal, final @RequestParam(required=false) String query, final @RequestParam(required=false) Integer page) {
         return rateService.getRates(principal.getName(), query==null?"":query, page==null?0:page);
     }
      

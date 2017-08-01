@@ -2,11 +2,14 @@ package com.github.morotsman.beverage.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Access;
+import static javax.persistence.AccessType.PROPERTY;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import org.hibernate.annotations.AccessType;
 
 @Entity
 @Table(name = "product",
@@ -15,6 +18,7 @@ public class Product implements Serializable{
     
     @Id
     @Column(unique=true) 
+    @Access(PROPERTY)
     private Long productId;
     
     private String name;
@@ -202,7 +206,13 @@ public class Product implements Serializable{
     public String getRawMaterialDescription() {
         return rawMaterialDescription;
     }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
   
+    
+    
     @Override
     public String toString() {
         return "Product{" + "productId=" + productId + ", name=" + name + ", productCategory=" + productCategory + ", price=" + price + ", volume=" + volume + ", nr=" + nr + ", articelNumber=" + articelNumber + ", pricePerLiter=" + pricePerLiter + ", startSellDate=" + startSellDate + ", expired=" + expired + ", type=" + type + ", style=" + style + ", packaging=" + packaging + ", seal=" + seal + ", origin=" + origin + ", originCountry=" + originCountry + ", producer=" + producer + ", supplier=" + supplier + ", vintage=" + vintage + ", alcoholPercent=" + alcoholPercent + ", assortment=" + assortment + ", assortmentText=" + assortmentText + ", ecologic=" + ecologic + ", etnic=" + etnic + ", koscher=" + koscher + ", rawMaterialDescription=" + rawMaterialDescription + '}';

@@ -1,7 +1,5 @@
 package com.github.morotsman.beverage.rater;
 
-import com.github.morotsman.beverage.model.Rate;
-
 
 public interface RateService {
     
@@ -13,7 +11,7 @@ public interface RateService {
     
     void deleteRate(String username, long rateId);
     
-    Iterable<Rate> getRates(String username, String query, final int page);
+    Iterable<RateDto> getRates(String username, String query, final int page);
 
     void deleteAllRates();
     
