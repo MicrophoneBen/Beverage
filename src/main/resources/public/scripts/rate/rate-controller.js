@@ -4,8 +4,8 @@
 'use strict';
 
 define(['angular', './rate.module', './product-select.directive', './product-details.directive'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['$scope', '$http',
-        function ($scope, $http) {
+    angular.module('beverage.rate').controller('rateCtrl', ['$http', '$timeout',
+        function ($http, $timeout) {
             var vm = this;
 
             vm.beverages = [];
@@ -14,6 +14,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.rateIt = rateIt;
             vm.deleteRate = deleteRate;
             vm.updateRate = updateRate;
+            vm.filterRates = filterRates;
             vm.currentPage = 0;
             vm.rates = [];
 
@@ -24,28 +25,64 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.loadingRates = false;
             vm.allLoaded = false;
 
+            function throttle(fun, timeout) {
+
+                var throttled = false;
+                var currentArguments;
+
+                return function (/*arguments*/) {
+                    currentArguments = arguments;
+                    if (throttled) {
+                        return;
+                    } else {
+                        throttled = true;
+
+                        $timeout(function () {
+                            throttled = false;
+                            if (currentArguments) {
+                                var args = Array.prototype.slice.call(currentArguments, 0);
+                                currentArguments = undefined;
+                                return fun.apply(this, args);
+                            }
+                        }, timeout);
+
+                        var args = Array.prototype.slice.call(currentArguments, 0);
+                        currentArguments = undefined;
+                        return fun.apply(this, args);
+                    }
+                };
+            }
+
             function getRates() {
                 vm.loadingRates = true;
                 return $http.get('/v1/rate', {
-                    params: {page: vm.currentPage}
+                    params: {
+                        page: vm.currentPage,
+                        query: vm.queryString
+                    }
                 }).then(function (result) {
+                    vm.loadingRates = false;
                     return result.data;
                 }, function () {
-                    
+                    vm.loadingRates = false;
                 });
             }
 
             vm.loadMore = function () {
-                if(vm.allLoaded || vm.loadingRates) return;
+                if (vm.allLoaded || vm.loadingRates) {
+                    return;
+                }
+
                 vm.currentPage += 1;
-                getRates().then(function(rates) {
-                   //vm.rates = vm.rates.concat(rates); 
-                   for(var i = 0; i < rates.length; i++) {
-                      vm.rates.push(rates[i]); 
-                   }
-                    
-                    if(rates.length === 0) vm.allLoaded = true;
-                   vm.loadingRates = false;
+                getRates().then(function (rates) {
+                    //vm.rates = vm.rates.concat(rates); 
+                    for (var i = 0; i < rates.length; i++) {
+                        vm.rates.push(rates[i]);
+                    }
+
+                    if (rates.length === 0) {
+                        vm.allLoaded = true;
+                    }
                 });
             };
 
@@ -64,7 +101,6 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
 
-
             function refreshRates(rates) {
                 vm.rates = rates;
             }
@@ -77,6 +113,11 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             ////////////////////////////////public
 
+            function filterRates() {
+                vm.currentPage = 0;
+                getRates().then(refreshRates);
+            }
+
             function showBeverageDetails(rate) {
                 vm.rate.product = rate.product;
                 vm.activeTab = 2;
@@ -88,8 +129,8 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             function removeRate(index) {
-                return function() {
-                    vm.rates.splice(index,1);
+                return function () {
+                    vm.rates.splice(index, 1);
                 };
             }
 

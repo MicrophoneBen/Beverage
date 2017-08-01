@@ -4,6 +4,7 @@ import com.github.morotsman.beverage.rater.RateDto;
 import com.github.morotsman.beverage.rater.RateService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
+import java.util.Random;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +21,21 @@ public class ProductCatalogUpdater {
         this.userService = userService;
     }
 
-         
+           
 
     @Scheduled(fixedRateString = "${product_catalog.provider.systembolaget.reload_product.rate_in_ms}")
     public void reportCurrentTime() {
         productCatalogService.reloadProductCatalog();  
         userService.createUser(new BeverageUserDto("password","niklas",22L));
-        /*
-        for(long i = 0; i < 800; i++) {
-            rateService.createRate("niklas", new RateDto(null, "Some description", 5L, i));
-        }
-        */
+        
+        Random ran = new Random();
+        
+        productCatalogService.getProductCatalog().forEach(p -> {
+            long rate = ran.nextInt(11);
+            rateService.createRate("niklas", new RateDto(null, "Some description", rate, p.getProductId()));
+        });
+        
+        
     }
 
 }

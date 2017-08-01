@@ -7,10 +7,18 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface RateRepository extends PagingAndSortingRepository<Rate, Long> {
     
-    Stream<Rate> findByBevarageUserOrderByUpdatedDesc(BeverageUser user);
     
     Stream<Rate> findByBevarageUserOrderByUpdatedDesc(BeverageUser user,final Pageable pageable); 
     
-    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);    
+    Stream<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user,final String name, final Pageable pageable); 
+    
+    
+    Stream<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user1,final String name, BeverageUser user2, final String producer,final Pageable pageable); 
+    
+    
+    
+    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);   
+    
+    
     
 }

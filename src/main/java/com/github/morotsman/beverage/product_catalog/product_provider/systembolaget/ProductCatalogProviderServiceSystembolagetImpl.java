@@ -45,7 +45,7 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
         return LongStream.range(0, numberOfProducts).mapToObj(i -> {
             return new Product(i, "A bear" + i, "Bear", 12.0, 50.0, "2", "1243", 24.0, new Date(), 
                 false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
-                "A nice comapany", "Some other company", "1972", "7.0%", "", "", 
+                "A nice comapany" + (i+1), "Some other company", "1972", "7.0%", "", "", 
                 false, false, false, "some raw materials");
         });
     }

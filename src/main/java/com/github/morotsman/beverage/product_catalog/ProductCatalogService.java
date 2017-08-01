@@ -10,4 +10,6 @@ public interface ProductCatalogService {
     
     List<Product> getProductCatalog(String query, final int page);
     
+    Iterable<Product> getProductCatalog();
+    
 }

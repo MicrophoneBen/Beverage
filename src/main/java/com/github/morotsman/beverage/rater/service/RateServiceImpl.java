@@ -52,7 +52,7 @@ public class RateServiceImpl implements RateService {
 
     @Transactional
     @Override
-    public RateDto getRate(final String username, long rateId) {        
+    public RateDto getRate(final String username, long rateId) {          
         return toDto(getRateIfOwnedByUser(username, rateId));  
     }
     
@@ -83,23 +83,21 @@ public class RateServiceImpl implements RateService {
         final Rate rate = getRateIfOwnedByUser(username, rateId);     
         rateRepository.deleteByRateIdAndBevarageUser(rateId, rate.getBevarageUser());
     }  
-
-    @Transactional
-    @Override
-    public Iterable<Rate> getRates(final String username) { 
-        return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username))
-                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))
-                .collect(Collectors.toList());
-    }
     
     @Transactional
     @Override
-    public Iterable<Rate> getRates(String username, int page) {
+    public Iterable<Rate> getRates(String username, String query, int page) {
         //TODO add to application.properties
         PageRequest pageRequest = new PageRequest(page, 100,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
+        BeverageUser user = entityManager.getReference(BeverageUser.class, username);
+        return rateRepository.findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(user,query,user,query,pageRequest)
+                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))  
+                .collect(Collectors.toList());
+        /*
         return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username),pageRequest)
                 .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))
                 .collect(Collectors.toList());
+                */
     }    
     
     @Transactional

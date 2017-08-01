@@ -38,6 +38,12 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
         PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"productId"});
         return productRepository.findDistinctProductsByNameIgnoreCaseContainingOrProducerIgnoreCaseContaining(query,query,pageRequest);          
     }
+
+    @Transactional
+    @Override 
+    public Iterable<Product> getProductCatalog() {
+        return productRepository.findAll();
+    }
     
     
     

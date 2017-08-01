@@ -13,9 +13,7 @@ public interface RateService {
     
     void deleteRate(String username, long rateId);
     
-    Iterable<Rate> getRates(String username);
-    
-    Iterable<Rate> getRates(String username, final int page);
+    Iterable<Rate> getRates(String username, String query, final int page);
 
     void deleteAllRates();
     
