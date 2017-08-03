@@ -2,7 +2,6 @@ package com.github.morotsman.beverage.product_catalog;
 
 import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.model.exceptions.UnknownProductException;
-import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;

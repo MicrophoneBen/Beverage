@@ -2,7 +2,6 @@ package com.github.morotsman.beverage.product_catalog.service.product_provider.s
 
 
 import com.github.morotsman.beverage.model.product.Product;
-import com.github.morotsman.beverage.product_catalog.service.product_provider.systembolaget.dto.ProductCatalogeDto;
 import com.github.morotsman.beverage.product_catalog.service.product_provider.systembolaget.dto.ProductDto;
 import com.github.morotsman.beverage.product_catalog.service.ProductCatalogProviderService;
 import java.util.Date;

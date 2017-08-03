@@ -1,6 +1,5 @@
 package com.github.morotsman.beverage.model.product;
 
-import com.github.morotsman.beverage.model.product.Product;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;

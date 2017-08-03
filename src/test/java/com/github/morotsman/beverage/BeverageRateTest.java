@@ -1,6 +1,5 @@
 package com.github.morotsman.beverage;
 
-import com.github.morotsman.beverage.model.rate.Rate;
 import com.github.morotsman.beverage.rater.RateDto;
 import com.github.morotsman.beverage.rater.RateService;
 import com.github.morotsman.beverage.user.BeverageUserDto;

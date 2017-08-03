@@ -1,8 +1,6 @@
 package com.github.morotsman.beverage.configuration;
 
-import com.github.morotsman.beverage.model.user.BeverageUser;
 import com.github.morotsman.beverage.model.user.BeverageUserRepository;
-import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

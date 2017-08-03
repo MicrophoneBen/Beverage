@@ -9,10 +9,6 @@ public class RestTemplateConfiguration {
     
     @Bean("CsrfRestTemplate")
     public RestTemplate restTemplate() {
-        System.out.println("******************");
-         System.out.println("******************");
-          System.out.println("******************");
-           System.out.println("******************");
         final RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(new CsrfInterceptor());
         return restTemplate;

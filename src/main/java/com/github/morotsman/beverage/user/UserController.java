@@ -4,7 +4,6 @@ import com.github.morotsman.beverage.user.service.DupplicatedUserException;
 import java.security.Principal;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
