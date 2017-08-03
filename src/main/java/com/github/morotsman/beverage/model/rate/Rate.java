@@ -28,18 +28,20 @@ public class Rate implements Serializable{
     @Column(length = 1000)
     private String description;
 
+    @Column(nullable = false)
     private Long rate;
     
+    @Column(nullable = false)
     private String name;
     
     private String producer;
 
     @ManyToOne(fetch = FetchType.LAZY)  
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
     
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private BeverageUser bevarageUser;
     
     private Long updated;

@@ -4,6 +4,7 @@ package com.github.morotsman.beverage.product_catalog.service.product_provider.s
 import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.product_catalog.service.product_provider.systembolaget.dto.ProductDto;
 import com.github.morotsman.beverage.product_catalog.service.ProductCatalogProviderService;
+import com.github.morotsman.beverage.product_catalog.service.product_provider.systembolaget.dto.ProductCatalogeDto;
 import java.util.Date;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;

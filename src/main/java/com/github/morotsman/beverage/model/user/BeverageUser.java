@@ -3,6 +3,7 @@ package com.github.morotsman.beverage.model.user;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,8 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class BeverageUser implements UserDetails, Serializable{
     
     @Id
+    @Column(nullable = false)
     private String userName;
+    
+    @Column(nullable = false)
     private String password;
+    
+    @Column(nullable = false)
     private Long age;
 
     

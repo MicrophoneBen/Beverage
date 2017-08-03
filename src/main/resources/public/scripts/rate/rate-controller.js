@@ -94,7 +94,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             function createRate(_rate) {
                 var rate = {
                     description: _rate.description,
-                    rate: _rate.score,
+                    rate: _rate.score?_rate.score:0,
                     productId: _rate.product.productId
                 };
                 return $http.post('/v1/rate', rate);
