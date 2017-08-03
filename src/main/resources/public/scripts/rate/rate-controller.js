@@ -3,9 +3,9 @@
 
 'use strict';
 
-define(['angular', './rate.module', './product-select.directive', './product-details.directive'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['$http', '$timeout',
-        function ($http, $timeout) {
+define(['angular', './rate.module', './product-select.directive', './product-details.directive', '../utility/beverage-utility'], function (angular) {
+    angular.module('beverage.rate').controller('rateCtrl', ['$http', '$timeout','beverage-utility',
+        function ($http, $timeout, util) {
             var vm = this;
 
             vm.beverages = [];
@@ -14,7 +14,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.rateIt = rateIt;
             vm.deleteRate = deleteRate;
             vm.updateRate = updateRate;
-            vm.filterRates = filterRates;
+            vm.filterRates = util.throttle(filterRates,500);
             vm.currentPage = 0;
             vm.rates = [];
 
@@ -24,34 +24,6 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             vm.loadingRates = false;
             vm.allLoaded = false;
-
-            function throttle(fun, timeout) {
-
-                var throttled = false;
-                var currentArguments;
-
-                return function (/*arguments*/) {
-                    currentArguments = arguments;
-                    if (throttled) {
-                        return;
-                    } else {
-                        throttled = true;
-
-                        $timeout(function () {
-                            throttled = false;
-                            if (currentArguments) {
-                                var args = Array.prototype.slice.call(currentArguments, 0);
-                                currentArguments = undefined;
-                                return fun.apply(this, args);
-                            }
-                        }, timeout);
-
-                        var args = Array.prototype.slice.call(currentArguments, 0);
-                        currentArguments = undefined;
-                        return fun.apply(this, args);
-                    }
-                };
-            }
 
             function getRates() {
                 vm.loadingRates = true;
