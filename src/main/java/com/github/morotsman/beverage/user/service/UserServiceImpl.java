@@ -1,7 +1,7 @@
 package com.github.morotsman.beverage.user.service;
 
-import com.github.morotsman.beverage.model.BeverageUser;
-import com.github.morotsman.beverage.model.BeverageUserRepository;
+import com.github.morotsman.beverage.model.user.BeverageUser;
+import com.github.morotsman.beverage.model.user.BeverageUserRepository;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
 import javax.persistence.EntityManager;

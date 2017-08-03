@@ -1,17 +1,17 @@
 package com.github.morotsman.beverage.product_catalog;
 
-import com.github.morotsman.beverage.model.Product;
-import java.util.List;
+import com.github.morotsman.beverage.model.product.Product;
+import java.util.Optional;
 
 
 public interface ProductCatalogService {
     
     void reloadProductCatalog();
     
-    List<Product> getProductCatalog(String query, final int page);
+    Iterable<Product> getProductCatalog(String query, final int page);
     
     Iterable<Product> getProductCatalog();
     
-    Product getProduct(Long id);
+    Optional<Product> getProduct(Long id);
     
 }

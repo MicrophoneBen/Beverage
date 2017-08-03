@@ -1,5 +1,7 @@
-package com.github.morotsman.beverage.model;
+package com.github.morotsman.beverage.model.rate;
 
+import com.github.morotsman.beverage.model.product.Product;
+import com.github.morotsman.beverage.model.user.BeverageUser;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;

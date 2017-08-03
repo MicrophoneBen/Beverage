@@ -1,11 +1,11 @@
 package com.github.morotsman.beverage.rater.service;
 
-import com.github.morotsman.beverage.model.BeverageUser;
-import com.github.morotsman.beverage.model.ProductRepository;
-import com.github.morotsman.beverage.model.Product;
-import com.github.morotsman.beverage.model.Rate;
+import com.github.morotsman.beverage.model.user.BeverageUser;
+import com.github.morotsman.beverage.model.product.ProductRepository;
+import com.github.morotsman.beverage.model.product.Product;
+import com.github.morotsman.beverage.model.rate.Rate;
 import com.github.morotsman.beverage.rater.RateDto;
-import com.github.morotsman.beverage.model.RateRepository;
+import com.github.morotsman.beverage.model.rate.RateRepository;
 import com.github.morotsman.beverage.rater.RateService;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,8 +31,8 @@ public class RateServiceImpl implements RateService {
         this.entityManager= entityManager;
     }
     
-    private Rate fromDto(final RateDto rateDto, final Product product, final BeverageUser beverageUser, final Long timestamp) {
-        return new Rate(rateDto.getRateId(), rateDto.getDescription(), rateDto.getRate(), product, beverageUser,timestamp, product.getName(), product.getProducer());
+    private Rate fromDto(final RateDto rateDto, final Product product, final BeverageUser beverageUser) {
+        return new Rate(rateDto.getRateId(), rateDto.getDescription(), rateDto.getRate(), product, beverageUser,System.currentTimeMillis(), product.getName(), product.getProducer());
     }
    
     
@@ -47,7 +47,7 @@ public class RateServiceImpl implements RateService {
                 .findOne(rate.getProductId().longValue())
                 .map(product -> {
                     final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
-                    return fromDto(rate,product,user, System.currentTimeMillis());
+                    return fromDto(rate,product,user);
                 })
                 .map(rateRepository::save)
                 .map(this::toDto);
@@ -70,7 +70,7 @@ public class RateServiceImpl implements RateService {
     public Optional<RateDto> updateRate(final String username, RateDto rateDto) {
         return getRateIfOwnedByUser(username, rateDto.getRateId())
                 .map((Rate rate) -> {
-                    return fromDto(rateDto, rate.getProduct(), rate.getBevarageUser(),System.currentTimeMillis());
+                    return fromDto(rateDto, rate.getProduct(), rate.getBevarageUser());
                 })
                 .map(rateRepository::save)
                 .map(this::toDto);

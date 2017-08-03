@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage.product_catalog.product_provider.systembolaget.dto;
+package com.github.morotsman.beverage.product_catalog.service.product_provider.systembolaget.dto;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

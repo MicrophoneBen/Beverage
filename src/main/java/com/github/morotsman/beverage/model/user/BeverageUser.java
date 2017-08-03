@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage.model;
+package com.github.morotsman.beverage.model.user;
 
 import java.io.Serializable;
 import java.util.Arrays;

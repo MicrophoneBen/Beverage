@@ -1,9 +1,10 @@
 package com.github.morotsman.beverage.product_catalog.service;
 
 import com.github.morotsman.beverage.product_catalog.ProductCatalogService;
-import com.github.morotsman.beverage.model.Product;
-import com.github.morotsman.beverage.model.ProductRepository;
+import com.github.morotsman.beverage.model.product.Product;
+import com.github.morotsman.beverage.model.product.ProductRepository;
 import java.util.List;
+import java.util.Optional;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,7 +34,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
   
     @Transactional
     @Override 
-    public List<Product> getProductCatalog(final String query, final int page) {
+    public Iterable<Product> getProductCatalog(final String query, final int page) {
         //TODO add to application.properties
         PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"productId"});
         return productRepository.findDistinctProductsByNameIgnoreCaseContainingOrProducerIgnoreCaseContaining(query,query,pageRequest);          
@@ -46,8 +47,8 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     }
 
     @Override
-    public Product getProduct(Long id) {
-        return productRepository.findOne(id);
+    public Optional<Product> getProduct(Long id) {
+        return productRepository.findOne(id.byteValue());
     }
     
     

@@ -1,8 +1,7 @@
 package com.github.morotsman.beverage.rater;
 
-import com.github.morotsman.beverage.rater.service.UnknownProductException;
-import com.github.morotsman.beverage.rater.service.UnknownRateException;
-import com.github.morotsman.beverage.rater.service.WrongUserException;
+import com.github.morotsman.beverage.model.exceptions.UnknownRateException;
+import com.github.morotsman.beverage.model.exceptions.UnknownProductException;
 import java.security.Principal;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;

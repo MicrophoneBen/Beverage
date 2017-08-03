@@ -24,7 +24,7 @@ public class ProductCatalogUpdater {
            
 
     @Scheduled(fixedRateString = "${product_catalog.provider.systembolaget.reload_product.rate_in_ms}")
-    public void reportCurrentTime() {
+    public void reloadProductCatalog() {  
         productCatalogService.reloadProductCatalog();  
         userService.createUser(new BeverageUserDto("password","niklas",22L));
         

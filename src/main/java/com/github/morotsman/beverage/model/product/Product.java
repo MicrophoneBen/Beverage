@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage.model;
+package com.github.morotsman.beverage.model.product;
 
 import java.io.Serializable;
 import java.util.Date;

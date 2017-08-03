@@ -1,5 +1,7 @@
-package com.github.morotsman.beverage.model;
+package com.github.morotsman.beverage.model.rate;
 
+import com.github.morotsman.beverage.model.rate.Rate;
+import com.github.morotsman.beverage.model.user.BeverageUser;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
