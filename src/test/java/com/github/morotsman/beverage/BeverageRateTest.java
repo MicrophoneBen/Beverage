@@ -178,7 +178,7 @@ public class BeverageRateTest {
                 .assertCall(restTemplate);
         
         login("user2", "password").assertCall(restTemplate);
-        ResponseEntity<RateDto> actual = getRate(rate.getBody().getRateId()).expectedStatus(HttpStatus.FORBIDDEN).assertCall(restTemplate);
+        ResponseEntity<RateDto> actual = getRate(rate.getBody().getRateId()).expectedStatus(HttpStatus.NOT_FOUND).assertCall(restTemplate);
     }
      
     @Test
@@ -203,7 +203,7 @@ public class BeverageRateTest {
         
         login("user2", "password").assertCall(restTemplate);
         deleteRate(rate.getBody().getRateId())
-                .expectedStatus(HttpStatus.FORBIDDEN)
+                .expectedStatus(HttpStatus.NOT_FOUND)
                 .assertCall(restTemplate);
         
         login("user1", "password").assertCall(restTemplate);
@@ -275,7 +275,7 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 1L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());     
+        Assert.assertEquals(new RateDto(rate.getBody().getRateId(), "another description", 3L, 3L, rate.getBody().getName(), rate.getBody().getProducer()), rate.getBody());     
     }
    
     @Test
@@ -292,7 +292,7 @@ public class BeverageRateTest {
         
         updateRate(rate.getBody().getRateId(), 
                 "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
-                .expectedStatus(HttpStatus.FORBIDDEN)
+                .expectedStatus(HttpStatus.NOT_FOUND)
                 .assertCall(restTemplate);
         
         login("user1", "password").assertCall(restTemplate);      
@@ -327,15 +327,6 @@ public class BeverageRateTest {
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
-        updateRate(rate.getBody().getRateId(), 
-                "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":-1}")
-                .expectedStatus(HttpStatus.BAD_REQUEST)
-                .assertCall(restTemplate);
-        
-        updateRate(rate.getBody().getRateId(), 
-                "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":7438437843}")
-                .expectedStatus(HttpStatus.BAD_REQUEST)
-                .assertCall(restTemplate);
         
         updateRate(rate.getBody().getRateId(), 
                 "{\"rateId\":" + rate.getBody().getRateId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1")

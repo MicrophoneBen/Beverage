@@ -1,6 +1,5 @@
 package com.github.morotsman.beverage.rater;
 
-import com.github.morotsman.beverage.model.Rate;
 import com.github.morotsman.beverage.rater.service.UnknownProductException;
 import com.github.morotsman.beverage.rater.service.UnknownRateException;
 import com.github.morotsman.beverage.rater.service.WrongUserException;
@@ -42,24 +41,29 @@ public class RateController {
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
     public RateDto createRate(@RequestBody @Valid RateDto rate, Principal principal) {
-        return rateService.createRate(principal.getName(),rate);
+        return rateService.createRate(principal.getName(),rate).orElseThrow(() -> new UnknownProductException());
     }
     
     
     @GetMapping(value = "/{rateId}")
     public RateDto getRate(@PathVariable long rateId, Principal principal) {
-        System.out.println("Get rate");
-        return rateService.getRate(principal.getName(),rateId);
+        return rateService
+                .getRate(principal.getName(),rateId)
+                .orElseThrow(() -> new UnknownRateException());
     }
     
     @PutMapping(value = "/{rateId}")
     public RateDto updateRate(@PathVariable long rateId,@RequestBody @Valid RateDto rate, Principal principal) {
-        return rateService.updateRate(principal.getName(),rate);
+        return rateService
+                .updateRate(principal.getName(),rate)
+                .orElseThrow(() -> new UnknownRateException());
     }
     
     @DeleteMapping(value = "/{rateId}")
     public void deleteRate(@PathVariable long rateId, Principal principal) {
-        rateService.deleteRate(principal.getName(),rateId);  
+        rateService
+                .deleteRate(principal.getName(),rateId)
+                .orElseThrow(() -> new UnknownRateException());  
     }
     
     //TODO add log
@@ -127,17 +131,6 @@ public class RateController {
         System.out.println(e.getMessage());  
         e.printStackTrace(System.out);    
     }
-    
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    @ExceptionHandler({ WrongUserException.class })
-    public void handleException(WrongUserException e) {
-        System.out.println(e.getMessage());  
-        e.printStackTrace(System.out);    
-    }
-    
-    
-    
-
-    
+     
     
 }

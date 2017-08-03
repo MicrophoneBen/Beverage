@@ -19,6 +19,8 @@ define(['angular', './navigation.module', './authentication-service'], function 
                     $rootScope.$broadcast("authenticated", result);
                     if (result === true) {
                         $location.path('/home');
+                    } else {
+                        goToWelcome();
                     }
                 });
             }

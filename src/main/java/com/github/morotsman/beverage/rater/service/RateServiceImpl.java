@@ -7,6 +7,7 @@ import com.github.morotsman.beverage.model.Rate;
 import com.github.morotsman.beverage.rater.RateDto;
 import com.github.morotsman.beverage.model.RateRepository;
 import com.github.morotsman.beverage.rater.RateService;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 
@@ -41,47 +42,48 @@ public class RateServiceImpl implements RateService {
 
     @Transactional
     @Override 
-    public RateDto createRate(final String username, final RateDto rate) {
-        final Product product = productRepository.findOne(rate.getProductId());
-        if(product == null) throw new UnknownProductException();
-        
-        final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
-        final Rate createdRate = rateRepository.save(fromDto(rate,product,user, System.currentTimeMillis()));
-        return toDto(createdRate);
+    public Optional<RateDto> createRate(final String username, final RateDto rate) {
+        return productRepository
+                .findOne(rate.getProductId().longValue())
+                .map(product -> {
+                    final BeverageUser user = entityManager.getReference(BeverageUser.class, username);
+                    return fromDto(rate,product,user, System.currentTimeMillis());
+                })
+                .map(rateRepository::save)
+                .map(this::toDto);
     }
 
     @Transactional
     @Override
-    public RateDto getRate(final String username, long rateId) {          
-        return toDto(getRateIfOwnedByUser(username, rateId));  
+    public Optional<RateDto> getRate(final String username, long rateId) {          
+        return getRateIfOwnedByUser(username, rateId)
+                .map(this::toDto);  
     }
     
-    private Rate getRateIfOwnedByUser(final String username, long rateId) {
-        final Rate rate = rateRepository.findOne(rateId);
-        if(rate == null) throw new UnknownRateException();
-        
-        final BeverageUser owner = rate.getBevarageUser();
-        if(!owner.getUsername().equals(username)) throw new WrongUserException();
-        
-        return rate;
+    private Optional<Rate> getRateIfOwnedByUser(final String username, long rateId) {
+        return rateRepository.findOne(rateId)
+                .filter(rate -> rate.getBevarageUser().getUsername().equals(username));
     }
 
     @Transactional
     @Override
-    public RateDto updateRate(final String username, RateDto rateDto) {
-        final Rate rate = getRateIfOwnedByUser(username, rateDto.getRateId());         
-        final Product product = productRepository.findOne(rateDto.getProductId());
-        if(product == null) throw new UnknownProductException();
-        
-        final Rate updatedRate = rateRepository.save(fromDto(rateDto,product,rate.getBevarageUser(),System.currentTimeMillis()));
-        return toDto(updatedRate);
+    public Optional<RateDto> updateRate(final String username, RateDto rateDto) {
+        return getRateIfOwnedByUser(username, rateDto.getRateId())
+                .map((Rate rate) -> {
+                    return fromDto(rateDto, rate.getProduct(), rate.getBevarageUser(),System.currentTimeMillis());
+                })
+                .map(rateRepository::save)
+                .map(this::toDto);
     }
 
     @Transactional
     @Override
-    public void deleteRate(final String username, long rateId) {
-        final Rate rate = getRateIfOwnedByUser(username, rateId);     
-        rateRepository.deleteByRateIdAndBevarageUser(rateId, rate.getBevarageUser());
+    public Optional<Boolean> deleteRate(final String username, long rateId) {
+        return getRateIfOwnedByUser(username, rateId)
+                .map(rate -> {
+                    rateRepository.deleteByRateIdAndBevarageUser(rateId, rate.getBevarageUser());
+                    return true;
+                });
     }  
     
     @Transactional
@@ -93,11 +95,6 @@ public class RateServiceImpl implements RateService {
         return rateRepository.findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(user,query,user,query,pageRequest)
                 .map(r -> new RateDto(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct().getProductId(), r.getName(), r.getProducer()))  
                 .collect(Collectors.toList());
-        /*
-        return rateRepository.findByBevarageUserOrderByUpdatedDesc(entityManager.getReference(BeverageUser.class, username),pageRequest)
-                .map(r -> new Rate(r.getRateId(), r.getDescription(), r.getRate(), null, null,r.getUpdated(), r.getName(), r.getProducer()))
-                .collect(Collectors.toList());
-                */
     }    
     
     @Transactional

@@ -1,15 +1,17 @@
 package com.github.morotsman.beverage.rater;
 
+import java.util.Optional;
+
 
 public interface RateService {
     
-    RateDto createRate(String username,RateDto rate);
+    Optional<RateDto> createRate(String username,RateDto rate);
     
-    RateDto getRate(String username,long rateId);
+    Optional<RateDto> getRate(String username,long rateId);
     
-    RateDto updateRate(String username, RateDto rate);
+    Optional<RateDto> updateRate(String username, RateDto rate);
     
-    void deleteRate(String username, long rateId);
+    Optional<Boolean> deleteRate(String username, long rateId);
     
     Iterable<RateDto> getRates(String username, String query, final int page);
 

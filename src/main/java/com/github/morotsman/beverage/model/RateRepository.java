@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage.model;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -17,7 +18,9 @@ public interface RateRepository extends PagingAndSortingRepository<Rate, Long> {
     
     
     
-    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);   
+    void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);  
+    
+    Optional<Rate> findOne(long rateId);
     
     
     
