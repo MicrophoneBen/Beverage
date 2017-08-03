@@ -48,7 +48,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public Optional<Product> getProduct(Long id) {
-        return productRepository.findOne(id.byteValue());
+        return productRepository.findOne(id.longValue());
     }
     
     
