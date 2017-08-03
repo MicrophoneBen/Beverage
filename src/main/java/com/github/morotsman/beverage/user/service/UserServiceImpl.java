@@ -32,13 +32,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public BeverageUserDto getUser(String username) {
-        BeverageUser user = userRepository.findOne(username);
-        return new BeverageUserDto(null, user.getUsername(), user.getAge());
-    }
-
-    @Override
-    @Transactional
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }
