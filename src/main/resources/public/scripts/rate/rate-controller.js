@@ -4,8 +4,8 @@
 'use strict';
 
 define(['angular', './rate.module', './product-select.directive', './product-details.directive', '../utility/beverage-utility'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['$http', '$timeout','beverage-utility',
-        function ($http, $timeout, util) {
+    angular.module('beverage.rate').controller('rateCtrl', ['$http','beverage-utility',
+        function ($http, util) {
             var vm = this;
 
             vm.beverages = [];

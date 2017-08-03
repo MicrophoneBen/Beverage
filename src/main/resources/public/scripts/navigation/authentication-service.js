@@ -17,7 +17,7 @@ define(['angular', './navigation.module'], function (angular, module) {
             function isAuthenticated(credentials) {
                 return loggedInUser(credentials).then(function (result) {
                     return true;
-                }, function () {
+                }, function (result) {
                     return false;
                 });
             }

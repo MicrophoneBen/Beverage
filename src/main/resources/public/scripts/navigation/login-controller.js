@@ -4,8 +4,8 @@
 'use strict';
 
 define(['angular', './navigation.module', , './authentication-service'], function (angular, module) {
-    module.controller('login', ['$rootScope','$scope', '$http', '$location','authentication',
-        function ($rootScope,$scope, $http, $location, authentication) {
+    module.controller('login', ['$rootScope','$scope', '$http', '$location','authentication','toastr',
+        function ($rootScope,$scope, $http, $location, authentication, toastr) {
                     
             activate();
             
@@ -31,6 +31,7 @@ define(['angular', './navigation.module', , './authentication-service'], functio
 
             function setErrorStatus(result) {
                 $scope.error = !result;
+                toastr.error('Could not log in.','Fatal Error');
                 return result;
             }
             

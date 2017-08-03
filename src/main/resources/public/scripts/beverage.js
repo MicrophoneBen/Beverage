@@ -4,11 +4,11 @@
 
 
 define(['angular', 'ui_select', 'angular-sanitize', 'angular-animate','./rate/rate-controller', './navigation/login-controller', './navigation/main-controller'
-    , './navigation/welcome-controller', 'angular-ui-bootstrap', 'infinit-scrolling', 'ng-infinite-scroll',
+    , './navigation/welcome-controller', 'angular-ui-bootstrap', 'infinit-scrolling', 'ng-infinite-scroll','toastr',
     './rate/product-select.directive', './rate/product-details.directive', 'angular-route', './utility/utility.module'],
         function (angular) {
             var app = angular.module('beverage', ['ngSanitize', 'ngAnimate','ui.select', 'beverage.rate', 'beverage.navigation', 
-                'ui.bootstrap', 'ui-select-infinity', 'ngRoute', 'infinite-scroll', 'beverage.utility']);
+                'ui.bootstrap', 'ui-select-infinity', 'ngRoute', 'infinite-scroll', 'beverage.utility', 'toastr']);
 
             app.config(function ($routeProvider, $httpProvider) {
 

@@ -6,7 +6,8 @@ requirejs.config({
         'infinit-scrolling': ['./lib/infinit-scrolling'],
         'ui_select': ['../webjars/angular-ui-select/select'],
         'angular-ui-bootstrap': ['../webjars/angular-ui-bootstrap/ui-bootstrap-tpls'],
-        'ng-infinite-scroll': ['./lib/ng-infinite-scroll']
+        'ng-infinite-scroll': ['./lib/ng-infinite-scroll'],
+        'toastr': ['./lib/angular-toastr.tpls']
     },
     shim: {
         'ui_select': {
@@ -23,7 +24,10 @@ requirejs.config({
         'ng-infinite-scroll': {
             exports: 'ng-infinite-scroll',
             deps: ['angular']
-        }
+        },
+        'toastr' : {
+    	 deps: ['angular']
+     }
     }
 });
 
