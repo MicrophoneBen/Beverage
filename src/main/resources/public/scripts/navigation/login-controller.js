@@ -15,23 +15,28 @@ define(['angular', './navigation.module', , './authentication-service'], functio
             }
             
             $scope.createUser = function (userDetails) {
-                $scope.error = false;
                 return $http.post('/v1/user', userDetails).then(function () {
+                    toastr.success('User created, welcome!');
                     $scope.signIn = true;
                     $scope.signUp = false;
-                }, function () {
-                    $scope.error = true;
+                }, function (error) {
+                    if(error.status === 400) {
+                        toastr.error('Could not create a user due to bad input.','Error.');
+                    } else {
+                        toastr.error('Because of unknown server error.','Error.');
+                    }
+                    
                 });
             };   
             
             $scope.login = function (credentials) {
-                $scope.error = false;
                 return authentication.isAuthenticated(credentials).then(setErrorStatus).then(broadcast).then(route);
             };
 
             function setErrorStatus(result) {
-                $scope.error = !result;
-                toastr.error('Could not log in.','Fatal Error');
+                if(result === false) {
+                    toastr.error('Could not log in, please try again.','Error');
+                }             
                 return result;
             }
             
