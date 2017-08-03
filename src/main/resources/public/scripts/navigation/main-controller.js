@@ -16,7 +16,7 @@ define(['angular', './navigation.module', './authentication-service'], function 
 
             function activate() {
                 authentication.isAuthenticated().then(function (result) {
-                    $rootScope.$broadcast("authenticated", false);
+                    $rootScope.$broadcast("authenticated", result);
                     if (result === true) {
                         $location.path('/home');
                     }
