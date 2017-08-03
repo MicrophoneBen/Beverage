@@ -27,7 +27,7 @@ public class ProductCatalogController {
     }
     
     @GetMapping("/{productId}")  
-    public Product getProductCatalog(@PathVariable final Long productId) {
+    public Product getProduct(@PathVariable final Long productId) {
         return productCatalogService.getProduct(productId).orElseThrow(() -> new UnknownProductException());
     }
     
