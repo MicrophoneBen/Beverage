@@ -1,8 +1,8 @@
 package com.github.morotsman.beverage.model.rate;
 
 import com.github.morotsman.beverage.model.user.BeverageUser;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -10,12 +10,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface RateRepository extends PagingAndSortingRepository<Rate, Long> {
     
     
-    Stream<Rate> findByBevarageUserOrderByUpdatedDesc(BeverageUser user,final Pageable pageable); 
+    List<Rate> findByBevarageUserOrderByUpdatedDesc(BeverageUser user,final Pageable pageable); 
     
-    Stream<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user,final String name, final Pageable pageable); 
+    List<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user,final String name, final Pageable pageable); 
     
     
-    Stream<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user1,final String name, BeverageUser user2, final String producer,final Pageable pageable); 
+    List<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user1,final String name, BeverageUser user2, final String producer,final Pageable pageable); 
     
     
     

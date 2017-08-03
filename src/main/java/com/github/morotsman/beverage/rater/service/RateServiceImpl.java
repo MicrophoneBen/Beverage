@@ -93,6 +93,7 @@ public class RateServiceImpl implements RateService {
         PageRequest pageRequest = new PageRequest(page, 100,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
         BeverageUser user = entityManager.getReference(BeverageUser.class, username);
         return rateRepository.findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(user,query,user,query,pageRequest)
+                .stream() 
                 .map(r -> new RateDto(r.getRateId(), r.getDescription(), r.getRate(), r.getProduct().getProductId(), r.getName(), r.getProducer()))  
                 .collect(Collectors.toList());
     }    
