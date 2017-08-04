@@ -45,7 +45,6 @@ public class BeverageLoginTest {
     
     @After
     public void after() {
-        rateService.deleteAllRates();
         userService.deleteAllUsers();
     }
 
