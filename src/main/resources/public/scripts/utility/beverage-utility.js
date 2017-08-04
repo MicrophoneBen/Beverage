@@ -4,29 +4,27 @@
 'use strict';
 
 define(['./utility.module'], function (module) {
-    module.service('beverage-utility', ['$timeout','toastr',
+    module.service('beverage-utility', ['$timeout', 'toastr',
         function ($timeout, toastr) {
             function throttle(fun, timeout) {
 
-                var throttled = false;
                 var currentArguments;
+                var timer;
 
                 return function (/*arguments*/) {
                     currentArguments = arguments;
-                    if (throttled) {
-                        return;
-                    } else {
-                        throttled = true;
-
-                        $timeout(function () {
-                            var args = Array.prototype.slice.call(currentArguments, 0);
-                            fun.apply(this, args);
-                            currentArguments = undefined;
-                            throttled = false;
-                        }, timeout);
+                    if (timer) {
+                        $timeout.cancel(timer);
                     }
+                    
+                    timer = $timeout(function () {
+                        var args = Array.prototype.slice.call(currentArguments, 0);
+                        fun.apply(this, args);
+                        currentArguments = undefined;
+                        timer = undefined;
+                    }, timeout);
                 };
-            }
+            };
 
             function curry(fun) {
                 var numberOfParameters = fun.length;
@@ -42,18 +40,19 @@ define(['./utility.module'], function (module) {
                     };
                 };
             }
-            
+
             function givePositiveFeedback(message) {
                 return function () {
-                    if(message) toastr.success(message);      
-                }; 
+                    if (message)
+                        toastr.success(message);
+                };
             }
-            
+
             function displayErrorInformation(message) {
-                return function(error) {
-                   toastr.error(message, 'Error'); 
-                };                
-            }            
+                return function (error) {
+                    toastr.error(message, 'Error');
+                };
+            }
 
             return {
                 throttle: throttle,

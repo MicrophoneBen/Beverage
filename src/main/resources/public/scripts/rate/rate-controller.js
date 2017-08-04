@@ -14,8 +14,8 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.rateIt = rateIt;
             vm.deleteRate = deleteRate;
             vm.updateRate = updateRate;
-            vm.filterRates = util.throttle(filterRates, 500);
-            vm.currentPage = 0;
+            vm.filterRates = util.throttle(filterRates, 300);
+            
             vm.rates = [];
 
             activate();
@@ -23,43 +23,82 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             ////////////////////////////////////private
 
             vm.loadingRates = false;
-            vm.allLoaded = false;
+
+            var allLoaded = false;
+            var currentPage = 0;
+
+            vm.loadMore = function () {
+                if (allLoaded || vm.loadingRates) {
+                    return;
+                }
+
+                currentPage += 1;
+                getRates()
+                        .then(checkIfAllLoaded)
+                        .then(addRatesToList);
+            };
 
             function getRates() {
                 vm.loadingRates = true;
                 return $http.get('/v1/rate', {
                     params: {
-                        page: vm.currentPage,
+                        page: currentPage,
                         query: vm.queryString
                     }
                 }).then(function (result) {
-                    vm.loadingRates = false;
                     return result.data;
-                }, function () {
+                }).finally(function () {
                     vm.loadingRates = false;
                 });
             }
 
-            vm.loadMore = function () {
-                if (vm.allLoaded || vm.loadingRates) {
-                    return;
+            function checkIfAllLoaded(rates) {
+                if (rates.length === 0) {
+                    allLoaded = true;
                 }
+                return rates;
+            }
 
-                vm.currentPage += 1;
-                getRates().then(function (rates) {
-                    //vm.rates = vm.rates.concat(rates); 
-                    for (var i = 0; i < rates.length; i++) {
-                        vm.rates.push(rates[i]);
-                    }
-
-                    if (rates.length === 0) {
-                        vm.allLoaded = true;
-                    }
-                });
-            };
+            function addRatesToList(rates) {
+                //vm.rates = vm.rates.concat(rates); 
+                for (var i = 0; i < rates.length; i++) {
+                    vm.rates.push(rates[i]);
+                }
+            }
 
             function activate() {
+                getRates()
+                        .then(refreshRates)
+                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the rates.'));
+                ;
+            }
+
+
+            function refreshRates(rates) {
+                vm.rates = rates;
+            }
+
+            function selectTab(tab) {
+                return function () {
+                    vm.activeTab = tab;
+                };
+            }
+
+
+            function filterRates() {
+                currentPage = 0;
+                allLoaded = false;
                 getRates().then(refreshRates);
+            }
+
+            function showBeverageDetails(rate) {
+                $http.get('/v1/product_catalog/' + rate.productId)
+                        .then(function (result) {
+                            vm.rate.product = result.data;
+                        })
+                        .then(selectTab(2))
+                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not get the beverage details.'));
+
             }
 
             function createRate(_rate) {
@@ -73,43 +112,18 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                 });
             }
 
-
-            function refreshRates(rates) {
-                vm.rates = rates;
-            }
-
-            function selectTab(tab) {
-                return function () {
-                    vm.activeTab = tab;
-                };
-            }
-            
-            ////////////////////////////////public
-
-            function filterRates() {
-                vm.currentPage = 0;
-                vm.allLoaded = false;
-                getRates().then(refreshRates);
-            }
-
-            function showBeverageDetails(rate) {
-                $http.get('/v1/product_catalog/' + rate.productId)
-                        .then(function (result) { vm.rate.product = result.data;})
-                        .then(selectTab(2))
-                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not get the beverage details.'));
-
-            }
-
             function rateIt() {
-                vm.currentPage = 0;
-                vm.allLoaded = false;
+                currentPage = 0;
+                allLoaded = false;
                 createRate(vm.rate)
                         .then(getRates)
                         .then(refreshRates)
                         .then(selectTab(1))
                         .then(util.givePositiveFeedback('Beverage rated!'), util.displayErrorInformation('Could not rate the beverage.'));
             }
-            
+
+
+
             function removeRate(index) {
                 return function () {
                     vm.rates.splice(index, 1);

@@ -57,7 +57,7 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
         //final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
         //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));
         
-        return getProducts(10);  
+        return getProducts(1000);  
     }    
     
 }
