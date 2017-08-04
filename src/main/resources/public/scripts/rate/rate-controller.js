@@ -4,7 +4,7 @@
 'use strict';
 
 define(['angular', './rate.module', './product-select.directive', './product-details.directive', '../utility/beverage-utility'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['$http','beverage-utility','toastr',
+    angular.module('beverage.rate').controller('rateCtrl', ['$http', 'beverage-utility', 'toastr',
         function ($http, util, toastr) {
             var vm = this;
 
@@ -14,7 +14,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             vm.rateIt = rateIt;
             vm.deleteRate = deleteRate;
             vm.updateRate = updateRate;
-            vm.filterRates = util.throttle(filterRates,500);
+            vm.filterRates = util.throttle(filterRates, 500);
             vm.currentPage = 0;
             vm.rates = [];
 
@@ -58,7 +58,6 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                 });
             };
 
-
             function activate() {
                 getRates().then(refreshRates);
             }
@@ -66,11 +65,11 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             function createRate(_rate) {
                 var rate = {
                     description: _rate.description,
-                    rate: _rate.score?_rate.score:0,
+                    rate: _rate.score ? _rate.score : 0,
                     productId: _rate.product.productId
                 };
-                return $http.post('/v1/rate', rate).then(function(result) {
-                   return result; 
+                return $http.post('/v1/rate', rate).then(function (result) {
+                    return result;
                 });
             }
 
@@ -84,7 +83,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                     vm.activeTab = tab;
                 };
             }
-
+            
             ////////////////////////////////public
 
             function filterRates() {
@@ -94,23 +93,23 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             function showBeverageDetails(rate) {
-                $http.get('/v1/product_catalog/' + rate.productId).then(function(result) {
-                    vm.rate.product = result.data;
-                    vm.activeTab = 2;
-                });
-                
+                $http.get('/v1/product_catalog/' + rate.productId)
+                        .then(function (result) { vm.rate.product = result.data;})
+                        .then(selectTab(2))
+                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not get the beverage details.'));
+
             }
 
             function rateIt() {
                 vm.currentPage = 0;
                 vm.allLoaded = false;
-                createRate(vm.rate).then(getRates).then(refreshRates).then(selectTab(1)).then(function() {
-                    toastr.success('Beverage rated!');
-                },function(error) {
-                    toastr.error('Could not rate the beverage.', 'Error');
-                });
+                createRate(vm.rate)
+                        .then(getRates)
+                        .then(refreshRates)
+                        .then(selectTab(1))
+                        .then(util.givePositiveFeedback('Beverage rated!'), util.displayErrorInformation('Could not rate the beverage.'));
             }
-
+            
             function removeRate(index) {
                 return function () {
                     vm.rates.splice(index, 1);
@@ -118,25 +117,14 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             }
 
             function deleteRate(rate, index) {
-                $http.delete('/v1/rate/' + rate.rateId).then(removeRate(index)).then(function() {
-                    toastr.success('Rate deleted.');
-                }, function(error) {
-                    toastr.error('Could not delete the rate.', 'Error.');
-                });
+                $http.delete('/v1/rate/' + rate.rateId)
+                        .then(removeRate(index))
+                        .then(util.givePositiveFeedback('Rate deleted.'), util.displayErrorInformation('Could not delete the rate.'));
             }
 
-            function updateRate(_rate, index) {
-                var rate = {
-                    rateId: _rate.rateId,
-                    description: _rate.description,
-                    rate: _rate.rate,
-                    productId: _rate.productId
-                };
-                $http.put('/v1/rate/' + _rate.rateId, rate).then(function() {
-                    toastr.success('Rate updated.');
-                }, function () {
-                    toastr.error('Could not update the rate.', 'Error.');
-                });
+            function updateRate(rate, index) {
+                $http.put('/v1/rate/' + rate.rateId, rate)
+                        .then(util.givePositiveFeedback('Rate updated.'), util.displayErrorInformation('Could not update the rate.'));
             }
 
 
