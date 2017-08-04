@@ -51,44 +51,44 @@
                                             <th></th>  
                                         </tr>
 
-                                            <tr ng-repeat="rate in vm.rates track by $index">
-                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.name}}</td>
-                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.producer}}</td>
-                                                <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
-                                                    {{rate.rate}}
-                                                    <!--
-                                                    <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span> 
-                                                    -->
-                                                </td>
-                                                <td ng-show="vm['editRate' + rate.rateId]">
-                                                    <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  
-                                                </td>
-                                                <td  class="col-md-2">
-                                                    <div>
-                                                        <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteRate(rate,$index)">
-                                                            <span class="glyphicon glyphicon-remove"></span>
-                                                        </button>
-                                                    </div>
-                                                    <div ng-hide="vm['editRate' + rate.rateId]">
-                                                        <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = true">
-                                                            <span class="glyphicon glyphicon-pencil"></span>
-                                                        </button> 
-                                                    </div>
-                                                    <div ng-show="vm['editRate' + rate.rateId]">
-                                                        <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.updateRate(rate,$index)">
-                                                            <span class="glyphicon glyphicon-ok"></span>
-                                                        </button>
-                                                    </div>
+                                        <tr ng-repeat="rate in vm.rates track by $index">
+                                            <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.name}}</td>
+                                            <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.producer}}</td>
+                                            <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
+                                                {{rate.rate}}
+                                                <!--
+                                                <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span> 
+                                                -->
+                                            </td>
+                                            <td ng-show="vm['editRate' + rate.rateId]">
+                                                <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  
+                                            </td>
+                                            <td  class="col-md-2">
+                                                <div>
+                                                    <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteRate(rate, $index)">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </div>
+                                                <div ng-hide="vm['editRate' + rate.rateId]">
+                                                    <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = true">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button> 
+                                                </div>
+                                                <div ng-show="vm['editRate' + rate.rateId]">
+                                                    <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.updateRate(rate, $index)">
+                                                        <span class="glyphicon glyphicon-ok"></span>
+                                                    </button>
+                                                </div>
 
 
-                                                </td>
+                                            </td>
 
-                                            </tr>
+                                        </tr>
                                     </table>   
                                 </div>
                             </div>
-                            <div class="panel-footer">
-
+                            <div class="panel-footer" >
+                                <span ng-show='vm.loadingRates'>Loading data...</>
                             </div>
                         </div>
 
