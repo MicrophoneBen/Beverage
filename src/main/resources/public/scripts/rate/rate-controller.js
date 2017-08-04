@@ -4,8 +4,8 @@
 'use strict';
 
 define(['angular', './rate.module', './product-select.directive', './product-details.directive', '../utility/beverage-utility'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['$http', 'beverage-utility', 'toastr',
-        function ($http, util, toastr) {
+    angular.module('beverage.rate').controller('rateCtrl', ['$http', 'beverage-utility',
+        function ($http, util) {
             var vm = this;
 
             vm.beverages = [];
@@ -20,7 +20,6 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             activate();
 
-            ////////////////////////////////////private
 
             vm.loadingRates = false;
 
@@ -55,6 +54,8 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             function checkIfAllLoaded(rates) {
                 if (rates.length === 0) {
                     allLoaded = true;
+                } else {
+                    allLoaded = false;
                 }
                 return rates;
             }
@@ -70,7 +71,6 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                 getRates()
                         .then(refreshRates)
                         .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the rates.'));
-                ;
             }
 
 
@@ -101,21 +101,15 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             }
 
-            function createRate(_rate) {
-                var rate = {
-                    description: _rate.description,
-                    rate: _rate.score ? _rate.score : 0,
-                    productId: _rate.product.productId
-                };
-                return $http.post('/v1/rate', rate).then(function (result) {
-                    return result;
-                });
-            }
-
             function rateIt() {
                 currentPage = 0;
                 allLoaded = false;
-                createRate(vm.rate)
+                var rate = {
+                    description: vm.rate.description,
+                    rate: vm.rate.score ? vm.rate.score : 0,
+                    productId: vm.rate.product.productId
+                };
+                $http.post('/v1/rate', rate)
                         .then(getRates)
                         .then(refreshRates)
                         .then(selectTab(1))

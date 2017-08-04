@@ -4,33 +4,25 @@
 'use strict';
 
 define(['angular', './navigation.module', , './authentication-service'], function (angular, module) {
-    module.controller('login', ['$rootScope','$scope', '$http', '$location','authentication','toastr',
-        function ($rootScope,$scope, $http, $location, authentication, toastr) {
+    module.controller('login', ['$rootScope','$scope', '$http', '$location','authentication','beverage-utility','toastr',
+        function ($rootScope,$scope, $http, $location, authentication, util,toastr) {
                     
             activate();
             
             function activate() {
                 $scope.signIn = true;
-                $scope.signUp = false;
             }
             
             $scope.createUser = function (userDetails) {
-                return $http.post('/v1/user', userDetails).then(function () {
-                    toastr.success('User created, welcome!');
-                    $scope.signIn = true;
-                    $scope.signUp = false;
-                }, function (error) {
-                    if(error.status === 400) {
-                        toastr.error('Could not create a user due to bad input.','Error.');
-                    } else {
-                        toastr.error('Because of unknown server error.','Error.');
-                    }
-                    
-                });
+                return $http.post('/v1/user', userDetails)
+                        .then(util.givePositiveFeedback("User created."),util.displayErrorInformation('Could not create user.'));
             };   
             
             $scope.login = function (credentials) {
-                return authentication.isAuthenticated(credentials).then(setErrorStatus).then(broadcast).then(route);
+                return authentication
+                        .isAuthenticated(credentials)
+                        .then(setErrorStatus)
+                        .then(broadcast).then(route);
             };
 
             function setErrorStatus(result) {

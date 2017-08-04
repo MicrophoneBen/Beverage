@@ -17,9 +17,9 @@
                             class="form-control" id="password" name="password" ng-model="credentials.password"/>
             </div>
             <button ng-disabled="signInForm.$invalid" type="submit" class="btn btn-primary" ng-click="login(credentials)">Sign in</button>
-            <button type="submit" class="btn btn-primary" ng-click="signIn=false;signUp=true;error=false;">Sign up</button>
+            <button type="submit" class="btn btn-primary" ng-click="signIn=false">Sign up</button>
     </form> 
-    <form ng-show="signUp" role="form" name="signUpForm">
+    <form ng-show="!signIn" role="form" name="signUpForm">
             <div class="form-group">
                     <label for="username">Username:</label> <input ng-required="true" type="text"
                             class="form-control" id="username" name="username" ng-model="userInfo.username"/>
@@ -37,7 +37,7 @@
                             class="form-control" id="confirmPassword" name="password" ng-model="userInfo.confirmPassword"/>
             </div>
             <button type="submit" ng-disabled="signUpForm.$invalid || userInfo.password !== userInfo.confirmPassword" class="btn btn-primary" ng-click="createUser(userInfo)">Sign up</button>
-            <button type="submit"  class="btn btn-primary" ng-click="signIn=true;signUp=false">Exit</button>
+            <button type="submit"  class="btn btn-primary" ng-click="signIn=true>Exit</button>
     </form>      
 </div>
 
