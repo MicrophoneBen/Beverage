@@ -18,7 +18,6 @@ public interface RateRepository extends PagingAndSortingRepository<Rate, Long> {
     List<Rate> findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(BeverageUser user1,final String name, BeverageUser user2, final String producer,final Pageable pageable); 
     
     
-    
     void deleteByRateIdAndBevarageUser(long rateId, BeverageUser user);  
     
     Optional<Rate> findOne(long rateId);

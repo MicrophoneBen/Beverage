@@ -97,7 +97,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             function createRate() {
                 currentPage = 0;
                 allLoaded = false;
-                vm.rate.productId = vm.selectedProduct.productId;
+                vm.rate.productId = vm.productToRate.productId;
                 rateDao.createRate(vm.rate)
                         .then(rateDao.getRates)
                         .then(refreshRates)
