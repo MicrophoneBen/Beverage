@@ -244,9 +244,9 @@ public class BeverageRateTest {
         assertThatTheNumberOfRatesIs(3);
         
         ResponseEntity<RateDto[]> rates = getRates().assertCall(restTemplate);
-        Assert.assertEquals("A bear5",rates.getBody()[0].getName());
-        Assert.assertEquals("A bear1",rates.getBody()[1].getName());
-        Assert.assertEquals("A bear3",rates.getBody()[2].getName());
+        Assert.assertEquals("A bear 5",rates.getBody()[0].getName());
+        Assert.assertEquals("A bear 1",rates.getBody()[1].getName());
+        Assert.assertEquals("A bear 3",rates.getBody()[2].getName());
     }
     
     @Test
