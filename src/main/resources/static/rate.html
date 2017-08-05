@@ -8,7 +8,7 @@
                 <div class="col-md-12">
                     <form name="form" role="form" autocomplete="off">
                         <div class="row">
-                            <select-product selected="vm.rate.product"></select-product>
+                            <select-product selected="vm.selectedProduct"></select-product>
                             <br>
                             <div class="form-group">
                                 <span uib-rating ng-model="vm.rate.score" max="10" aria-labelledby="default-rating"></span>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-10 form-group">
-                                <button id="submit" type="submit" class="btn btn-default" ng-click="vm.rateIt()">
+                                <button ng-disabled="!vm.selectedProduct" id="submit" type="submit" class="btn btn-default" ng-click="vm.createRate()">
                                     <span class="glyphicon glyphicon-ok"></span>
                                 </button>
                             </div>
@@ -100,8 +100,8 @@
         <uib-tab index="2" heading="Beverage">
             <div ng-cloak >
                 <br>
-                <select-product selected="vm.rate.product"></select-product>                       
-                <product-details ng-show="vm.rate.product" product="vm.rate.product"></product-details>                      
+                <select-product selected="vm.selectedProduct"></select-product>                       
+                <product-details ng-show="vm.selectedProduct" product="vm.selectedProduct"></product-details>                      
             </div>
         </uib-tab>
         <uib-tab index="3" heading="Popular">

@@ -3,53 +3,40 @@
 
 'use strict';
 
-define(['angular', './rate.module', './product-select.directive', './product-details.directive', '../utility/beverage-utility'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['$http', 'beverage-utility',
-        function ($http, util) {
+define(['angular', './rate.module', './product-select.directive', './product-details.directive'
+    , '../utility/beverage-utility', './rate-dao', './product-dao'], function (angular) {
+    angular.module('beverage.rate').controller('rateCtrl', ['beverage-utility','rateDao','productDao',
+        function (util, rateDao, productDao) {
             var vm = this;
 
             vm.beverages = [];
             vm.rate = {};
             vm.showBeverageDetails = showBeverageDetails;
-            vm.rateIt = rateIt;
+            vm.createRate = createRate;
             vm.deleteRate = deleteRate;
             vm.updateRate = updateRate;
-            vm.filterRates = util.throttle(filterRates, 300);
-            
+            vm.filterRates = util.throttle(filterRates, 300);       
             vm.rates = [];
-
-            activate();
-
-
             vm.loadingRates = false;
-
+            
             var allLoaded = false;
             var currentPage = 0;
+            
+            activate();
+            
 
             vm.loadMore = function () {
                 if (allLoaded || vm.loadingRates) {
                     return;
                 }
 
-                currentPage += 1;
-                getRates()
-                        .then(checkIfAllLoaded)
-                        .then(addRatesToList);
-            };
-
-            function getRates() {
                 vm.loadingRates = true;
-                return $http.get('/v1/rate', {
-                    params: {
-                        page: currentPage,
-                        query: vm.queryString
-                    }
-                }).then(function (result) {
-                    return result.data;
-                }).finally(function () {
-                    vm.loadingRates = false;
-                });
-            }
+                currentPage += 1;
+                rateDao.getRatesWithPageAndQuery(currentPage, vm.queryString)
+                        .then(checkIfAllLoaded)
+                        .then(addRatesToList)
+                        .finally(isNotLoadingRates);
+            };
 
             function checkIfAllLoaded(rates) {
                 if (rates.length === 0) {
@@ -66,9 +53,13 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                     vm.rates.push(rates[i]);
                 }
             }
+            
+            function isNotLoadingRates() {
+                vm.loadingRates = false;
+            }
 
             function activate() {
-                getRates()
+                rateDao.getRates()
                         .then(refreshRates)
                         .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the rates.'));
             }
@@ -78,60 +69,56 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                 vm.rates = rates;
             }
 
+            function filterRates() {
+                currentPage = 0;
+                allLoaded = false;
+                rateDao.getRatesWithPageAndQuery(currentPage, vm.queryString).then(refreshRates);
+            }
+
+            function showBeverageDetails(rate) {
+                productDao.getProduct(rate.productId)
+                        .then(selectProduct)
+                        .then(selectTab(2))
+                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not get the beverage details.'));
+
+            }
+            
+            function selectProduct(product) {
+                vm.selectedProduct = product;
+                return product;
+            }
+
             function selectTab(tab) {
                 return function () {
                     vm.activeTab = tab;
                 };
             }
 
-
-            function filterRates() {
+            function createRate() {
                 currentPage = 0;
                 allLoaded = false;
-                getRates().then(refreshRates);
-            }
-
-            function showBeverageDetails(rate) {
-                $http.get('/v1/product_catalog/' + rate.productId)
-                        .then(function (result) {
-                            vm.rate.product = result.data;
-                        })
-                        .then(selectTab(2))
-                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not get the beverage details.'));
-
-            }
-
-            function rateIt() {
-                currentPage = 0;
-                allLoaded = false;
-                var rate = {
-                    description: vm.rate.description,
-                    rate: vm.rate.score ? vm.rate.score : 0,
-                    productId: vm.rate.product.productId
-                };
-                $http.post('/v1/rate', rate)
-                        .then(getRates)
+                vm.rate.productId = vm.selectedProduct.productId;
+                rateDao.createRate(vm.rate)
+                        .then(rateDao.getRates)
                         .then(refreshRates)
                         .then(selectTab(1))
                         .then(util.givePositiveFeedback('Beverage rated!'), util.displayErrorInformation('Could not rate the beverage.'));
             }
 
-
-
+            function deleteRate(rate, index) {
+                rateDao.deleteRate(rate.rateId)
+                        .then(removeRate(index))
+                        .then(util.givePositiveFeedback('Rate deleted.'), util.displayErrorInformation('Could not delete the rate.'));
+            }
+            
             function removeRate(index) {
                 return function () {
                     vm.rates.splice(index, 1);
                 };
             }
 
-            function deleteRate(rate, index) {
-                $http.delete('/v1/rate/' + rate.rateId)
-                        .then(removeRate(index))
-                        .then(util.givePositiveFeedback('Rate deleted.'), util.displayErrorInformation('Could not delete the rate.'));
-            }
-
             function updateRate(rate, index) {
-                $http.put('/v1/rate/' + rate.rateId, rate)
+                rateDao.updateRate(rate.rateId, rate)
                         .then(util.givePositiveFeedback('Rate updated.'), util.displayErrorInformation('Could not update the rate.'));
             }
 
