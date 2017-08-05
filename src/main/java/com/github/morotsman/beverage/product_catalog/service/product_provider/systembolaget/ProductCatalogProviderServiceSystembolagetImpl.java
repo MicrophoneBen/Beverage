@@ -43,9 +43,9 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     
     private Stream<Product> getProducts(final int numberOfProducts) {
         return LongStream.range(0, numberOfProducts).mapToObj(i -> {
-            return new Product(i, "A bear" + i, "Bear", 12.0, 50.0, "2", "1243", 24.0, new Date(), 
+            return new Product(i, "A bear " + i, "Bear", 12.0, 50.0, "2", "1243", 24.0, new Date(), 
                 false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
-                "A nice comapany" + (i+1), "Some other company", "1972", "7.0%", "", "", 
+                "A nice comapany " + (i+1), "Some other company", "1972", "7.0%", "", "", 
                 false, false, false, "some raw materials");
         });
     }
@@ -55,9 +55,9 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     public Stream<Product> getProductCatalog() {
         
         //final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
-        //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));
+        //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));  
         
-        return getProducts(10);  
+        return getProducts(10);   
     }    
     
 }

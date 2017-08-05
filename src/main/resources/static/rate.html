@@ -44,26 +44,32 @@
                                     <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
                                            class="table table-hover" cellspacing="0" width="100%">
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Producer</th>
-                                            <th>Rate</th>
+                                            <th>Beverage</th>
                                             <th></th>
                                             <th></th>  
                                         </tr>
 
                                         <tr ng-repeat="rate in vm.rates track by $index">
-                                            <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.name}}</td>
-                                            <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)">{{rate.producer}}</td>
-                                            <td class="col-md-3" ng-click="vm.showBeverageDetails(rate)" ng-hide="vm['editRate' + rate.rateId]">
-                                                {{rate.rate}}
+                                            <td ng-hide="vm['editRate' + rate.rateId]" class="col-md-9" ng-click="vm.showBeverageDetails(rate)">
+                                                
+                                                <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>
                                                 <!--
-                                                <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span> 
+                                                <h1>{{rate.rate}}</h1>
                                                 -->
+                                                <br>
+                                                <span>{{rate.name}} <b>produced by</b> {{rate.producer}}<span>  
+                                                <br>
+                                                <span><b>Review: </b><i>{{rate.description}}<i></span>
                                             </td>
-                                            <td ng-show="vm['editRate' + rate.rateId]">
-                                                <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>  
+                                            
+                                            <td ng-show="vm['editRate' + rate.rateId]" class="col-md-9">
+                                                <span><b>Rate: </b></span><span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>
+                                                <br>
+                                                <span>{{rate.name}} <b>produced by</b> {{rate.producer}}<span> 
+                                                <br>
+                                                <textarea rows="6" class="form-control" id="description" ng-model="rate.description"></textarea>
                                             </td>
-                                            <td  class="col-md-2">
+                                            <td  class="col-md-3">
                                                 <div>
                                                     <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteRate(rate, $index)">
                                                         <span class="glyphicon glyphicon-remove"></span>
@@ -79,10 +85,7 @@
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                     </button>
                                                 </div>
-
-
                                             </td>
-
                                         </tr>
                                     </table>   
                                 </div>
