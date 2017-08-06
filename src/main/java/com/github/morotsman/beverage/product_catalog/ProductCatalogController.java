@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage.product_catalog;
 
+import com.github.morotsman.beverage.common.ErrorDto;
 import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.model.exceptions.UnknownProductException;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,10 @@ public class ProductCatalogController {
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({UnknownProductException.class})
-    public void handleException(UnknownProductException e) {
+    public ErrorDto handleException(UnknownProductException e) {
         System.out.println(e.getMessage());  
-        e.printStackTrace(System.out);  
+        e.printStackTrace(System.out); 
+        return new ErrorDto("Could not find the product in the database.");
     }
       
     

@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage.user;
 
+import com.github.morotsman.beverage.common.ErrorDto;
 import java.security.Principal;
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;

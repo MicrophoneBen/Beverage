@@ -15,8 +15,13 @@ define(['angular', './navigation.module', , './authentication-service'], functio
             
             $scope.createUser = function (userDetails) {
                 return $http.put('/v1/user', userDetails)
+                        .then(goToSignIn)
                         .then(util.givePositiveFeedback("User created."),util.displayErrorInformation('Could not create user.'));
             };   
+            
+            function goToSignIn() { 
+                $scope.signIn = true; 
+            }
             
             $scope.login = function (credentials) {
                 return authentication

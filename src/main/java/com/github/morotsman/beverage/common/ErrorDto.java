@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage.user;
+package com.github.morotsman.beverage.common;
 
 import java.util.Arrays;
 import java.util.List;

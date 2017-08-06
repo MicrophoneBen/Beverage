@@ -16,12 +16,12 @@ public class RateDto {
     
     private String producer;
 
-    @NotNull
-    @Min(0)
-    @Max(10)
+    @NotNull(message = "The review must contain a grade.")
+    @Min(value=0, message="The value of the grade must be between at least 0 and at most 10.")
+    @Max(value=10, message="The value of the grade must be between at least 0 and at most 10.")
     private Long rate;
 
-    @NotNull
+    @NotNull(message="A review must be about a product.")
     private Long productId;
     
 

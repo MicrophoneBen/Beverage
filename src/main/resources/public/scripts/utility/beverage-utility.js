@@ -16,7 +16,7 @@ define(['./utility.module'], function (module) {
                     if (timer) {
                         $timeout.cancel(timer);
                     }
-                    
+
                     timer = $timeout(function () {
                         var args = Array.prototype.slice.call(currentArguments, 0);
                         fun.apply(this, args);
@@ -24,7 +24,8 @@ define(['./utility.module'], function (module) {
                         timer = undefined;
                     }, timeout);
                 };
-            };
+            }
+            ;
 
             function curry(fun) {
                 var numberOfParameters = fun.length;
@@ -49,8 +50,16 @@ define(['./utility.module'], function (module) {
             }
 
             function displayErrorInformation(message) {
-                return function (error) {
-                    toastr.error(message, 'Error');
+                return function (response) {
+                    var detailedErrorInfo = "";
+                    if (response.data && response.data.errors) {
+                        detailedErrorInfo = response.data.errors.map(function (error) {
+                            return error.defaultMessage;
+                        }).join(" ");
+                    }
+
+                    var errorMessage = message + " " + detailedErrorInfo;
+                    toastr.error(errorMessage, 'Error');
                 };
             }
 

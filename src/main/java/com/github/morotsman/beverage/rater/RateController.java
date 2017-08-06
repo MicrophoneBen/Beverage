@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage.rater;
 
+import com.github.morotsman.beverage.common.ErrorDto;
 import com.github.morotsman.beverage.model.exceptions.UnknownRateException;
 import com.github.morotsman.beverage.model.exceptions.UnknownProductException;
 import java.security.Principal;
@@ -77,41 +78,43 @@ public class RateController {
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({ EmptyResultDataAccessException.class})
-    public void handleException(EmptyResultDataAccessException e) {
+    public ErrorDto handleException(EmptyResultDataAccessException e) {
         System.out.println(e.getMessage());  
         e.printStackTrace(System.out);
-        
+        return new ErrorDto("Could not find the entity in the database.");
     }
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({ UnknownRateException.class})
-    public void handleException(UnknownRateException e) {
+    public ErrorDto handleException(UnknownRateException e) {
         System.out.println(e.getMessage());  
         e.printStackTrace(System.out);
+        return new ErrorDto("Could not find the review in the database.");
         
     } 
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({JpaObjectRetrievalFailureException.class})
-    public void handleException(JpaObjectRetrievalFailureException e) {
+    public ErrorDto handleException(JpaObjectRetrievalFailureException e) {
         System.out.println(e.getMessage());  
         e.printStackTrace(System.out);
+        return new ErrorDto("Could not find the entity in the database.");
         
     }
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({EntityNotFoundException.class})
-    public void handleException(EntityNotFoundException e) {
+    public ErrorDto handleException(EntityNotFoundException e) {
         System.out.println(e.getMessage());  
-        e.printStackTrace(System.out);
-        
+        return new ErrorDto("Could not find the entity in the database.");     
     }
     
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({UnknownProductException.class})
-    public void handleException(UnknownProductException e) {
+    public ErrorDto handleException(UnknownProductException e) {
         System.out.println(e.getMessage());  
         e.printStackTrace(System.out);  
+        return new ErrorDto("Could not create the review since it's about an unknown product.");
     }
     
     
@@ -126,9 +129,10 @@ public class RateController {
     
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ DataIntegrityViolationException.class })
-    public void handleException(DataIntegrityViolationException e) {
+    public ErrorDto handleException(DataIntegrityViolationException e) {
         System.out.println(e.getMessage());  
-        e.printStackTrace(System.out);    
+        e.printStackTrace(System.out); 
+        return new ErrorDto("Could not create the review since it already exists.");
     }
      
     
