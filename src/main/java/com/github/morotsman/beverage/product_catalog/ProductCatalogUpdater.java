@@ -1,7 +1,7 @@
 package com.github.morotsman.beverage.product_catalog;
 
-import com.github.morotsman.beverage.rater.RateDto;
-import com.github.morotsman.beverage.rater.RateService;
+import com.github.morotsman.beverage.review.ReviewDto;
+import com.github.morotsman.beverage.review.ReviewService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
 import java.util.Random;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductCatalogUpdater {  
     
-    private final RateService rateService;
+    private final ReviewService rateService;
     private final ProductCatalogService productCatalogService; 
     private final UserService userService;
 
-    public ProductCatalogUpdater(RateService rateService, ProductCatalogService productCatalogService, UserService userService) {
+    public ProductCatalogUpdater(ReviewService rateService, ProductCatalogService productCatalogService, UserService userService) {
         this.rateService = rateService;
         this.productCatalogService = productCatalogService;
         this.userService = userService;
@@ -32,7 +32,7 @@ public class ProductCatalogUpdater {
         
         productCatalogService.getProductCatalog().forEach(p -> {
             long rate = ran.nextInt(11);
-            rateService.createRate("niklas", new RateDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
+            rateService.createReview("niklas", new ReviewDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
         });
         
         

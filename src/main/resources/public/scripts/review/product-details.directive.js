@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./rate.module'], function (module) {
+define(['./review.module'], function (module) {
 
 
    module.directive('productDetails', function () {

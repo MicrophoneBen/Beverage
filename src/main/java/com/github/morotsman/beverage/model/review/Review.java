@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage.model.rate;
+package com.github.morotsman.beverage.model.review;
 
 import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.model.user.BeverageUser;
@@ -21,11 +21,11 @@ import org.hibernate.annotations.OnDeleteAction;
     uniqueConstraints=
         @UniqueConstraint(columnNames={"product_id", "user_id"})
 )
-public class Rate implements Serializable{
+public class Review implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long rateId;
+    private Long reviewId;
 
     @Column(length = 1000)
     private String description;
@@ -49,10 +49,10 @@ public class Rate implements Serializable{
     
     private Long updated;
     
-    protected Rate() {}
+    protected Review() {}
 
-    public Rate(Long rateId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated, String name, String producer) {
-        this.rateId = rateId;
+    public Review(Long reviewId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated, String name, String producer) {
+        this.reviewId = reviewId;
         this.description = description;
         this.rate = rate;
         this.product = product;
@@ -64,8 +64,8 @@ public class Rate implements Serializable{
 
     
     
-    public Long getRateId() {
-        return rateId;
+    public Long getReviewId() {
+        return reviewId;
     }
 
     public String getDescription() {

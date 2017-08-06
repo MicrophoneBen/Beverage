@@ -3,21 +3,21 @@
 
 'use strict';
 
-define(['angular', './rate.module', './product-select.directive', './product-details.directive'
-    , '../utility/beverage-utility', './rate-dao', './product-dao'], function (angular) {
-    angular.module('beverage.rate').controller('rateCtrl', ['beverage-utility','rateDao','productDao',
-        function (util, rateDao, productDao) {
+define(['angular', './review.module', './product-select.directive', './product-details.directive'
+    , '../utility/beverage-utility', './review-dao', './product-dao'], function (angular) {
+    angular.module('beverage.review').controller('reviewCtrl', ['beverage-utility','reviewDao','productDao',
+        function (util, reviewDao, productDao) {
             var vm = this;
 
             vm.beverages = [];
-            vm.rate = {};
+            vm.review = {};
             vm.showBeverageDetails = showBeverageDetails;
-            vm.createRate = createRate;
-            vm.deleteRate = deleteRate;
-            vm.updateRate = updateRate;
-            vm.filterRates = util.throttle(filterRates, 300);       
-            vm.rates = [];
-            vm.loadingRates = false;
+            vm.createReview = createReview;
+            vm.deleteReview = deleteReview;
+            vm.updateReview = updateReview;
+            vm.filterReviews = util.throttle(filterReviews, 300);       
+            vm.reviews = [];
+            vm.loadingReviews = false;
             
             var allLoaded = false;
             var currentPage = 0;
@@ -26,57 +26,57 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             
 
             vm.loadMore = function () {
-                if (allLoaded || vm.loadingRates) {
+                if (allLoaded || vm.loadingReviews) {
                     return;
                 }
 
-                vm.loadingRates = true;
+                vm.loadingReviews = true;
                 currentPage += 1;
-                rateDao.getRatesWithPageAndQuery(currentPage, vm.queryString)
+                reviewDao.getReviewsWithPageAndQuery(currentPage, vm.queryString)
                         .then(checkIfAllLoaded)
-                        .then(addRatesToList)
-                        .finally(isNotLoadingRates);
+                        .then(addReviewsToList)
+                        .finally(isNotLoadingReviews);
             };
 
-            function checkIfAllLoaded(rates) {
-                if (rates.length === 0) {
+            function checkIfAllLoaded(reviews) {
+                if (reviews.length === 0) {
                     allLoaded = true;
                 } else {
                     allLoaded = false;
                 }
-                return rates;
+                return reviews;
             }
 
-            function addRatesToList(rates) {
+            function addReviewsToList(reviews) {
                 //vm.rates = vm.rates.concat(rates); 
-                for (var i = 0; i < rates.length; i++) {
-                    vm.rates.push(rates[i]);
+                for (var i = 0; i < reviews.length; i++) {
+                    vm.reviews.push(reviews[i]);
                 }
             }
             
-            function isNotLoadingRates() {
-                vm.loadingRates = false;
+            function isNotLoadingReviews() {
+                vm.loadingReviews = false;
             }
 
             function activate() {
-                rateDao.getRates()
-                        .then(refreshRates)
+                reviewDao.getReviews()
+                        .then(refreshReviews)
                         .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the reviews.'));
             }
 
 
-            function refreshRates(rates) {
-                vm.rates = rates;
+            function refreshReviews(rates) {
+                vm.reviews = rates;
             }
 
-            function filterRates() {
+            function filterReviews() {
                 currentPage = 0;
                 allLoaded = false;
-                rateDao.getRatesWithPageAndQuery(currentPage, vm.queryString).then(refreshRates);
+                reviewDao.getReviewsWithPageAndQuery(currentPage, vm.queryString).then(refreshReviews);
             }
 
-            function showBeverageDetails(rate) {
-                productDao.getProduct(rate.productId)
+            function showBeverageDetails(review) {
+                productDao.getProduct(review.productId)
                         .then(selectProduct)
                         .then(selectTab(2))
                         .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not get the beverage details.'));
@@ -94,31 +94,31 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                 };
             }
 
-            function createRate() {
+            function createReview() {
                 currentPage = 0;
                 allLoaded = false;
-                vm.rate.productId = vm.productToRate.productId;
-                rateDao.createRate(vm.rate)
-                        .then(rateDao.getRates)
-                        .then(refreshRates)
+                vm.review.productId = vm.productToRate.productId;
+                reviewDao.createReview(vm.review)
+                        .then(reviewDao.getReviews)
+                        .then(refreshReviews)
                         .then(selectTab(1))
                         .then(util.givePositiveFeedback('Beverage reviewed!'), util.displayErrorInformation('Could not review the beverage.'));
             }
 
-            function deleteRate(rate, index) {
-                rateDao.deleteRate(rate.rateId)
+            function deleteReview(review, index) {
+                reviewDao.deleteReview(review.reviewId)
                         .then(removeRate(index))
                         .then(util.givePositiveFeedback('Review deleted.'), util.displayErrorInformation('Could not delete the review.'));
             }
             
             function removeRate(index) {
                 return function () {
-                    vm.rates.splice(index, 1);
+                    vm.reviews.splice(index, 1);
                 };
             }
 
-            function updateRate(rate, index) {
-                rateDao.updateRate(rate.rateId, rate)
+            function updateReview(review, index) {
+                reviewDao.updateReview(review.reviewId, review)
                         .then(util.givePositiveFeedback('Review updated.'), util.displayErrorInformation('Could not update the review.'));
             }
 

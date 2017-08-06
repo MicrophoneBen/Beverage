@@ -1,7 +1,7 @@
 package com.github.morotsman.beverage.function_test;
 
 import com.github.morotsman.beverage.test_util.RestTester;
-import com.github.morotsman.beverage.rater.RateService;
+import com.github.morotsman.beverage.review.ReviewService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
 import static java.util.stream.Collectors.joining;
@@ -37,7 +37,7 @@ public class UserTest {
     private UserService userService;
 
     @Autowired
-    private RateService rateService;
+    private ReviewService rateService;
 
     private String baseUrl;
 
@@ -120,10 +120,6 @@ public class UserTest {
     public void tryToGetLoggedInUser() {
         createUser("user4", "password", 23L)
                 .expectedStatus(HttpStatus.CREATED)
-                .assertCall(restTemplate);
-
-        getLoggedInUser()
-                .expectedStatus(HttpStatus.UNAUTHORIZED)
                 .assertCall(restTemplate);
 
         login("user4", "password");

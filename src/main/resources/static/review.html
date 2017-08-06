@@ -1,6 +1,6 @@
 
 
-<div class="container" ng-controller="rateCtrl as vm">
+<div class="container" ng-controller="reviewCtrl as vm">
     <uib-tabset active="vm.activeTab">
         <uib-tab index="0" heading="Review It">
             <br>
@@ -11,17 +11,17 @@
                             <select-product selected="vm.productToRate"></select-product>
                             <br>
                             <div class="form-group">
-                                <span uib-rating ng-model="vm.rate.score" max="10" aria-labelledby="default-rating"></span>
+                                <span uib-rating ng-model="vm.review.score" max="10" aria-labelledby="default-rating"></span>
                             </div>
 
                             <div class="form-group">
                                 <label for="description" class="control-label">Description</label>
-                                <textarea rows="6" class="form-control" id="description" ng-model="vm.rate.description"></textarea>
+                                <textarea rows="6" class="form-control" id="description" ng-model="vm.review.description"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 form-group">
-                                <button ng-disabled="!vm.productToRate" id="submit" type="submit" class="btn btn-default" ng-click="vm.createRate()">
+                                <button ng-disabled="!vm.productToRate" id="submit" type="submit" class="btn btn-default" ng-click="vm.createReview()">
                                     <span class="glyphicon glyphicon-ok"></span>
                                 </button>
                             </div>
@@ -37,45 +37,45 @@
                     <div class="row">
                         <div class="panel panel-default panel-table">
                             <div class="panel-heading">
-                                <input type="text" class="form-control" ng-model="vm.queryString" ng-keyup="vm.filterRates()">
+                                <input type="text" class="form-control" ng-model="vm.queryString" ng-keyup="vm.filterReviews()">
                             </div>
                             <div class="panel-body">
                                 <div class="infinite-table" style="height:600px;overflow-y:scroll;">
                                     <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
                                            class="table table-hover" cellspacing="0" width="100%">
-                                        <tr ng-repeat="rate in vm.rates track by $index">
-                                            <td ng-hide="vm['editRate' + rate.rateId]" class="col-md-9" ng-click="vm.showBeverageDetails(rate)">
+                                        <tr ng-repeat="review in vm.reviews track by $index">
+                                            <td ng-hide="vm['editReview' + review.reviewId]" class="col-md-9" ng-click="vm.showBeverageDetails(review)">
                                                 
-                                                <span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>
+                                                <span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>
                                                 <!--
-                                                <h1>{{rate.rate}}</h1>
+                                                <h1>{{review.rate}}</h1>
                                                 -->
                                                 <br>
-                                                <span>{{rate.name}} <b>produced by</b> {{rate.producer}}<span>  
+                                                <span>{{review.name}} <b>produced by</b> {{review.producer}}<span>  
                                                 <br>
-                                                <span><b>Review: </b><i>{{rate.description}}<i></span>
+                                                <span><b>Review: </b><i>{{review.description}}<i></span>
                                             </td>
                                             
-                                            <td ng-show="vm['editRate' + rate.rateId]" class="col-md-9">
-                                                <span><b>Rate: </b></span><span uib-rating ng-model="rate.rate" max="10" aria-labelledby="default-rating"></span>
+                                            <td ng-show="vm['editReview' + review.reviewId]" class="col-md-9">
+                                                <span><b>Rate: </b></span><span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating"></span>
                                                 <br>
-                                                <span>{{rate.name}} <b>produced by</b> {{rate.producer}}<span> 
+                                                <span>{{review.name}} <b>produced by</b> {{review.producer}}<span> 
                                                 <br>
-                                                <textarea rows="6" class="form-control" id="description" ng-model="rate.description"></textarea>
+                                                <textarea rows="6" class="form-control" id="description" ng-model="review.description"></textarea>
                                             </td>
                                             <td  class="col-md-3">
                                                 <div>
-                                                    <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteRate(rate, $index)">
+                                                    <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteReview(review, $index)">
                                                         <span class="glyphicon glyphicon-remove"></span>
                                                     </button>
                                                 </div>
-                                                <div ng-hide="vm['editRate' + rate.rateId]">
-                                                    <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = true">
+                                                <div ng-hide="vm['editReview' + review.reviewId]">
+                                                    <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editReview' + review.reviewId] = true">
                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                     </button> 
                                                 </div>
-                                                <div ng-show="vm['editRate' + rate.rateId]">
-                                                    <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editRate' + rate.rateId] = false; vm.updateRate(rate, $index)">
+                                                <div ng-show="vm['editReview' + review.reviewId]">
+                                                    <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editReview' + review.reviewId] = false; vm.updateReview(review, $index)">
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                     </button>
                                                 </div>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer" >
-                                <span ng-show='vm.loadingRates'>Loading data...</>
+                                <span ng-show='vm.loadingReviews'>Loading data...</>
                             </div>
                         </div>
 

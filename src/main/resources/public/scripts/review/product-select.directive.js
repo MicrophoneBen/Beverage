@@ -1,6 +1,6 @@
 'use strict';
 
-define(['./rate.module', './product-dao'], function (module) {
+define(['./review.module', './product-dao'], function (module) {
 
 
     module.directive('selectProduct', function () {

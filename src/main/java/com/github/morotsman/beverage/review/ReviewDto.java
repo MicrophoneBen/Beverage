@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage.rater;
+package com.github.morotsman.beverage.review;
 
 import java.util.Objects;
 import javax.validation.constraints.Max;
@@ -6,9 +6,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
-public class RateDto {
+public class ReviewDto {
     
-    private Long rateId;
+    private Long reviewId;
 
     private String description;
     
@@ -25,10 +25,10 @@ public class RateDto {
     private Long productId;
     
 
-    protected RateDto(){}
+    protected ReviewDto(){}
     
-    public RateDto(Long rateId, String description, Long rate, Long productId, String name, String producer) {
-        this.rateId = rateId;
+    public ReviewDto(Long reviewId, String description, Long rate, Long productId, String name, String producer) {
+        this.reviewId = reviewId;
         this.description = description;
         this.rate = rate;
         this.productId = productId;
@@ -36,8 +36,8 @@ public class RateDto {
         this.producer = producer;
     }
 
-    public Long getRateId() {
-        return rateId;
+    public Long getReviewId() {
+        return reviewId;
     }
 
     public String getDescription() {
@@ -62,13 +62,13 @@ public class RateDto {
 
     @Override
     public String toString() {
-        return "RateDto{" + "rateId=" + rateId + ", description=" + description + ", rate=" + rate + ", productId=" + productId + '}';
+        return "RateDto{" + "rateId=" + reviewId + ", description=" + description + ", rate=" + rate + ", productId=" + productId + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.rateId);
+        hash = 59 * hash + Objects.hashCode(this.reviewId);
         hash = 59 * hash + Objects.hashCode(this.description);
         hash = 59 * hash + Objects.hashCode(this.rate);
         hash = 59 * hash + Objects.hashCode(this.productId);
@@ -83,8 +83,8 @@ public class RateDto {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final RateDto other = (RateDto) obj;
-        if (!Objects.equals(this.rateId, other.rateId)) {
+        final ReviewDto other = (ReviewDto) obj;
+        if (!Objects.equals(this.reviewId, other.reviewId)) {
             return false;
         }
         if (!Objects.equals(this.description, other.description)) {
