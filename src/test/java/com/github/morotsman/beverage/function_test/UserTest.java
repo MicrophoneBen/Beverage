@@ -7,6 +7,7 @@ import com.github.morotsman.beverage.user.UserService;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 import org.junit.Test;
@@ -53,13 +54,16 @@ public class UserTest {
 
     @Test
     public void testCreateUser() {
-        ResponseEntity<String> response = createUser("user4", "password", 23L)
+        final ResponseEntity<BeverageUserDto> response = createUser("user4", "password", 23L)
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
-       
+
+        Assert.assertEquals(new Long(23), response.getBody().getAge());
+        Assert.assertEquals("user4", response.getBody().getUsername());
+        Assert.assertNull(response.getBody().getPassword());
+
     }
 
-    
     @Test
     public void testCreateUserWithANonUniqueUserName() {
         createUser("user4", "password", 23L)
@@ -91,19 +95,19 @@ public class UserTest {
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
     }
-    
+
     @Test
     public void testCreateUserWithShortPassword() {
         createUser("user4", "passw", 100L)
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
     }
-    
+
     public void testCreateUserWithNoUsername() {
         createUser(null, "password", 100L)
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
-    }    
+    }
 
     @Test
     public void testCreateUserWithNoAge() {
@@ -111,18 +115,51 @@ public class UserTest {
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
     }
-    
 
-    public RestTester<String> createUser(final String username, final String password, final Long age) {
-        final String body = Stream.of((username!=null?"\"username\": \"" + username + "\"":"")
-                ,(password!=null?"\"password\": \"" + password + "\"":""),
-                (age!=null?"\"age\":" + age:"")).filter(s -> s.length() > 0).collect(joining(",", "{","}"));
-       
-        
-        return RestTester.put(String.class)
+    @Test
+    public void tryToGetLoggedInUser() {
+        createUser("user4", "password", 23L)
+                .expectedStatus(HttpStatus.CREATED)
+                .assertCall(restTemplate);
+
+        getLoggedInUser()
+                .expectedStatus(HttpStatus.UNAUTHORIZED)
+                .assertCall(restTemplate);
+
+        login("user4", "password");
+
+        final ResponseEntity<BeverageUserDto> response = getLoggedInUser()
+                .expectedStatus(HttpStatus.OK)
+                .assertCall(restTemplate);
+
+
+        Assert.assertNull(response.getBody().getAge());
+        Assert.assertEquals("user4", response.getBody().getUsername());
+        Assert.assertNull(response.getBody().getPassword());
+    }
+
+    public RestTester<BeverageUserDto> createUser(final String username, final String password, final Long age) {
+        final String body = Stream.of((username != null ? "\"username\": \"" + username + "\"" : ""), (password != null ? "\"password\": \"" + password + "\"" : ""),
+                (age != null ? "\"age\":" + age : "")).filter(s -> s.length() > 0).collect(joining(",", "{", "}"));
+
+        return RestTester.put(BeverageUserDto.class)
                 .withRequestBody(body)
                 .withUrl(baseUrl + "v1/user")
                 .expectedStatus(HttpStatus.CREATED);
+    }
+
+    public RestTester<BeverageUserDto> getLoggedInUser() {
+        return RestTester.get(BeverageUserDto.class)
+                .withUrl(baseUrl + "user")
+                .expectedStatus(HttpStatus.OK);
+    }
+
+    private void login(final String username, final String password) {
+        RestTester.get(String.class)
+                .withUrl(baseUrl)
+                .withCredentials(username, password)
+                .expectedStatus(HttpStatus.OK)
+                .assertCall(restTemplate);
     }
 
 }
