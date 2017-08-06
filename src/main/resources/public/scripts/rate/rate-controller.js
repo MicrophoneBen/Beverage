@@ -61,7 +61,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
             function activate() {
                 rateDao.getRates()
                         .then(refreshRates)
-                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the rates.'));
+                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the reviews.'));
             }
 
 
@@ -102,13 +102,13 @@ define(['angular', './rate.module', './product-select.directive', './product-det
                         .then(rateDao.getRates)
                         .then(refreshRates)
                         .then(selectTab(1))
-                        .then(util.givePositiveFeedback('Beverage rated!'), util.displayErrorInformation('Could not rate the beverage.'));
+                        .then(util.givePositiveFeedback('Beverage reviewed!'), util.displayErrorInformation('Could not review the beverage.'));
             }
 
             function deleteRate(rate, index) {
                 rateDao.deleteRate(rate.rateId)
                         .then(removeRate(index))
-                        .then(util.givePositiveFeedback('Rate deleted.'), util.displayErrorInformation('Could not delete the rate.'));
+                        .then(util.givePositiveFeedback('Review deleted.'), util.displayErrorInformation('Could not delete the review.'));
             }
             
             function removeRate(index) {
@@ -119,7 +119,7 @@ define(['angular', './rate.module', './product-select.directive', './product-det
 
             function updateRate(rate, index) {
                 rateDao.updateRate(rate.rateId, rate)
-                        .then(util.givePositiveFeedback('Rate updated.'), util.displayErrorInformation('Could not update the rate.'));
+                        .then(util.givePositiveFeedback('Review updated.'), util.displayErrorInformation('Could not update the review.'));
             }
 
 

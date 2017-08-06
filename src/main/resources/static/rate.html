@@ -2,7 +2,7 @@
 
 <div class="container" ng-controller="rateCtrl as vm">
     <uib-tabset active="vm.activeTab">
-        <uib-tab index="0" heading="Rate It">
+        <uib-tab index="0" heading="Review It">
             <br>
             <div>
                 <div class="col-md-12">
@@ -30,7 +30,7 @@
                 </div>
             </div>                   
         </uib-tab>
-        <uib-tab index="1" heading="My Rates">
+        <uib-tab index="1" heading="My Reviews">
             <div ng-cloak>
                 <br>
                 <div class="col-md-12">
@@ -43,12 +43,6 @@
                                 <div class="infinite-table" style="height:600px;overflow-y:scroll;">
                                     <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
                                            class="table table-hover" cellspacing="0" width="100%">
-                                        <tr>
-                                            <th>Beverage</th>
-                                            <th></th>
-                                            <th></th>  
-                                        </tr>
-
                                         <tr ng-repeat="rate in vm.rates track by $index">
                                             <td ng-hide="vm['editRate' + rate.rateId]" class="col-md-9" ng-click="vm.showBeverageDetails(rate)">
                                                 
