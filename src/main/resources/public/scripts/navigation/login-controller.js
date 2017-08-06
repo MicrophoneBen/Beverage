@@ -14,7 +14,7 @@ define(['angular', './navigation.module', , './authentication-service'], functio
             }
             
             $scope.createUser = function (userDetails) {
-                return $http.post('/v1/user', userDetails)
+                return $http.put('/v1/user', userDetails)
                         .then(util.givePositiveFeedback("User created."),util.displayErrorInformation('Could not create user.'));
             };   
             

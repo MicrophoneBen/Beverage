@@ -1,5 +1,6 @@
-package com.github.morotsman.beverage;
+package com.github.morotsman.beverage.function_test;
 
+import com.github.morotsman.beverage.test_util.RestTester;
 import com.github.morotsman.beverage.rater.RateService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
@@ -69,6 +70,14 @@ public class BeverageLoginTest {
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
     }
+    
+    @Test
+    public void callGetRatesWithoutCredentials() {
+        RestTester.get(String.class)
+                .withUrl(baseUrl + "v1/rate")
+                .expectedStatus(HttpStatus.UNAUTHORIZED)
+                .assertCall(restTemplate);
+    }   
 
     
     private RestTester login(final String username, final String password) {

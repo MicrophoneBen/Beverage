@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage;
+package com.github.morotsman.beverage.test_util;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +17,12 @@ public class CsrfInterceptor implements ClientHttpRequestInterceptor {
    
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {   
-        if(xsrfToken.isPresent()) {
+        if(xsrfToken.isPresent() && !jsession.isPresent()) {
+            request.getHeaders().add("X-XSRF-TOKEN", xsrfToken.get());
+            request.getHeaders().add("Cookie","XSRF-TOKEN=" + xsrfToken.get() + "; ");
+        }
+        
+        if(xsrfToken.isPresent() && jsession.isPresent()) {
             request.getHeaders().add("X-XSRF-TOKEN", xsrfToken.get());
             request.getHeaders().add("Cookie","XSRF-TOKEN=" + xsrfToken.get() + "; " + "JSESSIONID=" + jsession.get());
         }

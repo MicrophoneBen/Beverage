@@ -1,4 +1,4 @@
-package com.github.morotsman.beverage;
+package com.github.morotsman.beverage.test_util;
 
 import java.nio.charset.Charset;
 import java.util.Collections;

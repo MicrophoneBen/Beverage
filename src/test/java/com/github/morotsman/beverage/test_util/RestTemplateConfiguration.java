@@ -1,5 +1,6 @@
-package com.github.morotsman.beverage;
+package com.github.morotsman.beverage.test_util;
 
+import com.github.morotsman.beverage.test_util.CsrfInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;

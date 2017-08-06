@@ -1,5 +1,6 @@
-package com.github.morotsman.beverage;
+package com.github.morotsman.beverage.function_test;
 
+import com.github.morotsman.beverage.test_util.RestTester;
 import com.github.morotsman.beverage.rater.RateDto;
 import com.github.morotsman.beverage.rater.RateService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
