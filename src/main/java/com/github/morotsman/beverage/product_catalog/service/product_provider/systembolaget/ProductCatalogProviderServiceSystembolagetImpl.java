@@ -52,12 +52,12 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     
     //TODO we are using mock data for the time being, no need to hammer the service
     @Override
-    public Stream<Product> getProductCatalog() {
+    public Stream<Product> getProductCatalog() {   
         
         //final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
         //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));  
         
-        return getProducts(1000);   
+        return getProducts(10);   
     }    
     
 }
