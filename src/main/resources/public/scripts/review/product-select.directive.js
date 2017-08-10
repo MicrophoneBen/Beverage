@@ -11,7 +11,7 @@ define(['./review.module', './product-dao'], function (module) {
             bindToController: {
                 selected: '='
             },
-            templateUrl: 'scripts/rate/product-select.directive.template.html',
+            templateUrl: 'scripts/review/product-select.directive.template.html',
             controllerAs: 'vm',
             controller: function ($http, productDao) {
                 var vm = this;

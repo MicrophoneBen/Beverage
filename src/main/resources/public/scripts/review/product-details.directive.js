@@ -11,7 +11,7 @@ define(['./review.module'], function (module) {
             bindToController: {
                 product: '='
             },
-            templateUrl: 'scripts/rate/product-details.directive.template.html',
+            templateUrl: 'scripts/review/product-details.directive.template.html',
             controllerAs: 'vm',
             controller: function () {
 
