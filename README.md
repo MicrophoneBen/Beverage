@@ -1,11 +1,9 @@
 # Beverage
 A service that rates bevarages found on Systembolaget.
 
-Start by (will use real data from systembolaget): java -jar target/beverage-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+Start by: java -jar target/beverage-0.0.1-SNAPSHOT.jar 
 
-or
-
-Start by (will use fake data): java -jar target/beverage-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+Data are loaded from systembolaget at startup it can take 30 sec.
 
 Stack: angular/spring boot/jpa
 
