@@ -3,6 +3,7 @@ package com.github.morotsman.beverage.product_catalog;
 import com.github.morotsman.beverage.common.ErrorDto;
 import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.model.exceptions.UnknownProductException;
+import java.util.stream.Stream;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class ProductCatalogController {
     
     @GetMapping("/{productId}")  
     public Product getProduct(@PathVariable final Long productId) {
-        return productCatalogService.getProduct(productId).orElseThrow(() -> new UnknownProductException());
+        return productCatalogService.getProduct(productId).orElseThrow(() -> new UnknownProductException());  
     }
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

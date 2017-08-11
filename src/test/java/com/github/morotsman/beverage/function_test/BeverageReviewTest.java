@@ -2,7 +2,6 @@ package com.github.morotsman.beverage.function_test;
 
 import com.github.morotsman.beverage.test_util.RestTester;
 import com.github.morotsman.beverage.review.ReviewDto;
-import com.github.morotsman.beverage.review.ReviewService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
 import org.junit.After;
@@ -11,6 +10,7 @@ import org.junit.Before;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockserver.integration.ClientAndServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "product_catalog.provider.systembolaget.url=http://localhost:1080/product_supplier")
 public class BeverageReviewTest {
 
     @Value("${local.server.port}")
@@ -36,15 +36,18 @@ public class BeverageReviewTest {
     private UserService userService;
     
     @Autowired
-    private ReviewService rateService; 
+    private ClientAndServer mockServer;
 
     private String baseUrl;
 
+    
     @Before
     public void before() {  
         baseUrl = "http://localhost:" + port + "/"; 
         createUser("user1", "password",20L);
         createUser("user2", "password", 30L);
+        
+                
     }
     
     @After
@@ -56,22 +59,22 @@ public class BeverageReviewTest {
     public void testCreateReview() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 3L, review.getBody().getName(),review.getBody().getProducer()), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());
     }
     
     @Test
     public void testThatItIsImpossibleToReviewTheSameBeverageTwoTimes() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        createReview("{\"description\": \"a description\",\"review\": 7,\"productId\":3}")
+        createReview("{\"description\": \"a description\",\"review\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
@@ -82,7 +85,7 @@ public class BeverageReviewTest {
     public void testThatItIsPossibleToReviewTheSameBeverageTwoTimesIfTheUsersAreDifferent() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
@@ -90,7 +93,7 @@ public class BeverageReviewTest {
         
         login("user2", "password").assertCall(restTemplate);
         
-        createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
@@ -102,15 +105,15 @@ public class BeverageReviewTest {
         login("user1", "password").assertCall(restTemplate);
         
         
-        createReview("{\"description\": \"a description\",\"productId\":3}")
+        createReview("{\"description\": \"a description\",\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
-        createReview("{\"description\": \"a description\",\"rate\": -1,\"productId\":3}")
+        createReview("{\"description\": \"a description\",\"rate\": -1,\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
-        createReview("{\"description\": \"a description\",\"rate\": 11,\"productId\":3}")
+        createReview("{\"description\": \"a description\",\"rate\": 11,\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
@@ -137,13 +140,13 @@ public class BeverageReviewTest {
     public void testGetReview() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         ResponseEntity<ReviewDto> actual = getReview(review.getBody().getReviewId()).expectedStatus(HttpStatus.OK).assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 3L,review.getBody().getName(),review.getBody().getProducer()), actual.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L,"Renat","Pernod Ricard"), actual.getBody());
     }
     
     
@@ -172,12 +175,12 @@ public class BeverageReviewTest {
     @Test
     public void testGetAnotherUsersReview() {
         login("user1", "password").assertCall(restTemplate);      
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         login("user2", "password").assertCall(restTemplate);
-        ResponseEntity<ReviewDto> actual = getReview(review.getBody().getReviewId()).expectedStatus(HttpStatus.NOT_FOUND).assertCall(restTemplate);
+        getReview(review.getBody().getReviewId()).expectedStatus(HttpStatus.NOT_FOUND).assertCall(restTemplate);
     }
      
     @Test
@@ -230,7 +233,7 @@ public class BeverageReviewTest {
     public void verifyThatReviewsAreDefaultSortOnUpdatedTimeStamp() {
         login("user1", "password").assertCall(restTemplate);
         
-        createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":77747}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
@@ -238,16 +241,16 @@ public class BeverageReviewTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":5}")
+        createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":77857}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
         assertThatTheNumberOfReviewsAre(3);
         
         ResponseEntity<ReviewDto[]> rates = getReviews().assertCall(restTemplate);
-        Assert.assertEquals("A bear 5",rates.getBody()[0].getName());
-        Assert.assertEquals("A bear 1",rates.getBody()[1].getName());
-        Assert.assertEquals("A bear 3",rates.getBody()[2].getName());
+        Assert.assertEquals("Canella (Bellini)",rates.getBody()[0].getName());
+        Assert.assertEquals("Renat",rates.getBody()[1].getName());
+        Assert.assertEquals("Canella (Valdobbiadene Prosecco Superiore Extra Dry)",rates.getBody()[2].getName());
     }
     
     @Test
@@ -264,28 +267,28 @@ public class BeverageReviewTest {
     public void updateAReview() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 3L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());
         
         review = updateReview(review.getBody().getReviewId(), "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "another description", 3L, 3L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());     
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "another description", 3L, 1L, "Renat", "Pernod Ricard"), review.getBody());     
     }
    
     @Test
     public void doNotUpdateAnotherUsersReview() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 3L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());
         
         login("user2", "password").assertCall(restTemplate);
         
@@ -296,33 +299,33 @@ public class BeverageReviewTest {
         
         login("user1", "password").assertCall(restTemplate);      
         review = getReview(review.getBody().getReviewId()).assertCall(restTemplate);      
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 3L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());     
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());     
     }
     
     @Test
     public void testUpdateWithInvalidInputs() {
         login("user1", "password").assertCall(restTemplate);
         
-        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":3}")
+        ResponseEntity<ReviewDto> review = createReview("{\"description\": \"a description\",\"rate\": 7,\"productId\":1}")
                 .assertCall(restTemplate);
         
         updateReview(review.getBody().getReviewId(), 
-                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"productId\":3}")
+                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
         updateReview(review.getBody().getReviewId(), 
-                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": 11,\"productId\":3}")
+                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": 11,\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
         updateReview(review.getBody().getReviewId(), 
-                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": -1,\"productId\":3}")
+                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": -1,\"productId\":1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
         updateReview(review.getBody().getReviewId(), 
-                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": 3}")
+                "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": 1}")
                 .expectedStatus(HttpStatus.BAD_REQUEST)
                 .assertCall(restTemplate);
         
@@ -333,7 +336,7 @@ public class BeverageReviewTest {
                 .assertCall(restTemplate);
         
         review = getReview(review.getBody().getReviewId()).assertCall(restTemplate);      
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 3L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());
         
     } 
     
@@ -385,7 +388,7 @@ public class BeverageReviewTest {
     public RestTester<ReviewDto> createRandomReview() {
         return RestTester.post(ReviewDto.class)
                 .withUrl(baseUrl+ "v1/review")
-                .withRequestBody("{\"description\": \"ghhg\", \"rate\": 5, \"productId\": 3}")
+                .withRequestBody("{\"description\": \"ghhg\", \"rate\": 5, \"productId\": 1}")
                 .expectedStatus(HttpStatus.CREATED);
     }
     

@@ -18,12 +18,15 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
     
     private final RestTemplate restTemplate;
     private final String providerUrl;
+    private boolean useFakeData = false;
     
     @Autowired
     public ProductCatalogProviderServiceSystembolagetImpl(final RestTemplate restTemplate, 
-            final @Value("${product_catalog.provider.systembolaget.url}") String providerUrl) {
+            final @Value("${product_catalog.provider.systembolaget.url}") String providerUrl,
+            final @Value("${product_catalog.provider.systembolaget.use_fake_data}") Boolean useFakeData) {
         this.restTemplate = restTemplate;
         this.providerUrl = providerUrl;
+        this.useFakeData = useFakeData;
     }
     
     private String getName(final ProductDto from) {
@@ -48,16 +51,17 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
                 "A nice comapany " + (i+1), "Some other company", "1972", "7.0%", "", "", 
                 false, false, false, "some raw materials");
         });
-    }
+    }  
     
     //TODO we are using mock data for the time being, no need to hammer the service
     @Override
-    public Stream<Product> getProductCatalog() {   
-        
-        //final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
-        //return productCatalogeDto.getProducts().stream().map(p -> toProduct(p));  
-        
-        return getProducts(10);   
+    public Stream<Product> getProductCatalog() {  
+        if(!useFakeData) {
+            final ProductCatalogeDto productCatalogeDto = restTemplate.getForObject(providerUrl, ProductCatalogeDto.class);
+            return productCatalogeDto.getProducts().stream().map(p -> toProduct(p)); 
+        } else {
+            return getProducts(10);
+        }  
     }    
     
 }

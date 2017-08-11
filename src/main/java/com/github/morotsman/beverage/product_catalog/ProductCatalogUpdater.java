@@ -11,21 +11,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductCatalogUpdater {  
     
-    private final ReviewService rateService;
     private final ProductCatalogService productCatalogService; 
-    private final UserService userService;
 
-    public ProductCatalogUpdater(ReviewService rateService, ProductCatalogService productCatalogService, UserService userService) {
-        this.rateService = rateService;
+    public ProductCatalogUpdater(ProductCatalogService productCatalogService) {
         this.productCatalogService = productCatalogService;
-        this.userService = userService;
     }
 
            
 
     @Scheduled(fixedRateString = "${product_catalog.provider.systembolaget.reload_product.rate_in_ms}")
-    public void reloadProductCatalog() {  
-        productCatalogService.reloadProductCatalog();  
+    public void reloadProductCatalog() { 
+        System.out.println("**************************");
+        System.out.println("*Loading product catalog.*");
+        System.out.println("**************************");
+        productCatalogService.reloadProductCatalog(); 
+        System.out.println("*************************");
+        System.out.println("*Product catalog loaded.*");
+        System.out.println("*************************");   
+    }
+    
+    //used when developing
+    /*
+    private void createFakeReviews() {
         userService.createUser(new BeverageUserDto("password","niklas",22L));
         
         Random ran = new Random();
@@ -33,9 +40,8 @@ public class ProductCatalogUpdater {
         productCatalogService.getProductCatalog().forEach(p -> {
             long rate = ran.nextInt(11);
             rateService.createReview("niklas", new ReviewDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
-        });
-        
-        
+        });   
     }
+    */
 
 }
