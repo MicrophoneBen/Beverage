@@ -12,7 +12,6 @@ import org.junit.Before;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockserver.integration.ClientAndServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "product_catalog.provider.systembolaget.url=http://localhost:1080/product_supplier")
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+        properties = {
+            "product_catalog.provider.systembolaget.url=http://localhost:1080/product_supplier",
+            "product_catalog.provider.systembolaget.use_fake_data=false"
+        })
 public class ProductCatalogTest {
 
     @Value("${local.server.port}")
@@ -39,13 +42,12 @@ public class ProductCatalogTest {
 
     @Autowired
     private ProductCatalogService productCatalogService;
-    
-    private String baseUrl;
 
+    private String baseUrl;
 
     @Before
     public void before() {
-        createUser("user1", "password",20L);
+        createUser("user1", "password", 20L);
         baseUrl = "http://localhost:" + port + "/";
     }
 
@@ -56,14 +58,13 @@ public class ProductCatalogTest {
 
     @Test
     public void testLoadProductCatalog() throws InterruptedException {
-        login("user1","password");
-        
-        
+        login("user1", "password");
+
         ResponseEntity<Product[]> result = RestTester.get(Product[].class)
                 .withUrl(baseUrl + "/v1/product_catalog?page=0&query=")
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
-        
+
         Assert.assertEquals(9, result.getBody().length);
     }
 
@@ -74,9 +75,9 @@ public class ProductCatalogTest {
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
     }
-    
+
     public void createUser(final String username, final String password, final Long age) {
-        userService.createUser(new BeverageUserDto(password,username, age));
+        userService.createUser(new BeverageUserDto(password, username, age));
     }
 
 }

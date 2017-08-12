@@ -20,7 +20,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "product_catalog.provider.systembolaget.url=http://localhost:1080/product_supplier")
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
+    "product_catalog.provider.systembolaget.url=http://localhost:1080/product_supplier",
+    "product_catalog.provider.systembolaget.use_fake_data=false"
+})
 public class BeverageLoginTest {
 
     @Value("${local.server.port}")
