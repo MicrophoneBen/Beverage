@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,14 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     
     private final ProductCatalogProviderService productCatalogProviderService;
     private final ProductRepository productRepository;
+    private final int pageSize;
 
-    public ProductCatalogServiceImpl(final ProductCatalogProviderService productCatalogProviderService, final ProductRepository productRepository) {
+    public ProductCatalogServiceImpl(final ProductCatalogProviderService productCatalogProviderService, 
+            final ProductRepository productRepository,
+            @Value("${product_catalog.provider.page_size}") int pageSize) {
         this.productCatalogProviderService = productCatalogProviderService;
         this.productRepository = productRepository;
+        this.pageSize = pageSize;
     }
     
     @Transactional
@@ -36,7 +41,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     @Override 
     public Iterable<Product> getProductCatalog(final String query, final int page) {
         //TODO add to application.properties
-        PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"productId"});
+        PageRequest pageRequest = new PageRequest(page, pageSize,Sort.DEFAULT_DIRECTION, new String[]{"productId"});
         return productRepository.findDistinctProductsByNameIgnoreCaseContainingOrProducerIgnoreCaseContaining(query,query,pageRequest);          
     }
 

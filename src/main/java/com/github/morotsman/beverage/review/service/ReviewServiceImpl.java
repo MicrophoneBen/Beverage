@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 
 import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,15 @@ public class ReviewServiceImpl implements ReviewService {
     
     private final EntityManager entityManager;
     
-    public ReviewServiceImpl(final ReviewRepository reviewRepository, final ProductRepository productRepository, final EntityManager entityManager) {
+    private final int pageSize;
+    
+    public ReviewServiceImpl(final ReviewRepository reviewRepository, final ProductRepository productRepository, 
+            final EntityManager entityManager,
+            final @Value("${review.page_size}") int pageSize) {
         this.reviewRepository = reviewRepository;
         this.productRepository = productRepository;
         this.entityManager= entityManager;
+        this.pageSize= pageSize;
     }
     
     private Review fromDto(final ReviewDto reviewDto, final Product product, final BeverageUser beverageUser) {
@@ -90,7 +96,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Iterable<ReviewDto> getReviews(String username, String query, int page) {
         //TODO add to application.properties
-        PageRequest pageRequest = new PageRequest(page, 100,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
+        PageRequest pageRequest = new PageRequest(page, pageSize,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
         BeverageUser user = entityManager.getReference(BeverageUser.class, username);
         return reviewRepository.findDistinctByBevarageUserAndNameIgnoreCaseContainingOrBevarageUserAndProducerIgnoreCaseContainingOrderByUpdatedDesc(user,query,user,query,pageRequest)
                 .stream() 
