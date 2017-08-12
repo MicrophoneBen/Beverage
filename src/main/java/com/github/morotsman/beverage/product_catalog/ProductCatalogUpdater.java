@@ -12,9 +12,14 @@ import org.springframework.stereotype.Component;
 public class ProductCatalogUpdater {  
     
     private final ProductCatalogService productCatalogService; 
-
-    public ProductCatalogUpdater(ProductCatalogService productCatalogService) {
+    
+    private final UserService userService;
+    private final ReviewService reviewService;
+    
+    public ProductCatalogUpdater(ProductCatalogService productCatalogService, UserService userService, ReviewService reviewService) {
         this.productCatalogService = productCatalogService;
+        this.userService = userService;
+        this.reviewService = reviewService;
     }
 
            
@@ -28,10 +33,12 @@ public class ProductCatalogUpdater {
         System.out.println("*************************");
         System.out.println("*Product catalog loaded.*");
         System.out.println("*************************");   
+        
+        createFakeReviews();
     }
     
     //used when developing
-    /*
+    
     private void createFakeReviews() {
         userService.createUser(new BeverageUserDto("password","niklas",22L));
         
@@ -39,9 +46,9 @@ public class ProductCatalogUpdater {
         
         productCatalogService.getProductCatalog().forEach(p -> {
             long rate = ran.nextInt(11);
-            rateService.createReview("niklas", new ReviewDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
+            reviewService.createReview("niklas", new ReviewDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
         });   
     }
-    */
+    
 
 }

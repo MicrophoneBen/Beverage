@@ -5,23 +5,23 @@
         <uib-tab index="0" heading="Review It">
             <br>
             <div>
-                <div class="col-md-12">
+                <div class="col-md-12" ng-controller="createReviewCtrl as createReviewCtrl">
                     <form name="form" role="form" autocomplete="off">
                         <div class="row">
-                            <select-product selected="vm.productToRate"></select-product>
+                            <select-product selected="createReviewCtrl.productToRate"></select-product>
                             <br>
                             <div class="form-group">
-                                <span uib-rating ng-model="vm.review.score" max="10" aria-labelledby="default-rating"></span>
+                                <span uib-rating ng-model="createReviewCtrl.review.score" max="10" aria-labelledby="default-rating"></span>
                             </div>
 
                             <div class="form-group">
                                 <label for="description" class="control-label">Description</label>
-                                <textarea rows="6" class="form-control" id="description" ng-model="vm.review.description"></textarea>
+                                <textarea rows="6" class="form-control" id="description" ng-model="createReviewCtrl.review.description"></textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-10 form-group">
-                                <button ng-disabled="!vm.productToRate" id="submit" type="submit" class="btn btn-default" ng-click="vm.createReview()">
+                                <button ng-disabled="!createReviewCtrl.productToRate" id="submit" type="submit" class="btn btn-default" ng-click="createReviewCtrl.createReview()">
                                     <span class="glyphicon glyphicon-ok"></span>
                                 </button>
                             </div>
@@ -33,18 +33,18 @@
         <uib-tab index="1" heading="My Reviews">
             <div ng-cloak>
                 <br>
-                <div class="col-md-12">
+                <div class="col-md-12" ng-controller="listReviewCtrl as listReviewCtrl">
                     <div class="row">
                         <div class="panel panel-default panel-table">
                             <div class="panel-heading">
-                                <input type="text" class="form-control" ng-model="vm.queryString" ng-keyup="vm.filterReviews()">
+                                <input type="text" class="form-control" ng-model="listReviewCtrl.queryString" ng-keyup="listReviewCtrl.filterReviews()">
                             </div>
                             <div class="panel-body">
                                 <div class="infinite-table" style="height:600px;overflow-y:scroll;">
-                                    <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
+                                    <table infinite-scroll='listReviewCtrl.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
                                            class="table table-hover" cellspacing="0" width="100%">
-                                        <tr ng-repeat="review in vm.reviews track by $index">
-                                            <td ng-hide="vm['editReview' + review.reviewId]" class="col-md-9" ng-click="vm.showBeverageDetails(review)">
+                                        <tr ng-repeat="review in listReviewCtrl.reviews track by $index">
+                                            <td ng-hide="listReviewCtrl['editReview' + review.reviewId]" class="col-md-9" ng-click="listReviewCtrl.showBeverageDetails(review)">
                                                 
                                                 <span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>
                                                 <!--
@@ -56,7 +56,7 @@
                                                 <span><b>Review: </b><i>{{review.description}}<i></span>
                                             </td>
                                             
-                                            <td ng-show="vm['editReview' + review.reviewId]" class="col-md-9">
+                                            <td ng-show="listReviewCtrl['editReview' + review.reviewId]" class="col-md-9">
                                                 <span><b>Rate: </b></span><span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating"></span>
                                                 <br>
                                                 <span>{{review.name}} <b>produced by</b> {{review.producer}}<span> 
@@ -65,17 +65,17 @@
                                             </td>
                                             <td  class="col-md-3">
                                                 <div>
-                                                    <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="vm.deleteReview(review, $index)">
+                                                    <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="listReviewCtrl.deleteReview(review, $index)">
                                                         <span class="glyphicon glyphicon-remove"></span>
                                                     </button>
                                                 </div>
-                                                <div ng-hide="vm['editReview' + review.reviewId]">
-                                                    <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editReview' + review.reviewId] = true">
+                                                <div ng-hide="listReviewCtrl['editReview' + review.reviewId]">
+                                                    <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="listReviewCtrl['editReview' + review.reviewId] = true">
                                                         <span class="glyphicon glyphicon-pencil"></span>
                                                     </button> 
                                                 </div>
-                                                <div ng-show="vm['editReview' + review.reviewId]">
-                                                    <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="vm['editReview' + review.reviewId] = false; vm.updateReview(review, $index)">
+                                                <div ng-show="listReviewCtrl['editReview' + review.reviewId]">
+                                                    <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="listReviewCtrl['editReview' + review.reviewId] = false; listReviewCtrl.updateReview(review, $index)">
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                     </button>
                                                 </div>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer" >
-                                <span ng-show='vm.loadingReviews'>Loading data...</>
+                                <span ng-show='listReviewCtrl.loadingReviews'>Loading data...</>
                             </div>
                         </div>
 
@@ -94,14 +94,17 @@
                 </div>
             </div>
         </uib-tab>
-        <uib-tab index="2" heading="Beverage">
-            <div ng-cloak >
+        <uib-tab index="2" heading="Beverages">
+            
+        </uib-tab>
+        <uib-tab index="3" heading="Beverage">
+            <div ng-cloak ng-controller="showProductCtrl as showProductCtrl">
                 <br>
-                <select-product selected="vm.selectedProduct"></select-product>                       
-                <product-details ng-show="vm.selectedProduct" product="vm.selectedProduct"></product-details>                      
+                <select-product selected="showProductCtrl.selectedProduct"></select-product>                       
+                <product-details ng-show="showProductCtrl.selectedProduct" product="showProductCtrl.selectedProduct"></product-details>                      
             </div>
         </uib-tab>
-        <uib-tab index="3" heading="Popular">
+        <uib-tab index="4" heading="Popular">
             Not implemented yet
         </uib-tab>
     </uib-tabset>
