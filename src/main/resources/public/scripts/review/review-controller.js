@@ -3,9 +3,8 @@
 
 'use strict';
 
-define(['./review.module', './product-select.directive', './product-details.directive'
-            , '../utility/beverage-utility', './review-dao', './product-dao', './review-create-controller', './review-list-controller'
-            , './product-show-controller'], function (module) {
+define(['./review.module', './review-create-controller', './review-list-controller', './product-show-controller', 
+    './product-list-controller'], function (module) {
     module.controller('reviewCtrl', ['$scope',
         function ($scope) {
             var vm = this;

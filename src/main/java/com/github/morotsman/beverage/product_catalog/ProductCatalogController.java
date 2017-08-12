@@ -40,6 +40,14 @@ public class ProductCatalogController {
         e.printStackTrace(System.out); 
         return new ErrorDto("Could not find the product in the database.");
     }
+    
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({Exception.class})
+    public ErrorDto handleException(Exception e) {
+        System.out.println(e.getMessage());  
+        e.printStackTrace(System.out); 
+        return new ErrorDto("Internal server error.");
+    }
       
     
 }

@@ -1,0 +1,26 @@
+<div class="col-md-12" ng-controller="listProductCtrl as vm">
+    <div class="row">
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+                <input placeholder="Enter a name or a producer" type="text" class="form-control" ng-model="vm.queryString" ng-keyup="vm.filterProducts()">
+            </div>
+            <div class="panel-body">
+                <div class="infinite-product-table" style="height:600px;overflow-y:scroll;">
+                    <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-product-table"'
+                           class="table table-hover" cellspacing="0" width="100%">
+                        <tr ng-click="vm.productSelected(product)" ng-repeat="product in vm.products track by $index">
+                            <td>
+                                <b>{{product.name}}</b> by <b>{{product.producer}}, {{product.supplier}}</b>  (nr {{product.productId}})
+                                <br>
+                                <b>{{product.productCategory}}</b>, {{product.price}} kr ({{product.pricePerLiter}} kr/l), {{product.volume}} ml, {{product.packaging}}, {{product.alcoholPercent}}                                
+                            </td>
+                        </tr>
+                    </table>   
+                </div>
+            </div>
+            <div class="panel-footer" >
+                <span ng-show='vm.loadingProducts'>Loading data...</>
+            </div>
+        </div>
+    </div>
+</div>
