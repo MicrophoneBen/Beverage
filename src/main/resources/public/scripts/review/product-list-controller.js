@@ -21,7 +21,8 @@ define(['./review.module', './product-select.directive',
             activate();
             
             function activate() {
-                var currentPage = 0;
+                currentPage = 0;
+                allLoaded = false;
                 productDao.getProducts(0,'')
                         .then(setProducts)
                         .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the products.')); ;
@@ -29,7 +30,8 @@ define(['./review.module', './product-select.directive',
             
             
             function filterProducts() {
-                var currentPage = 0;
+                currentPage = 0;
+                allLoaded = false;
                 productDao.getProducts(0,vm.queryString)
                         .then(setProducts)
                         .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the products.')); ;
@@ -55,7 +57,7 @@ define(['./review.module', './product-select.directive',
                         .then(checkIfAllLoaded)
                         .then(addProductsToList)
                         .finally(isNotLoadingProducts)
-                        //.then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the products.'));                
+                        .then(util.givePositiveFeedback(), util.displayErrorInformation('Could not load the products.'));                
             }
             
             function checkIfAllLoaded(products) {
