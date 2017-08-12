@@ -9,14 +9,12 @@
                     <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
                            class="table table-hover" cellspacing="0" width="100%">
                         <tr ng-repeat="review in vm.reviews track by $index">
-                            <td ng-hide="vm['editReview' + review.reviewId]" class="col-md-9" ng-click="vm.showBeverageDetails(review)">
-                                <span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>
-                                <br>
-                                <span>{{review.name}} <b>produced by</b> {{review.producer}}<span>  
+                            <td ng-if="!vm['editReview' + review.reviewId]" class="col-md-9" ng-click="vm.showBeverageDetails(review)">
+                                <div class="numberCircle {{vm.getRate(review)}}">{{review.rate}}</div> <span>{{review.name}} <b>produced by</b> {{review.producer}}<span>  
                                 <br>
                                 <span><b>Review: </b><i>{{review.description}}<i></span>
                             </td>
-                            <td ng-show="vm['editReview' + review.reviewId]" class="col-md-9">
+                            <td ng-if="vm['editReview' + review.reviewId]" class="col-md-9">
                                 <span><b>Rate: </b></span><span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating"></span>
                                 <br>
                                 <span>{{review.name}} <b>produced by</b> {{review.producer}}<span> 

@@ -11,9 +11,11 @@ define(['angular', './review.module', '../utility/beverage-utility', './review-d
             vm.showBeverageDetails = showBeverageDetails;
             vm.deleteReview = deleteReview;
             vm.updateReview = updateReview;
-            vm.filterReviews = util.throttle(filterReviews, 300);       
+            vm.filterReviews = util.throttle(filterReviews, 300);   
+            vm.getRate = getRate;
             vm.reviews = [];
             vm.loadingReviews = false;
+            
             
             var allLoaded = false;
             var currentPage = 0;
@@ -28,7 +30,7 @@ define(['angular', './review.module', '../utility/beverage-utility', './review-d
                 reviewDao.getReviews()
                     .then(refreshReviews);
             });
-            
+                        
             vm.loadMore = function () {
                 if (allLoaded || vm.loadingReviews) {
                     return;
@@ -41,7 +43,7 @@ define(['angular', './review.module', '../utility/beverage-utility', './review-d
                         .then(addReviewsToList)
                         .finally(isNotLoadingReviews);
             };
-
+          
             function checkIfAllLoaded(reviews) {
                 if (reviews.length === 0) {
                     allLoaded = true;
@@ -98,6 +100,16 @@ define(['angular', './review.module', '../utility/beverage-utility', './review-d
             function updateReview(review, index) {
                 reviewDao.updateReview(review.reviewId, review)
                         .then(util.givePositiveFeedback('Review updated.'), util.displayErrorInformation('Could not update the review.'));
+            }
+            
+            function getRate(review) {
+                if(review.rate > 7) {
+                    return "good";
+                } else if(review.rate > 3) {
+                    return "medium";
+                } else {
+                    return "bad";
+                }
             }
 
 

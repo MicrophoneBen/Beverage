@@ -1,0 +1,30 @@
+.numberCircle {
+    border-radius: 50%;
+    behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+    width: 42px;
+    height: 42px;
+    padding: 8px;
+    /*background: #6ebc62;*/
+    border: 2px solid black;
+    color: black;
+    text-align: center;
+    font: 20px Arial, sans-serif;
+    display: inline-block;
+}
+
+.good {
+   background: #6ebc62
+}
+
+.medium {
+   background: #bcbf2d
+}
+
+.bad {
+   background: #b73922
+}
+
+
+.larger {
+    font-size: 32px
+}
