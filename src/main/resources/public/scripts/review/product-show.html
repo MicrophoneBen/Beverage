@@ -1,0 +1,4 @@
+<div ng-controller="showProductCtrl as showProductCtrl">
+    <select-product selected="showProductCtrl.selectedProduct"></select-product>                       
+    <product-details ng-show="showProductCtrl.selectedProduct" product="showProductCtrl.selectedProduct"></product-details>                      
+</div>

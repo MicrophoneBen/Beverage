@@ -1,0 +1,23 @@
+<div ng-controller="createReviewCtrl as createReviewCtrl">
+    <form name="form" role="form" autocomplete="off">
+        <div class="row">
+            <select-product selected="createReviewCtrl.productToRate"></select-product>
+            <br>
+            <div class="form-group">
+                <span uib-rating ng-model="createReviewCtrl.review.score" max="10" aria-labelledby="default-rating"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="control-label">Description</label>
+                <textarea rows="6" class="form-control" id="description" ng-model="createReviewCtrl.review.description"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 form-group">
+                <button ng-disabled="!createReviewCtrl.productToRate" id="submit" type="submit" class="btn btn-default" ng-click="createReviewCtrl.createReview()">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

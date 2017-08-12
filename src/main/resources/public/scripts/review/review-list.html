@@ -1,0 +1,59 @@
+<div class="col-md-12" ng-controller="listReviewCtrl as listReviewCtrl">
+    <div class="row">
+        <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+                <input type="text" class="form-control" ng-model="listReviewCtrl.queryString" ng-keyup="listReviewCtrl.filterReviews()">
+            </div>
+            <div class="panel-body">
+                <div class="infinite-table" style="height:600px;overflow-y:scroll;">
+                    <table infinite-scroll='listReviewCtrl.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-table"'
+                           class="table table-hover" cellspacing="0" width="100%">
+                        <tr ng-repeat="review in listReviewCtrl.reviews track by $index">
+                            <td ng-hide="listReviewCtrl['editReview' + review.reviewId]" class="col-md-9" ng-click="listReviewCtrl.showBeverageDetails(review)">
+
+                                <span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating" read-only="true"></span>
+                                <!--
+                                <h1>{{review.rate}}</h1>
+                                -->
+                                <br>
+                                <span>{{review.name}} <b>produced by</b> {{review.producer}}<span>  
+                                        <br>
+                                        <span><b>Review: </b><i>{{review.description}}<i></span>
+                                                    </td>
+
+                                                    <td ng-show="listReviewCtrl['editReview' + review.reviewId]" class="col-md-9">
+                                                        <span><b>Rate: </b></span><span uib-rating ng-model="review.rate" max="10" aria-labelledby="default-rating"></span>
+                                                        <br>
+                                                        <span>{{review.name}} <b>produced by</b> {{review.producer}}<span> 
+                                                                <br>
+                                                                <textarea rows="6" class="form-control" id="description" ng-model="review.description"></textarea>
+                                                                </td>
+                                                                <td  class="col-md-3">
+                                                                    <div>
+                                                                        <button id="deleteRate" type="submit" class="pull-right btn btn-default" ng-click="listReviewCtrl.deleteReview(review, $index)">
+                                                                            <span class="glyphicon glyphicon-remove"></span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div ng-hide="listReviewCtrl['editReview' + review.reviewId]">
+                                                                        <button id="updateRate" type="submit" class="pull-right btn btn-default" ng-click="listReviewCtrl['editReview' + review.reviewId] = true">
+                                                                            <span class="glyphicon glyphicon-pencil"></span>
+                                                                        </button> 
+                                                                    </div>
+                                                                    <div ng-show="listReviewCtrl['editReview' + review.reviewId]">
+                                                                        <button  id="saveRate" type="submit" class="pull-right btn btn-default" ng-click="listReviewCtrl['editReview' + review.reviewId] = false; listReviewCtrl.updateReview(review, $index)">
+                                                                            <span class="glyphicon glyphicon-ok"></span>
+                                                                        </button>
+                                                                    </div>
+                                                                </td>
+                                                                </tr>
+                                                                </table>   
+                                                                </div>
+                                                                </div>
+                                                                <div class="panel-footer" >
+                                                                    <span ng-show='listReviewCtrl.loadingReviews'>Loading data...</>
+                                                                </div>
+                                                                </div>
+
+
+                                                                </div>
+                                                                </div>
