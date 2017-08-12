@@ -16,7 +16,7 @@ define(['./review.module', './product-select.directive',
             vm.loadingProducts = false;
             var allLoaded = false;
             var currentPage = 0;
-               
+                  
             
             activate();
             

@@ -10,7 +10,7 @@
                            class="table table-hover" cellspacing="0" width="100%">
                         <tr ng-click="vm.productSelected(product)" ng-repeat="product in vm.products track by $index">
                             <td>
-                                <b>{{product.name}}</b> by <b>{{product.producer}}, {{product.supplier}}</b>  (nr {{product.productId}})
+                                {{product.name}} <b>produced by</b> {{product.producer}}, {{product.supplier}}  (nr {{product.productId}})
                                 <br>
                                 <b>{{product.productCategory}}</b>, {{product.price}} kr ({{product.pricePerLiter}} kr/l), {{product.volume}} ml, {{product.packaging}}, {{product.alcoholPercent}}                                
                             </td>
