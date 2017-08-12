@@ -14,6 +14,8 @@ public interface ReviewService {
     Optional<Boolean> deleteReview(String username, long reviewId);
     
     Iterable<ReviewDto> getReviews(String username, String query, final int page);
+    
+    Iterable<ReviewDto> getReviewsForProduct(Long productId, final int page);
 
     void deleteAllReviews();
     

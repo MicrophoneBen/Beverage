@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage.model.review;
 
+import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.model.user.BeverageUser;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,8 @@ public interface ReviewRepository extends PagingAndSortingRepository<Review, Lon
     void deleteByReviewIdAndBevarageUser(long reviewId, BeverageUser user);  
     
     Optional<Review> findOne(long rateId);
+    
+    List<Review> findByProduct(Product product, Pageable pageable);
     
     
     

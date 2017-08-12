@@ -39,12 +39,24 @@ define(['./review.module'], function (module) {
                 return $http.post('/v1/review', rateDto);
             }
             
+            function getReviewForTheProduct(productId, page) {
+                var url = '/v1/product_catalog/' + productId + "/reviews";
+                return $http.get(url , {
+                    params: {
+                        page: page?page:0
+                    }
+                }).then(function (result) {
+                    return result.data;
+                });
+            }
+            
             return {
                 getReviewsWithPageAndQuery: getReviewsWithPageAndQuery,
                 getReviews: getReviews,
                 deleteReview:deleteReview,
                 updateReview: updateReview,
-                createReview: createReview
+                createReview: createReview,
+                getReviewForTheProduct: getReviewForTheProduct
             };
 
         }]);

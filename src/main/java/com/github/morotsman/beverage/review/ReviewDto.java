@@ -24,16 +24,23 @@ public class ReviewDto {
     @NotNull(message="A review must be about a product.")
     private Long productId;
     
+    private String reviewer;
+    
 
     protected ReviewDto(){}
     
-    public ReviewDto(Long reviewId, String description, Long rate, Long productId, String name, String producer) {
+    public ReviewDto(Long reviewId, String description, Long rate, Long productId, String name, String producer, String reviewer) {
         this.reviewId = reviewId;
         this.description = description;
         this.rate = rate;
         this.productId = productId;
         this.name = name;
         this.producer = producer;
+        this.reviewer = reviewer;
+    }
+    
+    public ReviewDto(Long reviewId, String description, Long rate, Long productId, String name, String producer) {
+        this(reviewId, description, rate, productId, name, producer, null);
     }
 
     public Long getReviewId() {
@@ -60,18 +67,25 @@ public class ReviewDto {
         return producer;
     }
 
+    public String getReviewer() {
+        return reviewer;
+    }
+
     @Override
     public String toString() {
-        return "RateDto{" + "rateId=" + reviewId + ", description=" + description + ", rate=" + rate + ", productId=" + productId + '}';
+        return "ReviewDto{" + "reviewId=" + reviewId + ", description=" + description + ", name=" + name + ", producer=" + producer + ", rate=" + rate + ", productId=" + productId + ", reviewer=" + reviewer + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.reviewId);
-        hash = 59 * hash + Objects.hashCode(this.description);
-        hash = 59 * hash + Objects.hashCode(this.rate);
-        hash = 59 * hash + Objects.hashCode(this.productId);
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.reviewId);
+        hash = 17 * hash + Objects.hashCode(this.description);
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.producer);
+        hash = 17 * hash + Objects.hashCode(this.rate);
+        hash = 17 * hash + Objects.hashCode(this.productId);
+        hash = 17 * hash + Objects.hashCode(this.reviewer);
         return hash;
     }
 
@@ -90,14 +104,25 @@ public class ReviewDto {
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.producer, other.producer)) {
+            return false;
+        }
         if (!Objects.equals(this.rate, other.rate)) {
             return false;
         }
         if (!Objects.equals(this.productId, other.productId)) {
             return false;
         }
+        if (!Objects.equals(this.reviewer, other.reviewer)) {
+            return false;
+        }
         return true;
     }
+
+    
     
     
     

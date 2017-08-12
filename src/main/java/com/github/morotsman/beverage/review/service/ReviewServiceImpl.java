@@ -38,12 +38,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
     
     private Review fromDto(final ReviewDto reviewDto, final Product product, final BeverageUser beverageUser) {
-        return new Review(reviewDto.getReviewId(), reviewDto.getDescription(), reviewDto.getRate(), product, beverageUser,System.currentTimeMillis(), product.getName(), product.getProducer());
+        return new Review(reviewDto.getReviewId(), reviewDto.getDescription(), reviewDto.getRate(), product, beverageUser,System.currentTimeMillis(), product.getName(), product.getProducer(), beverageUser.getUsername());
     }
    
     
     private ReviewDto toDto(final Review review) {
-        return new ReviewDto(review.getReviewId(), review.getDescription(), review.getRate(), review.getProduct().getProductId(), review.getName(), review.getProducer());
+        return new ReviewDto(review.getReviewId(), review.getDescription(), review.getRate(), review.getProduct().getProductId(), review.getName(), review.getProducer(), review.getReviewer());
     }
 
     @Transactional
@@ -108,6 +108,15 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteAllReviews() {
         reviewRepository.deleteAll();
+    }
+
+    @Transactional
+    @Override
+    public Iterable<ReviewDto> getReviewsForProduct(Long productId, int page) {
+        //TODO add page size to aplication.properties
+        PageRequest pageRequest = new PageRequest(page, 5,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
+        Product product = entityManager.getReference(Product.class, productId);
+        return reviewRepository.findByProduct(product, pageRequest).stream().map(this::toDto).collect(Collectors.toList());
     }
    
 }

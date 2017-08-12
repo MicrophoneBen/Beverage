@@ -37,6 +37,8 @@ public class Review implements Serializable{
     private String name;
     
     private String producer;
+    
+    private String reviewer;
 
     @ManyToOne(fetch = FetchType.LAZY)  
     @JoinColumn(name = "product_id", nullable = false)
@@ -51,7 +53,7 @@ public class Review implements Serializable{
     
     protected Review() {}
 
-    public Review(Long reviewId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated, String name, String producer) {
+    public Review(Long reviewId, String description, Long rate, Product product,BeverageUser bevarageUser, Long updated, String name, String producer, String reviewer) {
         this.reviewId = reviewId;
         this.description = description;
         this.rate = rate;
@@ -60,6 +62,7 @@ public class Review implements Serializable{
         this.updated = updated;
         this.name = name;
         this.producer = producer;
+        this.reviewer = reviewer;
     }
 
     
@@ -94,6 +97,10 @@ public class Review implements Serializable{
 
     public String getProducer() {
         return producer;
+    }
+
+    public String getReviewer() {
+        return reviewer;
     }
     
     

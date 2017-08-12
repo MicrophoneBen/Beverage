@@ -3,6 +3,8 @@ package com.github.morotsman.beverage.product_catalog;
 import com.github.morotsman.beverage.common.ErrorDto;
 import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.model.exceptions.UnknownProductException;
+import com.github.morotsman.beverage.review.ReviewDto;
+import com.github.morotsman.beverage.review.ReviewService;
 import java.util.stream.Stream;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductCatalogController {
     
     final ProductCatalogService productCatalogService;
+    final ReviewService reviewServce;
     
-    public ProductCatalogController(final ProductCatalogService productCatalogService){
+    public ProductCatalogController(final ProductCatalogService productCatalogService, final ReviewService reviewService){
         this.productCatalogService = productCatalogService;
+        this.reviewServce = reviewService;
     }
     
     @RequestMapping  
@@ -31,6 +35,11 @@ public class ProductCatalogController {
     @GetMapping("/{productId}")  
     public Product getProduct(@PathVariable final Long productId) {
         return productCatalogService.getProduct(productId).orElseThrow(() -> new UnknownProductException());  
+    }
+    
+    @GetMapping("/{productId}/reviews")  
+    public Iterable<ReviewDto> getReviewsForTheProduct(@PathVariable final Long productId, final @RequestParam(required=true) int page) {
+        return reviewServce.getReviewsForProduct(productId, page);  
     }
     
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

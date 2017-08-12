@@ -1,3 +1,16 @@
-<div ng-controller="showProductCtrl as showProductCtrl">                    
-    <product-details ng-show="showProductCtrl.selectedProduct" product="showProductCtrl.selectedProduct"></product-details>                      
+<div ng-controller="showProductCtrl as vm">                    
+    <product-details ng-show="vm.selectedProduct" product="vm.selectedProduct"></product-details> 
+    <br>
+    <div class="panel panel-default panel-table">
+            <div class="panel-heading">Reviews</div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <tr ng-repeat="review in vm.reviews track by $index">
+                        <td>
+                            <div class="numberCircle {{vm.getRate(review)}}">{{review.rate}}</div> <span><b>{{review.reviewer}}: </b><i>{{review.description}}<i></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+    </div>
 </div>

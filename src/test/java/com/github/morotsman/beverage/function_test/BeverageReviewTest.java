@@ -66,7 +66,7 @@ public class BeverageReviewTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard","user1"), review.getBody());
     }
     
     @Test
@@ -149,7 +149,7 @@ public class BeverageReviewTest {
         
         ResponseEntity<ReviewDto> actual = getReview(review.getBody().getReviewId()).expectedStatus(HttpStatus.OK).assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L,"Renat","Pernod Ricard"), actual.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L,"Renat","Pernod Ricard", "user1"), actual.getBody());
     }
     
     
@@ -274,13 +274,13 @@ public class BeverageReviewTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard", "user1"), review.getBody());
         
         review = updateReview(review.getBody().getReviewId(), "{\"reviewId\":" + review.getBody().getReviewId() + ", \"description\": \"another description\",\"rate\": 3,\"productId\":1}")
                 .expectedStatus(HttpStatus.OK)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "another description", 3L, 1L, "Renat", "Pernod Ricard"), review.getBody());     
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "another description", 3L, 1L, "Renat", "Pernod Ricard", "user1"), review.getBody());     
     }
    
     @Test
@@ -291,7 +291,7 @@ public class BeverageReviewTest {
                 .expectedStatus(HttpStatus.CREATED)
                 .assertCall(restTemplate);
         
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard", "user1"), review.getBody());
         
         login("user2", "password").assertCall(restTemplate);
         
@@ -302,7 +302,7 @@ public class BeverageReviewTest {
         
         login("user1", "password").assertCall(restTemplate);      
         review = getReview(review.getBody().getReviewId()).assertCall(restTemplate);      
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard"), review.getBody());     
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, "Renat", "Pernod Ricard", "user1"), review.getBody());     
     }
     
     @Test
@@ -339,7 +339,7 @@ public class BeverageReviewTest {
                 .assertCall(restTemplate);
         
         review = getReview(review.getBody().getReviewId()).assertCall(restTemplate);      
-        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, review.getBody().getName(), review.getBody().getProducer()), review.getBody());
+        Assert.assertEquals(new ReviewDto(review.getBody().getReviewId(), "a description", 7L, 1L, review.getBody().getName(), review.getBody().getProducer(), "user1"), review.getBody());
         
     } 
     
