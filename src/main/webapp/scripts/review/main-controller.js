@@ -5,7 +5,7 @@
 
 define(['./review.module', './review-create-controller', './review-list-controller', './product-show-controller', 
     './product-list-controller'], function (module) {
-    module.controller('reviewCtrl', ['$scope',
+    module.controller('mainCtrl', ['$scope',
         function ($scope) {
             var vm = this;
 

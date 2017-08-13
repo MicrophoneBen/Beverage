@@ -4,7 +4,7 @@
 'use strict';
 
 define(['angular', './navigation.module', './authentication-service'], function (angular, module) {
-    module.controller('main', ['$rootScope' ,'$scope', '$location' , '$http', 'authentication',
+    module.controller('appCtrl', ['$rootScope' ,'$scope', '$location' , '$http', 'authentication',
         function ($rootScope, $scope, $location, $http, authentication) {
 
             var vm = this;

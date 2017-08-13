@@ -3,7 +3,7 @@
 'use strict';
 
 
-define(['angular', 'ui_select', 'angular-sanitize', 'angular-animate','./review/review-controller', './navigation/login-controller', './navigation/main-controller'
+define(['angular', 'ui_select', 'angular-sanitize', 'angular-animate','./review/main-controller', './navigation/login-controller', './navigation/app-controller'
     , './navigation/welcome-controller', 'angular-ui-bootstrap', 'infinit-scrolling', 'ng-infinite-scroll','toastr',
      'angular-route', './utility/utility.module'],
         function (angular) {
@@ -13,13 +13,13 @@ define(['angular', 'ui_select', 'angular-sanitize', 'angular-animate','./review/
             app.config(function ($routeProvider, $httpProvider) {
 
                 $routeProvider.when('/home', {
-                    templateUrl: 'review.html',
-                    controller: 'reviewCtrl'
+                    templateUrl: '/scripts/review/main.html',
+                    controller: 'mainCtrl'
                 }).when('/login', {
-                    templateUrl: 'login.html',
+                    templateUrl: '/scripts/navigation/login.html',
                     controller: 'login'
                 }).when('/welcome', {
-                    templateUrl: 'welcome.html',
+                    templateUrl: '/scripts/navigation/welcome.html',
                     controller: 'welcome'
                 }).otherwise('/welcome');
 
