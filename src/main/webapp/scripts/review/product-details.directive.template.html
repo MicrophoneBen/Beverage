@@ -1,27 +1,16 @@
 <div>
-    <h1>{{vm.product.name}}</h1><br>
-    <b>Product id</b><br>
-    <span>{{vm.product.productId}}</span><br>
-    <b>Producer</b><br>
-    <span>{{vm.product.producer}}, {{vm.product.supplier}}</span><br>
-    <b>Origin</b><br>
-    <span>{{vm.product.originCountry}}, {{vm.product.country}}</span><br>
-    <b>Style</b><br>
-    <span>{{vm.product.style}}</span><br>
-    <b>Category</b><br>
-    <span>{{vm.product.productCategory}}, {{vm.product.type}}</span><br>
-    <b>Price</b><br>
-    <span>{{vm.product.price}} kr ({{vm.product.pricePerLiter}} kr/l).</span><br>
-    <b>Alcohol percentege</b><br>
-    <span>{{vm.product.alcoholPercent}}</span><br>
-    <b>Volym</b><br>
-    <span>{{vm.product.volume}} ml</span><br>
-    <b>Packing</b><br>
-    <span>{{vm.product.packaging}}</span><br>
-    <b>Vintage</b><br>
-    <span>{{vm.product.vintage}}</span><br>
-    <b>Raw material</b><br>
-    <span>{{vm.product.rawMaterialDescription}}</span><br>   
+    <h2>{{vm.product.name}} by {{vm.product.producer}}, {{vm.product.supplier}} ({{vm.product.productId}})</h2><br>
+    <b>{{vm.product.productCategory}}{{vm.product.type ? (', ' + vm.product.type) : ''}} </b>from {{vm.product.originCountry}}{{vm.product.country ? (', ' + vm.product.country) : ''}}<br>
+    <div ng-if="vm.product.style">
+        <span>{{vm.product.style}}</span><br> 
+    </div>
+    <div ng-if="vm.product.vintage">
+        <span>{{vm.product.vintage}}</span><br> 
+    </div>
+    <span>{{vm.product.price}} kr ({{vm.product.pricePerLiter}} kr/l), {{vm.product.volume}} ml, {{vm.product.packaging}}, {{vm.product.alcoholPercent}}</span><br> 
+    <div ng-if="vm.product.rawMaterialDescription">
+        <span><i>{{vm.product.rawMaterialDescription}}</i></span><br> 
+    </div> 
 </div>
 
 
