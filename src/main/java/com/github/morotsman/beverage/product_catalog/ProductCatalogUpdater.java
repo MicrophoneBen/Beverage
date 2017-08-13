@@ -5,6 +5,7 @@ import com.github.morotsman.beverage.review.ReviewService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
 import com.github.morotsman.beverage.user.UserService;
 import java.util.Random;
+import java.util.stream.IntStream;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -40,9 +41,19 @@ public class ProductCatalogUpdater {
     //used when developing
     
     private void createFakeReviews() {
+        Random ran = new Random();
+        
+        
+        IntStream.rangeClosed(0, 500).forEach(n -> {
+            long rate = ran.nextInt(11);
+            userService.createUser(new BeverageUserDto("password","user" + n,22L));
+            reviewService.createReview("user" + n, new ReviewDto(null, "Some description", rate, 1L, "Renat", "Pernod Ricard"));
+        });
         userService.createUser(new BeverageUserDto("password","niklas",22L));
         
-        Random ran = new Random();
+        
+        
+        
         
         productCatalogService.getProductCatalog().forEach(p -> {
             long rate = ran.nextInt(11);

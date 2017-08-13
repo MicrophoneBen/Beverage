@@ -114,7 +114,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Iterable<ReviewDto> getReviewsForProduct(Long productId, int page) {
         //TODO add page size to aplication.properties
-        PageRequest pageRequest = new PageRequest(page, 5,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
+        PageRequest pageRequest = new PageRequest(page, 50,Sort.DEFAULT_DIRECTION, new String[]{"updated"});
         Product product = entityManager.getReference(Product.class, productId);
         return reviewRepository.findByProduct(product, pageRequest).stream().map(this::toDto).collect(Collectors.toList());
     }

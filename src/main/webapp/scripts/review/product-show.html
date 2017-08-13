@@ -4,13 +4,18 @@
     <div class="panel panel-default panel-table">
             <div class="panel-heading">Reviews</div>
             <div class="panel-body">
-                <table class="table table-hover">
-                    <tr ng-repeat="review in vm.reviews track by $index">
-                        <td>
-                            <div class="numberCircle {{vm.getRate(review)}}">{{review.rate}}</div> <span><b>{{review.reviewer}}: </b><i>{{review.description}}<i></span>
-                        </td>
-                    </tr>
-                </table>
+                <div class="infinite-product-review-table" style="height:400px;overflow-y:scroll;">
+                    <table infinite-scroll='vm.loadMore()'  infinite-scroll-distance='2' infinite-scroll-container='".infinite-product-review-table"' class="table table-hover">
+                        <tr ng-repeat="review in vm.reviews track by $index">
+                            <td>
+                                <div class="numberCircle {{vm.getRate(review)}}">{{review.rate}}</div> <span><b>{{review.reviewer}}: </b><i>{{review.description}}<i></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer" >
+                <span ng-show='vm.loadingReview'>Loading data...</>
             </div>
     </div>
 </div>
