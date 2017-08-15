@@ -14,4 +14,6 @@ public interface ProductCatalogService {
     
     Optional<Product> getProduct(Long id);
     
+    void updateProductWithAverageRateAndNumberOfReviews(Product product);
+    
 }

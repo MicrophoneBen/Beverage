@@ -67,13 +67,21 @@ public class Product implements Serializable{
     private Boolean etnic;
 
     private Boolean koscher;
+    
+    private Double averageRate;
+    
+    private long numberOfReviews;
 
     @Column(length = 1000)
     private String rawMaterialDescription;
     
     protected Product() {}
 
-    public Product(Long productId, String name, String productCategory, Double price, Double volume, String nr, String articelNumber, Double pricePerLiter, Date startSellDate, Boolean expired, String type, String style, String packaging, String seal, String origin, String originCountry, String producer, String supplier, String vintage, String alcoholPercent, String assortment, String assortmentText, Boolean ecologic, Boolean etnic, Boolean koscher, String rawMaterialDescription) {
+    public Product(Long productId, String name, String productCategory, Double price, Double volume, String nr, String articelNumber, 
+            Double pricePerLiter, Date startSellDate, Boolean expired, String type, String style, String packaging, String seal, 
+            String origin, String originCountry, String producer, String supplier, String vintage, String alcoholPercent, 
+            String assortment, String assortmentText, Boolean ecologic, Boolean etnic, Boolean koscher, String rawMaterialDescription, 
+            Double averageRate, long numberOfReviews) {
         this.productId = productId;
         this.name = name;
         this.productCategory = productCategory;
@@ -100,6 +108,8 @@ public class Product implements Serializable{
         this.etnic = etnic;
         this.koscher = koscher;
         this.rawMaterialDescription = rawMaterialDescription;
+        this.numberOfReviews = numberOfReviews;
+        this.averageRate = averageRate;
     }
 
     public Long getProductId() {
@@ -209,17 +219,25 @@ public class Product implements Serializable{
     public void setProductId(Long productId) {
         this.productId = productId;
     }
-  
-    
-    
-    @Override
-    public String toString() {
-        return "Product{" + "productId=" + productId + ", name=" + name + ", productCategory=" + productCategory + ", price=" + price + ", volume=" + volume + ", nr=" + nr + ", articelNumber=" + articelNumber + ", pricePerLiter=" + pricePerLiter + ", startSellDate=" + startSellDate + ", expired=" + expired + ", type=" + type + ", style=" + style + ", packaging=" + packaging + ", seal=" + seal + ", origin=" + origin + ", originCountry=" + originCountry + ", producer=" + producer + ", supplier=" + supplier + ", vintage=" + vintage + ", alcoholPercent=" + alcoholPercent + ", assortment=" + assortment + ", assortmentText=" + assortmentText + ", ecologic=" + ecologic + ", etnic=" + etnic + ", koscher=" + koscher + ", rawMaterialDescription=" + rawMaterialDescription + '}';
+
+    public Double getAverageRate() {
+        return averageRate;
     }
 
-    
+    public long getNumberOfReviews() {
+        return numberOfReviews;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", name=" + name + ", productCategory=" + productCategory + ", price=" + price + ", volume=" + volume + ", nr=" + nr + ", articelNumber=" + articelNumber + ", pricePerLiter=" + pricePerLiter + ", startSellDate=" + startSellDate + ", expired=" + expired + ", type=" + type + ", style=" + style + ", packaging=" + packaging + ", seal=" + seal + ", origin=" + origin + ", originCountry=" + originCountry + ", producer=" + producer + ", supplier=" + supplier + ", vintage=" + vintage + ", alcoholPercent=" + alcoholPercent + ", assortment=" + assortment + ", assortmentText=" + assortmentText + ", ecologic=" + ecologic + ", etnic=" + etnic + ", koscher=" + koscher + ", averageRate=" + averageRate + ", numberOfReviews=" + numberOfReviews + ", rawMaterialDescription=" + rawMaterialDescription + '}';
+    }
+
+
+
 
     
-        
+    
+
     
 }

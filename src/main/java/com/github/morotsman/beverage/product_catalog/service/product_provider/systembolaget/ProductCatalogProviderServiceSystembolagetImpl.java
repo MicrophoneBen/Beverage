@@ -40,7 +40,7 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
                 from.getStartSellDate(), from.isExpired(), from.getType(), from.getStyle(), from.getPackaging(), 
                 from.getSeal(), from.getOrigin(), from.getOriginCountry(), from.getProducer(), from.getSupplier(), 
                 from.getVintage(), from.getAlcoholPercent(), from.getAssortment(), from.getAssortmentText(), 
-                from.isEcologic(), from.isEtnic(), from.isKoscher(), from.getRawMaterialDescription());
+                from.isEcologic(), from.isEtnic(), from.isKoscher(), from.getRawMaterialDescription(),null,0);
     }
         
     
@@ -49,10 +49,10 @@ public class ProductCatalogProviderServiceSystembolagetImpl implements ProductCa
             return new Product(i, "A bear " + i, "Bear", 12.0, 50.0, "2", "1243", 24.0, new Date(), 
                 false, "a type", "a style", "bottle", "a seal", "Malmoe", "Sweden", 
                 "A nice comapany " + (i+1), "Some other company", "1972", "7.0%", "", "", 
-                false, false, false, "some raw materials");
+                false, false, false, "some raw materials",8.1,20);
         });
     }  
-    
+     
     //TODO we are using mock data for the time being, no need to hammer the service
     @Override
     public Stream<Product> getProductCatalog() {  

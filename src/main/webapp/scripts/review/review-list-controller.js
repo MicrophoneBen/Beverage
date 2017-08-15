@@ -102,6 +102,7 @@ define(['angular', './review.module', '../utility/beverage-utility', './review-d
                         .then(util.givePositiveFeedback('Review updated.'), util.displayErrorInformation('Could not update the review.'));
             }
             
+            //This code is dupplicated refactory needed-
             function getRate(review) {
                 if(review.rate > 7) {
                     return "good";

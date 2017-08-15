@@ -1,6 +1,6 @@
 <div>
     <h2>{{vm.product.name}} by {{vm.product.producer}}, {{vm.product.supplier}} ({{vm.product.productId}})</h2><br>
-    <b>{{vm.product.productCategory}} <span ng-if="vm.product.type">, {{vm.product.type }} </span></b>from {{vm.product.originCountry}}<span ng-if="vm.product.country">, {{vm.product.country}}</span><span ng-if="vm.product.vintage"> ({{vm.product.vintage}})</span><br>
+    <div style="padding:7px;padding-left:5px" class="numberCircle {{vm.getRate(vm.product.averageRate)}}">{{vm.product.averageRate}}</div> ({{vm.product.numberOfReviews}}) <b>{{vm.product.productCategory}} <span ng-if="vm.product.type">, {{vm.product.type }} </span></b>from {{vm.product.originCountry}}<span ng-if="vm.product.country">, {{vm.product.country}}</span><span ng-if="vm.product.vintage"> ({{vm.product.vintage}})</span><br>
     <div ng-if="vm.product.style">
         <span>{{vm.product.style}}</span><br> 
     </div>

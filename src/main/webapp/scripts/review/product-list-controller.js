@@ -12,6 +12,7 @@ define(['./review.module', './product-select.directive',
             vm.filterProducts = util.throttle(filterProducts, 300);  ;
             vm.productSelected = productSelected;
             vm.loadMore = loadMore;
+            vm.getRate = getRate;
             
             vm.loadingProducts = false;
             var allLoaded = false;
@@ -80,8 +81,17 @@ define(['./review.module', './product-select.directive',
                 vm.loadingProducts = false;
             }            
 
-            
-
+            //TODO dupplicated code refactory needed
+            function getRate(rate) {
+                if(!rate) return "unrated";
+                if(rate > 7) {
+                    return "good";
+                } else if(rate > 3) {
+                    return "medium";
+                } else {
+                    return "bad";
+                }
+            }
 
         }]);
 

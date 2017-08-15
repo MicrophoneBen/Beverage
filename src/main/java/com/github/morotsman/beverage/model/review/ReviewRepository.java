@@ -25,6 +25,8 @@ public interface ReviewRepository extends PagingAndSortingRepository<Review, Lon
     
     List<Review> findByProduct(Product product, Pageable pageable);
     
+    List<Review> findByProduct(Product product);
+    
     
     
 }

@@ -1,5 +1,6 @@
 package com.github.morotsman.beverage.product_catalog;
 
+import com.github.morotsman.beverage.model.product.Product;
 import com.github.morotsman.beverage.review.ReviewDto;
 import com.github.morotsman.beverage.review.ReviewService;
 import com.github.morotsman.beverage.user.BeverageUserDto;
@@ -59,6 +60,16 @@ public class ProductCatalogUpdater {
             long rate = ran.nextInt(11);
             reviewService.createReview("niklas", new ReviewDto(null, "Some description", rate, p.getProductId(), p.getName(), p.getProducer()));
         });   
+    }
+    
+    @Scheduled(fixedRateString = "${product_catalog.statistics.aggregation_interval_in_ms}")
+    public void updateProductWithAvarageRateAndNumberOfReviews() { 
+        System.out.println("Agregating statistics");
+        for(Product p: productCatalogService.getProductCatalog()) {
+            productCatalogService.updateProductWithAverageRateAndNumberOfReviews(p);
+        }
+        
+        System.out.println("Completed agregating statistics");
     }
     
 
